@@ -1,4 +1,55 @@
+'use client'
+
+import { useState } from "react";
+import * as fal from "@fal-ai/serverless-client";
+
+fal.config({
+  proxyUrl : "/api/fal/proxy",
+})
+
+
 export const Playground = () => {
+    const [prompt, setPrompt] = useState("");
+    const [imageUrl, setImageUrl] = useState<string>(
+      "https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg"
+    );
+    const [loading, setLoading] = useState(false);
+
+const handleGenerate = async () => {
+  setLoading(true);
+  setImageUrl(
+    "https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg"
+  );
+  try {
+    // Call the API
+    const result = await fal.subscribe("110602490-lora", {
+      input: {
+        prompt: prompt,
+        model_name: "stabilityai/stable-diffusion-xl-base-1.0",
+        image_size: "square_hd",
+      },
+      logs: true,
+      onQueueUpdate: (update) => {
+        if (update.status === "IN_PROGRESS") {
+          update.logs.map((log) => log.message).forEach(console.log);
+        }
+      },
+    });
+    const image = result.images[0].url;
+    console.log("result ");
+    console.log(image);
+    setImageUrl(image);
+
+    // Set the generated image URL when request is complete
+  } catch (error) {
+    console.error("Error generating image:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+
   return (
     <div className="flex flex-1 flex-col items-center py-16">
       <div className="flex w-full flex-col px-4 lg:px-40">
@@ -59,10 +110,15 @@ export const Playground = () => {
                       className="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 resize-none"
                       placeholder="Enter a prompt"
                       rows={4}
+                      value={prompt}
+                      onChange={(e) => setPrompt(e.target.value)}
                     >
                       a @waterbot37 product, frstingln illustration
                     </textarea>
-                    <button className="inline-flex items-center justify-center rounded-md text-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-secondary shadow hover:bg-primary/90 h-10 px-4 py-2">
+                    <button
+                      className="inline-flex items-center justify-center rounded-md text-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-secondary shadow hover:bg-primary/90 h-10 px-4 py-2"
+                      onClick={handleGenerate}
+                    >
                       Generate
                     </button>
                     <div className="transition-all duration-300 max-h-0 opacity-0">
@@ -156,7 +212,6 @@ export const Playground = () => {
                   </div>
                 </div>
                 <div className="flex flex-col rounded-md border border-stroke-light bg-surface group lg:w-1/2">
-                  
                   <div className="mb-2 p-6">
                     <div className="flex items-center gap-2">
                       <h1 className="text-xl">Result</h1>
@@ -174,12 +229,18 @@ export const Playground = () => {
                         target="_blank"
                         className="inline-flex flex-col"
                       >
-                        <img
-                          data-testid="value-output-image"
-                          src="https://replicate.delivery/yhqm/tEIKfYbofygrwU0at32V8I3fBC0YN5tE3rtd9vFIfjRBCVpNB/out-0.webp"
-                          alt="output"
-                          className="max-w-full"
-                        />
+                        {loading && (
+                          <div className="w-96 h-96 mt-6 bg-gray-300 animate-pulse rounded-lg"></div>
+                        )}
+
+                        {imageUrl && !loading && (
+                          <img
+                            data-testid="value-output-image"
+                            src={imageUrl}
+                            alt="output"
+                            className="max-w-full"
+                          />
+                        )}
                       </a>
                     </div>
                   </div>
