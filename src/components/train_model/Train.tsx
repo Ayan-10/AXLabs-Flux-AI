@@ -5,6 +5,7 @@ import { checkAuthStatus } from "@/app/auth/callback/actions";
 import { useQuery } from "@tanstack/react-query";
 
 
+
 export const Train = () => {
   const { data } = useQuery({
     queryKey: ["checkAuthStatus"],
