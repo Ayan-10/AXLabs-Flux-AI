@@ -32,7 +32,8 @@
 		"stripe": "^16.0.0",
 		"stripe-subscriptions": "file:",
 		"tailwind-merge": "^2.3.0",
-		"tailwindcss-animate": "^1.0.7"
+		"tailwindcss-animate": "^1.0.7",
+		"cloudinary": "^2.5.0"
 	},
 	"devDependencies": {
 		"@types/formidable": "^3.4.5",
