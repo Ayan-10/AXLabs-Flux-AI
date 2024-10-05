@@ -14,12 +14,14 @@ export const Playground = () => {
       "https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg"
     );
     const [loading, setLoading] = useState(false);
+    const [imageLoading, setImageLoading] = useState(false);
 
 const handleGenerate = async () => {
   setLoading(true);
   setImageUrl(
     "https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg"
   );
+  setImageLoading(true);
   try {
     // Call the API
     const result = await fal.subscribe("110602490-lora", {
@@ -47,6 +49,10 @@ const handleGenerate = async () => {
     setLoading(false);
   }
 };
+
+const  handleImageLoad = () =>{
+  setImageLoading(false)
+}
 
 
 
@@ -229,7 +235,7 @@ const handleGenerate = async () => {
                         target="_blank"
                         className="inline-flex flex-col"
                       >
-                        {loading && (
+                        {(loading || imageLoading) && (
                           <div className="w-96 h-96 mt-6 bg-gray-300 animate-pulse rounded-lg"></div>
                         )}
 
@@ -238,7 +244,8 @@ const handleGenerate = async () => {
                             data-testid="value-output-image"
                             src={imageUrl}
                             alt="output"
-                            className="max-w-full"
+                            className={`max-w-full ${imageLoading ? 'hidden': ''}`}
+                            onLoad={handleImageLoad}
                           />
                         )}
                       </a>

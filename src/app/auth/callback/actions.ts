@@ -23,5 +23,5 @@ export async function checkAuthStatus() {
 		});
 	}
 
-	return { success: true };
+	return { success: true, 'user_id': user.id };
 }

@@ -26,6 +26,7 @@ model User {
   customerId String? @unique // Stripe customer ID, this will be important when we need to delete the subscription
 
   Subscription Subscription?
+  Training       Training[]      
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -39,6 +40,18 @@ model Subscription {
 
   startDate DateTime @default(now())
   endDate   DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  User User @relation(fields: [userId], references: [id])
+}
+
+model Training {
+  id     String             @id @default(cuid()) @map("_id")
+  userId String             @unique
+  images String[]
+  status String             @default("IN PROGRESS")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
