@@ -49,7 +49,7 @@ model Subscription {
 
 model Training {
   id     String             @id @default(cuid()) @map("_id")
-  userId String             @unique
+  userId String             
   images String[]
   status String             @default("IN PROGRESS")
 

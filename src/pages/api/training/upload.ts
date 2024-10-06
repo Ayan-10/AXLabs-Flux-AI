@@ -80,7 +80,10 @@ export default async function handler(
           .json({ error: "Failed to upload files or save training data" });
       }
     });
+  } else {
+            res
+              .status(404)
+              .json({ message: "Method not allowed"});
+
   }
-  console.log("hi");
-  return res.status(200).json({ message: "Hello from Next.js!" });
 }

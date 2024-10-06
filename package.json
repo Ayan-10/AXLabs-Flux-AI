@@ -10,9 +10,14 @@
 		"postinstall": "prisma generate"
 	},
 	"dependencies": {
+		"@emotion/react": "^11.13.3",
+		"@emotion/styled": "^11.13.0",
 		"@fal-ai/serverless-client": "^0.14.3",
 		"@fal-ai/serverless-proxy": "^0.9.0",
 		"@kinde-oss/kinde-auth-nextjs": "^2.3.1",
+		"@mui/material": "^6.1.2",
+		"@nextui-org/progress": "^2.0.34",
+		"@nextui-org/react": "^2.4.8",
 		"@prisma/client": "^5.16.0",
 		"@radix-ui/react-avatar": "^1.1.0",
 		"@radix-ui/react-dropdown-menu": "^2.1.1",
@@ -21,6 +26,7 @@
 		"@radix-ui/react-slot": "^1.1.0",
 		"@tanstack/react-query": "^5.48.0",
 		"class-variance-authority": "^0.7.0",
+		"cloudinary": "^2.5.0",
 		"clsx": "^2.1.1",
 		"formidable": "^3.5.1",
 		"lucide-react": "^0.396.0",
@@ -29,11 +35,11 @@
 		"prisma": "^5.20.0",
 		"react": "^18",
 		"react-dom": "^18",
+		"react-toastify": "^10.0.5",
 		"stripe": "^16.0.0",
 		"stripe-subscriptions": "file:",
 		"tailwind-merge": "^2.3.0",
-		"tailwindcss-animate": "^1.0.7",
-		"cloudinary": "^2.5.0"
+		"tailwindcss-animate": "^1.0.7"
 	},
 	"devDependencies": {
 		"@types/formidable": "^3.4.5",
