@@ -1,0 +1,93 @@
+import { useEffect, useState } from "react";
+import {
+  LinearProgress,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  Collapse,
+  dividerClasses,
+} from "@mui/material";
+
+const TrainingHistory = ({ userId }) => {
+  const [trainingData, setTrainingData] = useState([]);
+  const [expanded, setExpanded] = useState({});
+
+  useEffect(() => {
+    const fetchTrainingData = async () => {
+      try {
+        const response = await fetch(`/api/training/history?userId=${userId}`, {
+          method: "GET",
+        });
+
+        const data = await response.json();
+        setTrainingData(data);
+      } catch (error) {
+        console.error("Error fetching training data:", error);
+      }
+    };
+
+    fetchTrainingData();
+  }, [userId]);
+
+  const handleToggle = (id) => {
+    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  return (
+    <div>
+      {trainingData && trainingData.length > 0 ? (
+        <div className="p-4 max-w-xl mx-auto">
+          {trainingData.map((training) => (
+            <Card
+              key={training.id}
+              className="shadow-md border rounded-md mb-1"
+            >
+              <CardContent>
+                <div className="flex justify-between items-center">
+                  <Typography variant="h6">{training.name}</Typography>
+                  <Typography
+                    variant="body2"
+                    color={training.status === "completed" ? "green" : "orange"}
+                  >
+                    {training.status}
+                  </Typography>
+                </div>
+                {training.status === "IN PROGRESS" && (
+                  <LinearProgress variant="indeterminate" className="my-3" />
+                )}
+                <Button
+                  variant="outlined"
+                  onClick={() => handleToggle(training.id)}
+                >
+                  {expanded[training.id] ? "Collapse" : "Show Images"}
+                </Button>
+                <Collapse in={expanded[training.id]}>
+                  <div className="my-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                      {console.log(training.images)}
+                      {training.images.map((imageUrl, index) => (
+                        <img
+                          key={index}
+                          src={imageUrl}
+                          alt={`Training Image ${index}`}
+                          className="w-full h-24 object-cover rounded-md"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </Collapse>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <div className="flex items-center justify-center w-full h-full">
+          <h2>no history</h2>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default TrainingHistory;

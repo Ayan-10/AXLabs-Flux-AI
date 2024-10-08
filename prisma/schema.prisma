@@ -48,10 +48,12 @@ model Subscription {
 }
 
 model Training {
-  id     String             @id @default(cuid()) @map("_id")
-  userId String             
-  images String[]
-  status String             @default("IN PROGRESS")
+  id            String             @id @default(cuid()) @map("_id")
+  userId        String             @unique
+  images        String[]
+  status        String             @default("IN PROGRESS")
+  name          String
+  trigger_word  String             @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

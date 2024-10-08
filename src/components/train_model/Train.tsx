@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LinearProgress from "@mui/material/LinearProgress"; // Import LinearProgress
+import TrainingHistory from "./TrainingHistory";
 
 export const Train = () => {
   const { data } = useQuery({
@@ -17,12 +18,18 @@ export const Train = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState(""); // Initialize state
 
   const handleButtonClick = () => {
     // e.preventDefault();
     if (!inputRef || !inputRef.current) return;
 
     inputRef.current.click();
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // e.preventDefault();
+    setName(e.target.value);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,22 +58,26 @@ export const Train = () => {
     const formData = new FormData();
     files.forEach((file) => formData.append("images", file));
     formData.append("userId", userId as string);
+    formData.append("name", name as string);
 
     const res = await fetch("/api/training/upload", {
       method: "POST",
       body: formData,
     });
+    
+    const resjson = await res.json();
 
     if (res.ok) {
       setIsLoading(false);
       setFiles([]);
       setPreviewUrls([]);
-      toast.success("Training data uploaded successfully");
+
+      toast.success(resjson.message);
     } else {
       setIsLoading(false);
       setFiles([]);
       setPreviewUrls([]);
-      setMessage("Failed to upload training data");
+      toast.error(resjson.message);
     }
   };
 
@@ -110,7 +121,8 @@ export const Train = () => {
                           aria-describedby=":R1deuuunjla:-form-item-description"
                           aria-invalid="false"
                           name="name"
-                          value=""
+                          value={name} // Bind the input field to state
+                          onChange={handleInputChange} // Handle changes to input
                         />
                       </div>
                       <div
@@ -181,7 +193,7 @@ export const Train = () => {
                         <button
                           className="inline-flex items-center justify-center text-md font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow h-11 px-8 rounded-lg w-full bg-brand text-white hover:bg-brand/90 transition-colors duration-200 bg-purple-800"
                           onClick={handleSubmit}
-                           disabled={isLoading}
+                          disabled={isLoading}
                           type="submit"
                         >
                           <svg
@@ -271,344 +283,13 @@ export const Train = () => {
                 </div>
               </div>
               <div className="hidden lg:block flex-1">
-                <div className="rounded-xl border shadow w-full max-w-6xl mx-auto bg-secondary text-secondary-foreground">
+                <div className="rounded-xl border shadow w-full max-w-6xl mx-auto bg-secondary text-secondary-foreground h-full">
                   <div className="flex flex-col space-y-1.5 p-6 pb-2">
                     <h3 className="tracking-tight text-2xl font-semibold">
-                      Tutorial
+                      Training History
                     </h3>
                   </div>
-                  <div className="p-6 pt-0">
-                    <div dir="ltr" data-orientation="horizontal">
-                      <div
-                        data-state="active"
-                        data-orientation="horizontal"
-                        role="tabpanel"
-                        aria-labelledby="radix-:R5uuuunjla:-trigger-Person"
-                        id="radix-:R5uuuunjla:-content-Person"
-                        className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-8"
-                      >
-                        <div className="space-y-4">
-                          <h3 className="text-xl font-semibold">
-                            How to get results:
-                          </h3>
-                          <div className="flex flex-wrap justify-center gap-4">
-                            <div className="relative w-[110px] h-[130px]">
-                              <img
-                                alt="How to get results: image 1"
-                                loading="lazy"
-                                decoding="async"
-                                data-nimg="fill"
-                                className="rounded-md"
-                                style={{
-                                  position: "absolute",
-                                  height: "100%",
-                                  width: "100%",
-                                  left: 0,
-                                  top: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  color: "transparent",
-                                }}
-                                srcSet="/_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fzebra%2FxSPD_fI06ZkpAG1rgZExx_16138f5ff8314a0a881ff01b967937e8.jpg&amp;w=640&amp;q=75 640w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fzebra%2FxSPD_fI06ZkpAG1rgZExx_16138f5ff8314a0a881ff01b967937e8.jpg&amp;w=750&amp;q=75 750w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fzebra%2FxSPD_fI06ZkpAG1rgZExx_16138f5ff8314a0a881ff01b967937e8.jpg&amp;w=828&amp;q=75 828w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fzebra%2FxSPD_fI06ZkpAG1rgZExx_16138f5ff8314a0a881ff01b967937e8.jpg&amp;w=1080&amp;q=75 1080w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fzebra%2FxSPD_fI06ZkpAG1rgZExx_16138f5ff8314a0a881ff01b967937e8.jpg&amp;w=1200&amp;q=75 1200w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fzebra%2FxSPD_fI06ZkpAG1rgZExx_16138f5ff8314a0a881ff01b967937e8.jpg&amp;w=1920&amp;q=75 1920w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fzebra%2FxSPD_fI06ZkpAG1rgZExx_16138f5ff8314a0a881ff01b967937e8.jpg&amp;w=2048&amp;q=75 2048w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fzebra%2FxSPD_fI06ZkpAG1rgZExx_16138f5ff8314a0a881ff01b967937e8.jpg&amp;w=3840&amp;q=75 3840w"
-                                src="/_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fzebra%2FxSPD_fI06ZkpAG1rgZExx_16138f5ff8314a0a881ff01b967937e8.jpg&amp;w=3840&amp;q=75"
-                              />
-                            </div>
-                            <div className="relative w-[110px] h-[130px]">
-                              <img
-                                alt="How to get results: image 2"
-                                loading="lazy"
-                                decoding="async"
-                                data-nimg="fill"
-                                className="rounded-md"
-                                style={{
-                                  position: "absolute",
-                                  height: "100%",
-                                  width: "100%",
-                                  left: 0,
-                                  top: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  color: "transparent",
-                                }}
-                                srcSet="/_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fkangaroo%2Ff6sEik9QZcfD7wXpxKRNn_7b9df0ce664a4fa6aed6ba73a70c7265.jpg&amp;w=640&amp;q=75 640w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fkangaroo%2Ff6sEik9QZcfD7wXpxKRNn_7b9df0ce664a4fa6aed6ba73a70c7265.jpg&amp;w=750&amp;q=75 750w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fkangaroo%2Ff6sEik9QZcfD7wXpxKRNn_7b9df0ce664a4fa6aed6ba73a70c7265.jpg&amp;w=828&amp;q=75 828w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fkangaroo%2Ff6sEik9QZcfD7wXpxKRNn_7b9df0ce664a4fa6aed6ba73a70c7265.jpg&amp;w=1080&amp;q=75 1080w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fkangaroo%2Ff6sEik9QZcfD7wXpxKRNn_7b9df0ce664a4fa6aed6ba73a70c7265.jpg&amp;w=1200&amp;q=75 1200w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fkangaroo%2Ff6sEik9QZcfD7wXpxKRNn_7b9df0ce664a4fa6aed6ba73a70c7265.jpg&amp;w=1920&amp;q=75 1920w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fkangaroo%2Ff6sEik9QZcfD7wXpxKRNn_7b9df0ce664a4fa6aed6ba73a70c7265.jpg&amp;w=2048&amp;q=75 2048w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fkangaroo%2Ff6sEik9QZcfD7wXpxKRNn_7b9df0ce664a4fa6aed6ba73a70c7265.jpg&amp;w=3840&amp;q=75 3840w"
-                                src="/_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fkangaroo%2Ff6sEik9QZcfD7wXpxKRNn_7b9df0ce664a4fa6aed6ba73a70c7265.jpg&amp;w=3840&amp;q=75"
-                              />
-                            </div>
-                            <div className="relative w-[110px] h-[130px]">
-                              <img
-                                alt="How to get results: image 3"
-                                loading="lazy"
-                                decoding="async"
-                                data-nimg="fill"
-                                className="rounded-md"
-                                style={{
-                                  position: "absolute",
-                                  height: "100%",
-                                  width: "100%",
-                                  left: 0,
-                                  top: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  color: "transparent",
-                                }}
-                                srcSet="/_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fpanda%2FzTckvlvtM6u2cavh8rWCZ_ca15cf58fa3d4febbf283054bdd3333b.jpg&amp;w=640&amp;q=75 640w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fpanda%2FzTckvlvtM6u2cavh8rWCZ_ca15cf58fa3d4febbf283054bdd3333b.jpg&amp;w=750&amp;q=75 750w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fpanda%2FzTckvlvtM6u2cavh8rWCZ_ca15cf58fa3d4febbf283054bdd3333b.jpg&amp;w=828&amp;q=75 828w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fpanda%2FzTckvlvtM6u2cavh8rWCZ_ca15cf58fa3d4febbf283054bdd3333b.jpg&amp;w=1080&amp;q=75 1080w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fpanda%2FzTckvlvtM6u2cavh8rWCZ_ca15cf58fa3d4febbf283054bdd3333b.jpg&amp;w=1200&amp;q=75 1200w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fpanda%2FzTckvlvtM6u2cavh8rWCZ_ca15cf58fa3d4febbf283054bdd3333b.jpg&amp;w=1920&amp;q=75 1920w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fpanda%2FzTckvlvtM6u2cavh8rWCZ_ca15cf58fa3d4febbf283054bdd3333b.jpg&amp;w=2048&amp;q=75 2048w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fpanda%2FzTckvlvtM6u2cavh8rWCZ_ca15cf58fa3d4febbf283054bdd3333b.jpg&amp;w=3840&amp;q=75 3840w"
-                                src="/_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Fpanda%2FzTckvlvtM6u2cavh8rWCZ_ca15cf58fa3d4febbf283054bdd3333b.jpg&amp;w=3840&amp;q=75"
-                              />
-                            </div>
-                            <div className="relative w-[110px] h-[130px]">
-                              <img
-                                alt="How to get results: image 4"
-                                loading="lazy"
-                                decoding="async"
-                                data-nimg="fill"
-                                className="rounded-md"
-                                style={{
-                                  position: "absolute",
-                                  height: "100%",
-                                  width: "100%",
-                                  left: 0,
-                                  top: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  color: "transparent",
-                                }}
-                                srcSet="/_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Ftiger%2F5lyRIbNHQt-LHmF72A6X2_b6c4254706df4b8eb113cd2e2b2671d8.jpg&amp;w=640&amp;q=75 640w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Ftiger%2F5lyRIbNHQt-LHmF72A6X2_b6c4254706df4b8eb113cd2e2b2671d8.jpg&amp;w=750&amp;q=75 750w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Ftiger%2F5lyRIbNHQt-LHmF72A6X2_b6c4254706df4b8eb113cd2e2b2671d8.jpg&amp;w=828&amp;q=75 828w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Ftiger%2F5lyRIbNHQt-LHmF72A6X2_b6c4254706df4b8eb113cd2e2b2671d8.jpg&amp;w=1080&amp;q=75 1080w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Ftiger%2F5lyRIbNHQt-LHmF72A6X2_b6c4254706df4b8eb113cd2e2b2671d8.jpg&amp;w=1200&amp;q=75 1200w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Ftiger%2F5lyRIbNHQt-LHmF72A6X2_b6c4254706df4b8eb113cd2e2b2671d8.jpg&amp;w=1920&amp;q=75 1920w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Ftiger%2F5lyRIbNHQt-LHmF72A6X2_b6c4254706df4b8eb113cd2e2b2671d8.jpg&amp;w=2048&amp;q=75 2048w, /_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Ftiger%2F5lyRIbNHQt-LHmF72A6X2_b6c4254706df4b8eb113cd2e2b2671d8.jpg&amp;w=3840&amp;q=75 3840w"
-                                src="/_next/image?url=https%3A%2F%2Ffal.media%2Ffiles%2Ftiger%2F5lyRIbNHQt-LHmF72A6X2_b6c4254706df4b8eb113cd2e2b2671d8.jpg&amp;w=3840&amp;q=75"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="space-y-4">
-                          <h3 className="text-xl font-semibold">
-                            ✅ Input model name and type
-                          </h3>
-                          <p className="text-sm text-description">
-                            Name your model any name you want, and select the
-                            type of subject (Person, Man, Woman)
-                          </p>
-                        </div>
-                        <div className="space-y-4">
-                          <h3 className="text-xl font-semibold">
-                            ✅ Choose good pictures
-                          </h3>
-                          <p className="text-sm text-description">
-                            5-10 high-quality samples, front facing, square
-                            aspect ratio, 1 person in frame, variety
-                          </p>
-                          <div className="flex flex-wrap justify-center gap-4">
-                            <div className="relative w-[110px] h-[130px]">
-                              <img
-                                alt="✅ Choose good pictures image 1"
-                                loading="lazy"
-                                decoding="async"
-                                data-nimg="fill"
-                                className="rounded-md"
-                                style={{
-                                  position: "absolute",
-                                  height: "100%",
-                                  width: "100%",
-                                  left: 0,
-                                  top: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  color: "transparent",
-                                }}
-                                sizes="100vw"
-                                srcSet="/_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_2-Tpn4lNZQBC0I7YYKPAJHDQCvxFEFQh.png&amp;w=640&amp;q=75 640w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_2-Tpn4lNZQBC0I7YYKPAJHDQCvxFEFQh.png&amp;w=750&amp;q=75 750w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_2-Tpn4lNZQBC0I7YYKPAJHDQCvxFEFQh.png&amp;w=828&amp;q=75 828w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_2-Tpn4lNZQBC0I7YYKPAJHDQCvxFEFQh.png&amp;w=1080&amp;q=75 1080w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_2-Tpn4lNZQBC0I7YYKPAJHDQCvxFEFQh.png&amp;w=1200&amp;q=75 1200w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_2-Tpn4lNZQBC0I7YYKPAJHDQCvxFEFQh.png&amp;w=1920&amp;q=75 1920w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_2-Tpn4lNZQBC0I7YYKPAJHDQCvxFEFQh.png&amp;w=2048&amp;q=75 2048w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_2-Tpn4lNZQBC0I7YYKPAJHDQCvxFEFQh.png&amp;w=3840&amp;q=75 3840w"
-                                src="/_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_2-Tpn4lNZQBC0I7YYKPAJHDQCvxFEFQh.png&amp;w=3840&amp;q=75"
-                              />
-                            </div>
-                            <div className="relative w-[110px] h-[130px]">
-                              <img
-                                alt="✅ Choose good pictures image 2"
-                                loading="lazy"
-                                decoding="async"
-                                data-nimg="fill"
-                                className="rounded-md"
-                                style={{
-                                  position: "absolute",
-                                  height: "100%",
-                                  width: "100%",
-                                  left: 0,
-                                  top: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  color: "transparent",
-                                }}
-                                sizes="100vw"
-                                srcSet="/_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_4-O6YDt8imZ9qNClbfNtGCWGkxqv8bZQ.png&amp;w=640&amp;q=75 640w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_4-O6YDt8imZ9qNClbfNtGCWGkxqv8bZQ.png&amp;w=750&amp;q=75 750w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_4-O6YDt8imZ9qNClbfNtGCWGkxqv8bZQ.png&amp;w=828&amp;q=75 828w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_4-O6YDt8imZ9qNClbfNtGCWGkxqv8bZQ.png&amp;w=1080&amp;q=75 1080w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_4-O6YDt8imZ9qNClbfNtGCWGkxqv8bZQ.png&amp;w=1200&amp;q=75 1200w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_4-O6YDt8imZ9qNClbfNtGCWGkxqv8bZQ.png&amp;w=1920&amp;q=75 1920w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_4-O6YDt8imZ9qNClbfNtGCWGkxqv8bZQ.png&amp;w=2048&amp;q=75 2048w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_4-O6YDt8imZ9qNClbfNtGCWGkxqv8bZQ.png&amp;w=3840&amp;q=75 3840w"
-                                src="/_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_4-O6YDt8imZ9qNClbfNtGCWGkxqv8bZQ.png&amp;w=3840&amp;q=75"
-                              />
-                            </div>
-                            <div className="relative w-[110px] h-[130px]">
-                              <img
-                                alt="✅ Choose good pictures image 3"
-                                loading="lazy"
-                                decoding="async"
-                                data-nimg="fill"
-                                className="rounded-md"
-                                style={{
-                                  position: "absolute",
-                                  height: "100%",
-                                  width: "100%",
-                                  left: 0,
-                                  top: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  color: "transparent",
-                                }}
-                                sizes="100vw"
-                                srcSet="/_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_5-uCtKrNy2o2B1EgXq4y9yoIaJNOr6Ye.png&amp;w=640&amp;q=75 640w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_5-uCtKrNy2o2B1EgXq4y9yoIaJNOr6Ye.png&amp;w=750&amp;q=75 750w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_5-uCtKrNy2o2B1EgXq4y9yoIaJNOr6Ye.png&amp;w=828&amp;q=75 828w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_5-uCtKrNy2o2B1EgXq4y9yoIaJNOr6Ye.png&amp;w=1080&amp;q=75 1080w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_5-uCtKrNy2o2B1EgXq4y9yoIaJNOr6Ye.png&amp;w=1200&amp;q=75 1200w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_5-uCtKrNy2o2B1EgXq4y9yoIaJNOr6Ye.png&amp;w=1920&amp;q=75 1920w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_5-uCtKrNy2o2B1EgXq4y9yoIaJNOr6Ye.png&amp;w=2048&amp;q=75 2048w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_5-uCtKrNy2o2B1EgXq4y9yoIaJNOr6Ye.png&amp;w=3840&amp;q=75 3840w"
-                                src="/_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_5-uCtKrNy2o2B1EgXq4y9yoIaJNOr6Ye.png&amp;w=3840&amp;q=75"
-                              />
-                            </div>
-                            <div className="relative w-[110px] h-[130px]">
-                              <img
-                                alt="✅ Choose good pictures image 4"
-                                loading="lazy"
-                                decoding="async"
-                                data-nimg="fill"
-                                className="rounded-md"
-                                style={{
-                                  position: "absolute",
-                                  height: "100%",
-                                  width: "100%",
-                                  left: 0,
-                                  top: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  color: "transparent",
-                                }}
-                                sizes="100vw"
-                                srcSet="/_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_6-BJgAt8M1JVsfTNoBMfJ9B2bTlTcrUG.png&amp;w=640&amp;q=75 640w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_6-BJgAt8M1JVsfTNoBMfJ9B2bTlTcrUG.png&amp;w=750&amp;q=75 750w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_6-BJgAt8M1JVsfTNoBMfJ9B2bTlTcrUG.png&amp;w=828&amp;q=75 828w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_6-BJgAt8M1JVsfTNoBMfJ9B2bTlTcrUG.png&amp;w=1080&amp;q=75 1080w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_6-BJgAt8M1JVsfTNoBMfJ9B2bTlTcrUG.png&amp;w=1200&amp;q=75 1200w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_6-BJgAt8M1JVsfTNoBMfJ9B2bTlTcrUG.png&amp;w=1920&amp;q=75 1920w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_6-BJgAt8M1JVsfTNoBMfJ9B2bTlTcrUG.png&amp;w=2048&amp;q=75 2048w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_6-BJgAt8M1JVsfTNoBMfJ9B2bTlTcrUG.png&amp;w=3840&amp;q=75 3840w"
-                                src="/_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2Fimage_6-BJgAt8M1JVsfTNoBMfJ9B2bTlTcrUG.png&amp;w=3840&amp;q=75"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="space-y-4">
-                          <h3 className="text-xl font-semibold">
-                            ❌ Example of bad pictures
-                          </h3>
-                          <p className="text-sm text-description">
-                            Multiple subjects, face covered, NSFW images,
-                            blurry, uncropped, full length
-                          </p>
-                          <div className="flex flex-wrap justify-center gap-4">
-                            <div className="relative w-[110px] h-[130px]">
-                              <img
-                                alt="❌ Example of bad pictures image 1"
-                                loading="lazy"
-                                decoding="async"
-                                data-nimg="fill"
-                                className="rounded-md"
-                                style={{
-                                  position: "absolute",
-                                  height: "100%",
-                                  width: "100%",
-                                  left: 0,
-                                  top: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  color: "transparent",
-                                }}
-                                sizes="100vw"
-                                srcSet="/_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.48.38%2520PM-YdVuOzvp6ES0eAEf3KcSif2vgNEQVb.png&amp;w=640&amp;q=75 640w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.48.38%2520PM-YdVuOzvp6ES0eAEf3KcSif2vgNEQVb.png&amp;w=750&amp;q=75 750w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.48.38%2520PM-YdVuOzvp6ES0eAEf3KcSif2vgNEQVb.png&amp;w=828&amp;q=75 828w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.48.38%2520PM-YdVuOzvp6ES0eAEf3KcSif2vgNEQVb.png&amp;w=1080&amp;q=75 1080w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.48.38%2520PM-YdVuOzvp6ES0eAEf3KcSif2vgNEQVb.png&amp;w=1200&amp;q=75 1200w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.48.38%2520PM-YdVuOzvp6ES0eAEf3KcSif2vgNEQVb.png&amp;w=1920&amp;q=75 1920w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.48.38%2520PM-YdVuOzvp6ES0eAEf3KcSif2vgNEQVb.png&amp;w=2048&amp;q=75 2048w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.48.38%2520PM-YdVuOzvp6ES0eAEf3KcSif2vgNEQVb.png&amp;w=3840&amp;q=75 3840w"
-                                src="/_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.48.38%2520PM-YdVuOzvp6ES0eAEf3KcSif2vgNEQVb.png&amp;w=3840&amp;q=75"
-                              />
-                            </div>
-                            <div className="relative w-[110px] h-[130px]">
-                              <img
-                                alt="❌ Example of bad pictures image 2"
-                                loading="lazy"
-                                decoding="async"
-                                data-nimg="fill"
-                                className="rounded-md"
-                                style={{
-                                  position: "absolute",
-                                  height: "100%",
-                                  width: "100%",
-                                  left: 0,
-                                  top: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  color: "transparent",
-                                }}
-                                sizes="100vw"
-                                srcSet="/_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.52.14%2520PM-2TjRxwJxB1jNC7RYJsssuJ25vv7Uhd.png&amp;w=640&amp;q=75 640w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.52.14%2520PM-2TjRxwJxB1jNC7RYJsssuJ25vv7Uhd.png&amp;w=750&amp;q=75 750w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.52.14%2520PM-2TjRxwJxB1jNC7RYJsssuJ25vv7Uhd.png&amp;w=828&amp;q=75 828w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.52.14%2520PM-2TjRxwJxB1jNC7RYJsssuJ25vv7Uhd.png&amp;w=1080&amp;q=75 1080w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.52.14%2520PM-2TjRxwJxB1jNC7RYJsssuJ25vv7Uhd.png&amp;w=1200&amp;q=75 1200w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.52.14%2520PM-2TjRxwJxB1jNC7RYJsssuJ25vv7Uhd.png&amp;w=1920&amp;q=75 1920w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.52.14%2520PM-2TjRxwJxB1jNC7RYJsssuJ25vv7Uhd.png&amp;w=2048&amp;q=75 2048w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.52.14%2520PM-2TjRxwJxB1jNC7RYJsssuJ25vv7Uhd.png&amp;w=3840&amp;q=75 3840w"
-                                src="/_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.52.14%2520PM-2TjRxwJxB1jNC7RYJsssuJ25vv7Uhd.png&amp;w=3840&amp;q=75"
-                              />
-                            </div>
-                            <div className="relative w-[110px] h-[130px]">
-                              <img
-                                alt="❌ Example of bad pictures image 3"
-                                loading="lazy"
-                                decoding="async"
-                                data-nimg="fill"
-                                className="rounded-md"
-                                style={{
-                                  position: "absolute",
-                                  height: "100%",
-                                  width: "100%",
-                                  left: 0,
-                                  top: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  color: "transparent",
-                                }}
-                                sizes="100vw"
-                                srcSet="/_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.49.01%2520PM-LEiif0NHcKTgSdHsyomZ8iI3kOlShz.png&amp;w=640&amp;q=75 640w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.49.01%2520PM-LEiif0NHcKTgSdHsyomZ8iI3kOlShz.png&amp;w=750&amp;q=75 750w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.49.01%2520PM-LEiif0NHcKTgSdHsyomZ8iI3kOlShz.png&amp;w=828&amp;q=75 828w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.49.01%2520PM-LEiif0NHcKTgSdHsyomZ8iI3kOlShz.png&amp;w=1080&amp;q=75 1080w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.49.01%2520PM-LEiif0NHcKTgSdHsyomZ8iI3kOlShz.png&amp;w=1200&amp;q=75 1200w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.49.01%2520PM-LEiif0NHcKTgSdHsyomZ8iI3kOlShz.png&amp;w=1920&amp;q=75 1920w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.49.01%2520PM-LEiif0NHcKTgSdHsyomZ8iI3kOlShz.png&amp;w=2048&amp;q=75 2048w, /_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.49.01%2520PM-LEiif0NHcKTgSdHsyomZ8iI3kOlShz.png&amp;w=3840&amp;q=75 3840w"
-                                src="/_next/image?url=https%3A%2F%2Ftncnlztihyicwsra.public.blob.vercel-storage.com%2Fexample_samples%2FScreen%2520Shot%25202024-09-04%2520at%25205.49.01%2520PM-LEiif0NHcKTgSdHsyomZ8iI3kOlShz.png&amp;w=3840&amp;q=75"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="space-y-4">
-                          <h3 className="text-xl font-semibold">
-                            ✅ Train your model
-                          </h3>
-                          <p className="text-sm text-description">
-                            Training your model takes ~30 minutes. You can leave
-                            the page and come back later.
-                          </p>
-                        </div>
-                        <div className="space-y-4">
-                          <h3 className="text-xl font-semibold">
-                            ✅ Generate images
-                          </h3>
-                          <p className="text-sm text-description">
-                            Once your model is trained, you can generate images
-                            using prompts. Make sure to include the subject
-                            keyword in your prompts.
-                          </p>
-                        </div>
-                      </div>
-                      <div
-                        data-state="inactive"
-                        data-orientation="horizontal"
-                        role="tabpanel"
-                        aria-labelledby="radix-:R5uuuunjla:-trigger-Product"
-                        id="radix-:R5uuuunjla:-content-Product"
-                        className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-8"
-                      ></div>
-                      <div
-                        data-state="inactive"
-                        data-orientation="horizontal"
-                        role="tabpanel"
-                        aria-labelledby="radix-:R5uuuunjla:-trigger-Style"
-                        id="radix-:R5uuuunjla:-content-Style"
-                        className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-8"
-                      ></div>
-                      <div
-                        data-state="inactive"
-                        data-orientation="horizontal"
-                        role="tabpanel"
-                        aria-labelledby="radix-:R5uuuunjla:-trigger-Pet"
-                        id="radix-:R5uuuunjla:-content-Pet"
-                        className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-8"
-                      ></div>
-                    </div>
-                  </div>
+                  <TrainingHistory userId={data?.user_id} />
                 </div>
               </div>
             </div>

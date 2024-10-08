@@ -21,17 +21,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    // console.log(req.body)
     const form = new IncomingForm();
-
-    // if (!files || files.length < 10) {
-    //     console.log("no hi");
-    //   return res
-    //     .status(400)
-    //     .json({ error: "Please upload at least 10 files." });
-    // }
-
-    //     const form = new formidable.IncomingForm();
 
     form.parse(req, async (err, fields, files) => {
       if (err) {
@@ -41,14 +31,14 @@ export default async function handler(
       const userId = Array.isArray(fields.userId)
         ? fields.userId[0]
         : fields.userId;
+      const name = Array.isArray(fields.name) ? fields.name[0] : fields.name;
       const uploadedFiles = Object.values(files)[0]; // Get uploaded files
-      console.log(userId)
 
       // Ensure at least 10 files are uploaded
       if (uploadedFiles.length < 10) {
         return res
           .status(400)
-          .json({ error: "Please upload at least 10 files." });
+          .json({ message: "Please upload at least 10 files." });
       }
       try {
         // Upload files to Cloudinary
@@ -63,27 +53,36 @@ export default async function handler(
             return uploadResponse.secure_url;
           })
         );
-        console.log(uploadedImages.length);
+        
         // Store the training data in MongoDB using Prisma
         const training = await prisma.training.create({
           data: {
             userId: userId,
             images: uploadedImages,
+            name: name,
+            trigger_word: userId?.concat("-" + name),
           },
         });
-
-        res.status(200).json({ message: "Files uploaded successfully", training });
+        return res.status(200).json({
+          message: "Training data uploaded successfully",
+        });
       } catch (error) {
-        console.error("Error uploading files: ", error);
-        res
-          .status(500)
-          .json({ error: "Failed to upload files or save training data" });
+        // if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        // Check if the error is a unique constraint violation
+        console.log(error.code);
+        if (error.code === "P2002") {
+          return res.status(409).json({
+            success: false,
+            message: "Duplicate name, please choose a different name.",
+          });
+        } else {
+          return res.status(500).json({
+            message: "Failed to upload files or save training data",
+          });
+        }
       }
     });
   } else {
-            res
-              .status(404)
-              .json({ message: "Method not allowed"});
-
+    res.status(405).json({ message: "Method not allowed" });
   }
 }
