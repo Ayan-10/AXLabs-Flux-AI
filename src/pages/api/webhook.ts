@@ -1,0 +1,44 @@
+import type { NextApiRequest, NextApiResponse } from "next";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method === "POST") {
+    const { tune } = req.body;
+    const { userId } = req.query;
+
+    try {
+      // Extract tune_id from request body
+      const tuneId = tune.id;
+      // Find the training in MongoDB with the tune_id and user_id
+      const training = await prisma.training.findFirst({
+        where: {
+          requestId: tuneId,
+          userId: userId
+        },
+      });
+
+      if (!training) {
+        return res.status(404).json({ error: "Training not found" });
+      }
+
+      // Update the training status to 'completed'
+      await prisma.training.update({
+        where: { id: training.id },
+        data: { status: "COMPLETED" },
+      });
+
+      // Send a success response
+      res.status(200).json({ message: "Training status updated to completed" });
+    } catch (error) {
+      console.error("Error updating training status:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  } else {
+    res.status(405).json({ message: "Method not allowed" });
+  }
+}

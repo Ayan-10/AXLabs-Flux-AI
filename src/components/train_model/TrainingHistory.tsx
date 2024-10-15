@@ -9,7 +9,7 @@ import {
   dividerClasses,
 } from "@mui/material";
 
-const TrainingHistory = ({ userId }) => {
+const TrainingHistory = ({ userId, uploadTrigger }) => {
   const [trainingData, setTrainingData] = useState([]);
   const [expanded, setExpanded] = useState({});
 
@@ -28,7 +28,7 @@ const TrainingHistory = ({ userId }) => {
     };
 
     fetchTrainingData();
-  }, [userId]);
+  }, [userId, uploadTrigger]);
 
   const handleToggle = (id) => {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -65,7 +65,7 @@ const TrainingHistory = ({ userId }) => {
                 <Collapse in={expanded[training.id]}>
                   <div className="my-4">
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                      {console.log(training.images)}
+                      {/* {console.log(training.images)} */}
                       {training.images.map((imageUrl, index) => (
                         <img
                           key={index}

@@ -19,6 +19,7 @@ export const Train = () => {
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState(""); // Initialize state
+  const [uploadTrigger, setUploadTrigger] = useState(false);
 
   const handleButtonClick = () => {
     // e.preventDefault();
@@ -64,13 +65,14 @@ export const Train = () => {
       method: "POST",
       body: formData,
     });
-    
+
     const resjson = await res.json();
 
     if (res.ok) {
       setIsLoading(false);
       setFiles([]);
       setPreviewUrls([]);
+      setUploadTrigger((prev) => !prev);
 
       toast.success(resjson.message);
     } else {
@@ -78,6 +80,7 @@ export const Train = () => {
       setFiles([]);
       setPreviewUrls([]);
       toast.error(resjson.message);
+      setUploadTrigger((prev) => !prev);
     }
   };
 
@@ -289,7 +292,10 @@ export const Train = () => {
                       Training History
                     </h3>
                   </div>
-                  <TrainingHistory userId={data?.user_id} />
+                  <TrainingHistory
+                    userId={data?.user_id}
+                    uploadTrigger={uploadTrigger}
+                  />
                 </div>
               </div>
             </div>

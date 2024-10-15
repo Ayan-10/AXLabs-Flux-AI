@@ -23,38 +23,60 @@ interface PricingProps {
 }
 
 const pricingList: PricingProps[] = [
-	{
-		title: "Free",
-		popular: 0,
-		price: 0,
-		description: "Lorem ipsum dolor sit, amet ipsum consectetur adipisicing elit.",
-		buttonText: "Get Started",
-		benefitList: ["1 Team member", "2 GB Storage", "Upto 4 pages", "Community support", "lorem ipsum dolor"],
-		href: "/",
-		billing: "/month",
-	},
-	{
-		title: "Premium",
-		popular: 1,
-		price: 10,
-		description: "Lorem ipsum dolor sit, amet ipsum consectetur adipisicing elit.",
-		buttonText: "Buy Now",
-		benefitList: ["4 Team member", "4 GB Storage", "Upto 6 pages", "Priority support", "lorem ipsum dolor"],
-		href: "/api/auth/login",
-		paymentLink: process.env.STRIPE_MONTHLY_PLAN_LINK,
-		billing: "/month",
-	},
-	{
-		title: "Enterprise",
-		popular: 0,
-		price: 99,
-		description: "Lorem ipsum dolor sit, amet ipsum consectetur adipisicing elit.",
-		buttonText: "Buy Now",
-		benefitList: ["10 Team member", "8 GB Storage", "Upto 10 pages", "Priority support", "lorem ipsum dolor"],
-		href: "/api/auth/login",
-		paymentLink: process.env.STRIPE_YEARLY_PLAN_LINK,
-		billing: "/year",
-	},
+  {
+    title: "Starter",
+    popular: 0,
+    price: 2,
+    description:
+      "Lorem ipsum dolor sit, amet ipsum consectetur adipisicing elit.",
+    buttonText: "Buy Now",
+    benefitList: [
+      "2 Prompt to Image",
+      "1 Model Training",
+      "Upto 4 pages",
+      "Community support",
+      "lorem ipsum dolor",
+    ],
+    href: "/api/auth/login",
+    paymentLink: process.env.STRIPE_STARTER_PLAN_LINK,
+    billing: "/month",
+  },
+  {
+    title: "Pro",
+    popular: 1,
+    price: 5,
+    description:
+      "Lorem ipsum dolor sit, amet ipsum consectetur adipisicing elit.",
+    buttonText: "Buy Now",
+    benefitList: [
+      "4 Prompt to Image",
+      "2 Model Training",
+      "Upto 6 pages",
+      "Priority support",
+      "lorem ipsum dolor",
+    ],
+    href: "/api/auth/login",
+    paymentLink: process.env.STRIPE_PRO_PLAN_LINK,
+    billing: "/month",
+  },
+  {
+    title: "Elite",
+    popular: 0,
+    price: 10,
+    description:
+      "Lorem ipsum dolor sit, amet ipsum consectetur adipisicing elit.",
+    buttonText: "Buy Now",
+    benefitList: [
+      "6 Prompt to Image",
+      "3 Model Training",
+      "Upto 10 pages",
+      "Priority support",
+      "lorem ipsum dolor",
+    ],
+    href: "/api/auth/login",
+    paymentLink: process.env.STRIPE_ELITE_PLAN_LINK,
+    billing: "/year",
+  },
 ];
 
 export const Pricing = () => {

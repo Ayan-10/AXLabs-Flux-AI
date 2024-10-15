@@ -1,63 +1,101 @@
-'use client'
+"use client";
 
 import { useState } from "react";
 import * as fal from "@fal-ai/serverless-client";
+import { ToastContainer, toast } from "react-toastify";
+
+import { useQuery } from "@tanstack/react-query";
+import { checkAuthStatus } from "@/app/auth/callback/actions";
+import prisma from "@/db/prisma";
+import LinearProgress from "@mui/material/LinearProgress"; // Import LinearProgress
 
 fal.config({
-  proxyUrl : "/api/fal/proxy",
-})
-
+  proxyUrl: "/api/fal/proxy",
+});
 
 export const Playground = () => {
-    const [prompt, setPrompt] = useState("");
-    const [imageUrl, setImageUrl] = useState<string>(
-      "https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg"
-    );
-    const [loading, setLoading] = useState(false);
-    const [imageLoading, setImageLoading] = useState(false);
-
-const handleGenerate = async () => {
-  setLoading(true);
-  setImageUrl(
+  const { data } = useQuery({
+    queryKey: ["checkAuthStatus"],
+    queryFn: async () => await checkAuthStatus(),
+  });
+  const [prompt, setPrompt] = useState("");
+  const [imageUrl, setImageUrl] = useState<string>(
     "https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg"
   );
-  setImageLoading(true);
-  try {
-    // Call the API
-    const result = await fal.subscribe("110602490-lora", {
-      input: {
-        prompt: prompt,
-        model_name: "stabilityai/stable-diffusion-xl-base-1.0",
-        image_size: "square_hd",
-      },
-      logs: true,
-      onQueueUpdate: (update) => {
-        if (update.status === "IN_PROGRESS") {
-          update.logs.map((log) => log.message).forEach(console.log);
-        }
-      },
-    });
-    const image = result.images[0].url;
-    console.log("result ");
-    console.log(image);
-    setImageUrl(image);
+  const [loading, setLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-    // Set the generated image URL when request is complete
-  } catch (error) {
-    console.error("Error generating image:", error);
-  } finally {
-    setLoading(false);
-  }
-};
+  const userId = data?.user_id;
 
-const  handleImageLoad = () =>{
-  setImageLoading(false)
-}
+  const handleGenerate = async () => {
+    setLoading(true);
+    setImageUrl(
+      "https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg"
+    );
+    setImageLoading(true);
+    setIsLoading(true);
 
+    try {
+      // Call the API
+      const result = await fal.subscribe("110602490-lora", {
+        input: {
+          prompt: prompt,
+          model_name: "stabilityai/stable-diffusion-xl-base-1.0",
+          image_size: "square_hd",
+        },
+        logs: true,
+        onQueueUpdate: (update) => {
+          if (update.status === "IN_PROGRESS") {
+            update.logs.map((log) => log.message).forEach(console.log);
+          }
+        },
+      });
+      const image = result.images[0].url;
+      console.log("result ");
+      console.log(userId);
+      setImageUrl(image);
 
+      const res = await fetch("/api/playground/upload", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: data?.user_id, // Assuming userId is available from the auth status
+          prompt: prompt,
+          name: "Test the app",
+          images: result.images, // Number of images generated
+        }),
+      });
+      
+    const resjson = await res.json();
+
+      if (res.ok) {
+        setIsLoading(false);
+
+        toast.success(resjson.message);
+      } else {
+        setIsLoading(false);
+        toast.error(resjson.message);
+      }
+
+      // Set the generated image URL when request is complete
+    } catch (error) {
+      console.error("Error generating image:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
 
   return (
     <div className="flex flex-1 flex-col items-center py-16">
+      <ToastContainer />
+
       <div className="flex w-full flex-col px-4 lg:px-40">
         <div className="w-full h-full">
           <div className="flex flex-row gap-4">
@@ -118,15 +156,19 @@ const  handleImageLoad = () =>{
                       rows={4}
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
-                    >
-                      a @waterbot37 product, frstingln illustration
-                    </textarea>
+                    />
                     <button
                       className="inline-flex items-center justify-center rounded-md text-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-secondary shadow hover:bg-primary/90 h-10 px-4 py-2"
                       onClick={handleGenerate}
                     >
                       Generate
                     </button>
+                    {isLoading && (
+                      <div className="mt-4 px-2">
+                        {" "}
+                        <LinearProgress />
+                      </div>
+                    )}
                     <div className="transition-all duration-300 max-h-0 opacity-0">
                       <div className="relative bg-zinc-800 rounded-lg p-4">
                         <button className="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
@@ -244,7 +286,9 @@ const  handleImageLoad = () =>{
                             data-testid="value-output-image"
                             src={imageUrl}
                             alt="output"
-                            className={`max-w-full ${imageLoading ? 'hidden': ''}`}
+                            className={`max-w-full ${
+                              imageLoading ? "hidden" : ""
+                            }`}
                             onLoad={handleImageLoad}
                           />
                         )}

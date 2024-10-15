@@ -18,18 +18,21 @@ enum SubscriptionPeriod {
 }
 
 model User {
-  id         String  @id @default(cuid()) @map("_id")
-  email      String  @unique
-  name       String?
-  image      String?
-  plan       Plan    @default(free)
-  customerId String? @unique // Stripe customer ID, this will be important when we need to delete the subscription
+  id            String  @id @default(cuid()) @map("_id")
+  email         String  @unique
+  name          String?
+  image         String?
+  plan          Plan    @default(free)
+  customerId    String? @unique // Stripe customer ID, this will be important when we need to delete the subscription
+  modelCredits  Int     @default(0)
+  imageCredits  Int     @default(0)
 
-  Subscription Subscription?
-  Training       Training[]      
+  Subscription  Subscription?
+  Training      Training[]
+  Play          Play[]      
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Subscription {
@@ -49,11 +52,25 @@ model Subscription {
 
 model Training {
   id            String             @id @default(cuid()) @map("_id")
-  userId        String             @unique
+  userId        String             
   images        String[]
   status        String             @default("IN PROGRESS")
   name          String
-  trigger_word  String             @unique
+  triggerWord  String             @unique
+  requestId     String             @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  User User @relation(fields: [userId], references: [id])
+}
+
+model Play {
+  id            String             @id @default(cuid()) @map("_id")
+  userId        String             
+  images        String[]
+  name          String
+  prompt        String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
