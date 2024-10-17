@@ -8,10 +8,26 @@ import {
   Collapse,
   dividerClasses,
 } from "@mui/material";
+// Define a type for each training record
+type Training = {
+  id: string;
+  name: string;
+  status: "IN PROGRESS" | "completed";
+  images: string[]; // assuming it's an array of image URLs
+};
 
-const TrainingHistory = ({ userId, uploadTrigger }) => {
-  const [trainingData, setTrainingData] = useState([]);
-  const [expanded, setExpanded] = useState({});
+// Define props for the component
+type TrainingHistoryProps = {
+  userId: string | undefined; // assuming userId is a string
+  uploadTrigger: boolean | number; // assuming a boolean or number triggers re-fetch
+};
+
+const TrainingHistory: React.FC<TrainingHistoryProps> = ({
+  userId,
+  uploadTrigger,
+}) => {
+  const [trainingData, setTrainingData] = useState<Training[]>([]);
+  const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({}); // Add type for expanded state
 
   useEffect(() => {
     const fetchTrainingData = async () => {
@@ -30,7 +46,7 @@ const TrainingHistory = ({ userId, uploadTrigger }) => {
     fetchTrainingData();
   }, [userId, uploadTrigger]);
 
-  const handleToggle = (id) => {
+  const handleToggle = (id: string) => {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 

@@ -4,7 +4,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "GET") {
     const userId = req.query.userId;
+    if (Array.isArray(userId)) {
+      return res.status(400).json({ error: "Invalid userId" });
+    }
 
+    if (typeof userId !== "string") {
+      return res.status(400).json({ error: "userId must be a string" });
+    }
     try {
       const trainingData = await prisma.training.findMany({
         where: { userId: userId }, // Adjust based on your schema

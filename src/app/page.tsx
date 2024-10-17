@@ -3,9 +3,9 @@ import { Pricing } from "@/components/Pricing";
 
 export default function Home() {
 	return (
-		<main>
-			{/* <Hero /> */}
-			<Pricing />
-		</main>
-	);
+    <main className="flex-1 ml-16">
+      {/* <Hero /> */}
+      <Pricing />
+    </main>
+  );
 }

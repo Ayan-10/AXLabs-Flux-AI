@@ -85,10 +85,10 @@ export const Train = () => {
   };
 
   return (
-    <div className="flex flex-1 flex-col items-center py-16">
+    <div className="flex flex-1 flex-col items-center py-16 ml-16">
       <ToastContainer />
 
-      <div className="flex w-full flex-col px-4 lg:px-40">
+      <div className="flex w-full flex-col px-4 lg:px-28">
         <div className="w-full mx-auto px-2 md:px-8 space-y-8">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col lg:flex-row gap-8">
@@ -245,7 +245,8 @@ export const Train = () => {
                           Training usually takes between 20 to 40 minutes.
                         </li>
                         <li>
-                          When your model is ready, we'll send you an email.
+                          When your model is ready, we&apos;ll send you an
+                          email.
                         </li>
                         <li>No nudes / NSFW images allowed.</li>
                       </ul>
@@ -272,8 +273,8 @@ export const Train = () => {
                         </li>
                       </ul>
                       <p className="mt-4">
-                        You'll be more likely to get a good model by uploading
-                        high quality samples.
+                        You&apos;ll be more likely to get a good model by
+                        uploading high quality samples.
                       </p>
                       <p className="mt-1">
                         Keep in mind there is no single best way to train a

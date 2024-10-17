@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import * as fal from "@fal-ai/serverless-client";
-import { ToastContainer, toast } from "react-toastify";
 
 import { useQuery } from "@tanstack/react-query";
 import { checkAuthStatus } from "@/app/auth/callback/actions";
@@ -12,6 +11,13 @@ import LinearProgress from "@mui/material/LinearProgress"; // Import LinearProgr
 fal.config({
   proxyUrl: "/api/fal/proxy",
 });
+
+interface FalResult {
+  images: Array<{
+    url: string;
+  }>;
+}
+
 
 export const Playground = () => {
   const { data } = useQuery({
@@ -38,7 +44,7 @@ export const Playground = () => {
 
     try {
       // Call the API
-      const result = await fal.subscribe("110602490-lora", {
+      const result: FalResult = await fal.subscribe("110602490-lora", {
         input: {
           prompt: prompt,
           model_name: "stabilityai/stable-diffusion-xl-base-1.0",
@@ -74,10 +80,8 @@ export const Playground = () => {
       if (res.ok) {
         setIsLoading(false);
 
-        toast.success(resjson.message);
       } else {
         setIsLoading(false);
-        toast.error(resjson.message);
       }
 
       // Set the generated image URL when request is complete
@@ -93,10 +97,9 @@ export const Playground = () => {
   };
 
   return (
-    <div className="flex flex-1 flex-col items-center py-16">
-      <ToastContainer />
+    <div className="flex flex-1 flex-col items-center py-16 ml-16 mr-0">
 
-      <div className="flex w-full flex-col px-4 lg:px-40">
+      <div className="flex w-full flex-col px-4 lg:px-28">
         <div className="w-full h-full">
           <div className="flex flex-row gap-4">
             <a className="text-xs w-fit" href="/">

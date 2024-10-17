@@ -10,7 +10,13 @@ export default async function handler(
   if (req.method === "POST") {
     const { tune } = req.body;
     const { userId } = req.query;
+    if (Array.isArray(userId)) {
+      return res.status(400).json({ error: "Invalid userId" });
+    }
 
+    if (typeof userId !== "string") {
+      return res.status(400).json({ error: "userId must be a string" });
+    }
     try {
       // Extract tune_id from request body
       const tuneId = tune.id;
@@ -18,7 +24,7 @@ export default async function handler(
       const training = await prisma.training.findFirst({
         where: {
           requestId: tuneId,
-          userId: userId
+          userId: userId,
         },
       });
 

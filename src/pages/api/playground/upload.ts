@@ -1,14 +1,24 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/db/prisma";
+import { Prisma } from "@prisma/client";
 
+type Image = {
+  url: string; // Define the structure of each image object
+};
 
+type RequestBody = {
+  userId: string;
+  name: string;
+  prompt: string;
+  images: Image[];
+};
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const { userId, name, prompt, images } = req.body;
+    const { userId, name, prompt, images }: RequestBody = req.body;
 
     try {
       const user = await prisma.user.findUnique({ where: { id: userId } });
@@ -36,16 +46,21 @@ export default async function handler(
       return res.status(200).json({
         message: "Data uploaded successfully",
       });
-    } catch (error) {
-      // if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      // Check if the error is a unique constraint violation
-      console.log("erro");
-      console.log(error);
-      if (error.code === "P2002") {
-        return res.status(409).json({
-          success: false,
-          message: "Duplicate name, please choose a different name.",
-        });
+    } catch (error: unknown) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        // Check if the error is a unique constraint violation
+        console.log("erro");
+        console.log(error);
+        if (error.code === "P2002") {
+          return res.status(409).json({
+            success: false,
+            message: "Duplicate name, please choose a different name.",
+          });
+        } else {
+          return res.status(500).json({
+            message: "Failed to upload files or save training data",
+          });
+        }
       } else {
         return res.status(500).json({
           message: "Failed to upload files or save training data",

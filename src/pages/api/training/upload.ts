@@ -3,7 +3,7 @@ import prisma from "@/db/prisma";
 import { v2 as cloudinary } from "cloudinary";
 import { IncomingForm } from "formidable"; // Correct import for formidable
 import JSZip from "jszip";
-
+import { Prisma } from "@prisma/client";
 
 // Cloudinary configuration
 cloudinary.config({
@@ -35,7 +35,24 @@ export default async function handler(
         : fields.userId;
       const name = Array.isArray(fields.name) ? fields.name[0] : fields.name;
       const uploadedFiles = Object.values(files)[0]; // Get uploaded files
+      // Ensure uploadedFiles is an array
+      if (
+        !uploadedFiles ||
+        (Array.isArray(uploadedFiles) && uploadedFiles.length < 10)
+      ) {
+        return res
+          .status(400)
+          .json({ message: "Please upload at least 10 files." });
+      }
 
+      // Check that userId is defined
+      if (!userId || typeof userId !== "string") {
+        return res.status(400).json({ message: "Invalid userId." });
+      }
+
+            if (!name || typeof name !== "string") {
+              return res.status(400).json({ message: "Invalid name" });
+            }
       // Ensure at least 10 files are uploaded
       if (uploadedFiles.length < 10) {
         return res
@@ -59,7 +76,6 @@ export default async function handler(
             };
           })
         );
-
 
         const zip = new JSZip();
         // uploadedImages.forEach((imageUrl, index) => {
@@ -97,8 +113,6 @@ export default async function handler(
         // fs.writeFileSync(base64FilePath, zipDataUrl);
         // // console.log(`Base64 zip content saved at: ${zipDataUrl}`);
 
-
-
         // const { request_id } = await fal.queue.submit(
         //   "fal-ai/flux-lora-fast-training",
         //   {
@@ -108,30 +122,27 @@ export default async function handler(
         //     webhookUrl: `${process.env.NEXT_PUBLIC_WEBHOOK_URL}/api/webhook`, // Set your webhook URL
         //   }
         // );
-        console.log(uploadedImages.length)
-    const response = await fetch("https://api.astria.ai/tunes", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.FAL_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        tune: {
-          title: `${userId.substring(3)?.concat(" " + name)}`,
-          base_tune_id: 1504944, // Example base tune ID
-          model_type: "lora",
-          name: userId.substring(3)?.concat(" " + name),
-          image_urls: uploadedImages.map((image) => image.url),
-          callback: `${process.env.NEXT_PUBLIC_WEBHOOK_URL}/api/webhook?userId=${userId}`,
-        },
-      }),
-    });
+        console.log(uploadedImages.length);
+        const response = await fetch("https://api.astria.ai/tunes", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.FAL_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            tune: {
+              title: `${userId.substring(3)?.concat(" " + name)}`,
+              base_tune_id: 1504944, // Example base tune ID
+              model_type: "lora",
+              name: userId.substring(3)?.concat(" " + name),
+              image_urls: uploadedImages.map((image) => image.url),
+              callback: `${process.env.NEXT_PUBLIC_WEBHOOK_URL}/api/webhook?userId=${userId}`,
+            },
+          }),
+        });
 
-    const data = await response.json();
-    console.log(data);
-
-
-
+        const data = await response.json();
+        console.log(data);
 
         // Store the training data in MongoDB using Prisma
         const training = await prisma.training.create({
@@ -140,26 +151,30 @@ export default async function handler(
             images: uploadedImages.map((image) => image.url),
             name: name,
             triggerWord: userId.substring(3)?.concat(" " + name),
-            falRequestId: request_id, // Store request_id to track status
+            requestId: data.tune_id, // Store request_id to track status
           },
         });
 
         await removeCredits(userId as string, 1, 0);
-        
 
         return res.status(200).json({
           message: "Training data uploaded successfully",
         });
       } catch (error) {
-        // if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        // Check if the error is a unique constraint violation
-        console.log("erro");
-        console.log(error);
-        if (error.code === "P2002") {
-          return res.status(409).json({
-            success: false,
-            message: "Duplicate name, please choose a different name.",
-          });
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          // Check if the error is a unique constraint violation
+          console.log("erro");
+          console.log(error);
+          if (error.code === "P2002") {
+            return res.status(409).json({
+              success: false,
+              message: "Duplicate name, please choose a different name.",
+            });
+          } else {
+            return res.status(500).json({
+              message: "Failed to upload files or save training data",
+            });
+          }
         } else {
           return res.status(500).json({
             message: "Failed to upload files or save training data",
@@ -172,7 +187,11 @@ export default async function handler(
   }
 }
 
-export async function removeCredits(userId: string, models: number, images: number) {
+export async function removeCredits(
+  userId: string,
+  models: number,
+  images: number
+) {
   await prisma.user.update({
     where: { id: userId },
     data: {
