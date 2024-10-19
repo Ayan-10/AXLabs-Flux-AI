@@ -97,9 +97,8 @@ export const Playground = () => {
   };
 
   return (
-    <div className="flex flex-1 flex-col items-center py-16 ml-16 mr-0">
-
-      <div className="flex w-full flex-col px-4 lg:px-28">
+    <div className="flex flex-1 flex-col items-center py-16 ml-[68px] mr-0">
+      <div className="flex w-full flex-col px-4 lg:px-24">
         <div className="w-full h-full">
           <div className="flex flex-row gap-4">
             <a className="text-xs w-fit" href="/">

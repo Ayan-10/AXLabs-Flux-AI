@@ -1,7 +1,7 @@
 "use client";
 
 import { useScrollTrigger } from "@mui/material";
-import { ChevronFirst, ChevronLast, LucideIcon } from "lucide-react";
+import { ChevronFirst, ChevronLast, ImagePlay, LucideIcon, MoreVertical } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ReactNode, useState } from "react";
 import { createContext, useContext } from "react";
@@ -28,17 +28,32 @@ const items: SidebarItemProps[] = [
   {
     icon: LayoutDashboard,
     text: "Home",
-    path: "/",
+    path: "/home",
   },
   {
     icon: Images,
     text: "My Images",
+    path: "/gallery",
+  },
+  {
+    icon: ImagePlay,
+    text: "Generate Image",
     path: "/playground",
   },
   {
     icon: Boxes,
     text: "Models",
+    path: "/models",
+  },
+  {
+    icon: Brain,
+    text: "Train new model",
     path: "/train",
+  },
+  {
+    icon: Settings,
+    text: "Billing & Usage",
+    path: "/",
   },
 ];
 export const Sidebar = () => {
@@ -63,13 +78,34 @@ export const Sidebar = () => {
         </div>
         <hr className="my-3" />
         <SidebarContext.Provider value={{ expanded }}>
+                    <div className="flex-grow">
+
           {items.map((item, index) => (
             <ul className="px-3" key={index}>
               <SidebarItem key={index} item={item} />
             </ul>
             // <SidebarItem key={index} item={item} />
           ))}
+          </div>
         </SidebarContext.Provider>
+        <div className="border-t flex p-3 flex-shrink-0">
+          <img
+            src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
+            alt=""
+            className="w-10 h-10 rounded-md"
+          />
+          <div
+            className={`
+              flex justify-between items-center
+              overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}
+          `}
+          >
+            <div className="leading-4">
+              <h4 className="font-semibold">John Doe</h4>
+              <span className="text-xs text-gray-600">johndoe@gmail.com</span>
+            </div>
+          </div>
+        </div>
       </nav>
     </aside>
   );

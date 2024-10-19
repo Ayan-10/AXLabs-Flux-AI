@@ -5,13 +5,14 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 
-import { LogOut } from "lucide-react";
+import { Box, Container, LogOut } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
 import { buttonVariants } from "./ui/button";
 import Link from "next/link";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useQuery } from "@tanstack/react-query";
 import { isUserSubscribed } from "@/app/premium/actions";
+import { Image } from "lucide-react";
 
 interface RouteProps {
   href: string;
@@ -44,9 +45,11 @@ export const Navbar = () => {
   const isSubscribed = data?.subscribed;
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b-[1px] dark:border-b-slate-700 
+    <header
+      className="sticky top-0 z-40 w-full border-b-[1px] dark:border-b-slate-700 
     bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60
-    ml-16">
+    ml-16"
+    >
       <NavigationMenu className="mx-auto">
         <NavigationMenuList className="container min-h-[72px] w-screen flex justify-between ">
           <NavigationMenuItem className="font-bold md:flex hidden">
@@ -61,7 +64,7 @@ export const Navbar = () => {
             </a>
           </NavigationMenuItem>
 
-          <nav className="md:flex gap-2">
+          {/* <nav className="md:flex gap-2">
             {routeList.map((route: RouteProps, i) => (
               <Link
                 rel="noreferrer noopener"
@@ -86,9 +89,17 @@ export const Navbar = () => {
                 Billing Portal
               </Link>
             )}
-          </nav>
+          </nav> */}
 
           <div className="hidden md:flex gap-2">
+            <div className="flex items-center justify-center gap-2 pr-4">
+              <Box size={20} />
+              <h1>10</h1>
+            </div>
+            <div className="flex items-center justify-center gap-2 pr-4">
+              <Image size={20} />
+              <h1>43</h1>
+            </div>
             {isAuthenticated && (
               <Link
                 rel="noreferrer noopener"
@@ -124,8 +135,9 @@ export const Navbar = () => {
                 Premium ✨
               </Link>
             )}
-
-            <ModeToggle />
+            <div className="mr-10">
+              <ModeToggle />
+            </div>
           </div>
         </NavigationMenuList>
       </NavigationMenu>

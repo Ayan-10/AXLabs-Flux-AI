@@ -85,10 +85,10 @@ export const Train = () => {
   };
 
   return (
-    <div className="flex flex-1 flex-col items-center py-16 ml-16">
+    <div className="flex flex-1 flex-col items-center py-16 ml-[68px]">
       <ToastContainer />
 
-      <div className="flex w-full flex-col px-4 lg:px-28">
+      <div className="flex w-full flex-col px-4 lg:px-24">
         <div className="w-full mx-auto px-2 md:px-8 space-y-8">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col lg:flex-row gap-8">
