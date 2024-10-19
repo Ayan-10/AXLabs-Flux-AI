@@ -17,9 +17,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "POST") {
-    const { userId, name, prompt, images }: RequestBody = req.body;
+      console.log("req.body");
 
+  if (req.method === "POST") {
+
+    const { userId, name, prompt, images }: RequestBody = req.body;
     try {
       const user = await prisma.user.findUnique({ where: { id: userId } });
 
@@ -41,6 +43,7 @@ export default async function handler(
           prompt: prompt,
         },
       });
+      console.log(images.length)
       await removeCredits(userId as string, 0, 1);
 
       return res.status(200).json({

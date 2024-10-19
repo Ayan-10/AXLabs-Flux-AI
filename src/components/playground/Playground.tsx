@@ -62,6 +62,7 @@ export const Playground = () => {
       console.log(userId);
       setImageUrl(image);
 
+      console.log(result.images);
       const res = await fetch("/api/playground/upload", {
         method: "POST",
         headers: {

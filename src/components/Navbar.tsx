@@ -5,14 +5,15 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 
-import { Box, Container, LogOut } from "lucide-react";
+import { Box, Image, LogOut } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
 import { buttonVariants } from "./ui/button";
 import Link from "next/link";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { checkAuthStatus } from "@/app/auth/callback/actions";
 import { isUserSubscribed } from "@/app/premium/actions";
-import { Image } from "lucide-react";
 
 interface RouteProps {
   href: string;
@@ -28,21 +29,51 @@ const routeList: RouteProps[] = [
     href: "#about",
     label: "About",
   },
-  // {
-  // 	href: "#testimonials",
-  // 	label: "Testimonials",
-  // },
 ];
 
 export const Navbar = () => {
   const { isAuthenticated } = useKindeBrowserClient();
 
-  const { data } = useQuery({
+  // Fetch subscription status
+  const { data: subscriptionData } = useQuery({
     queryKey: ["isUserSubscribed"],
-    queryFn: async () => isUserSubscribed(),
+    queryFn: async () => await isUserSubscribed(),
   });
 
-  const isSubscribed = data?.subscribed;
+  // Fetch authentication status
+  const { data: authData } = useQuery({
+    queryKey: ["checkAuthStatus"],
+    queryFn: async () => await checkAuthStatus(),
+  });
+
+  const isSubscribed = subscriptionData?.subscribed;
+  const userId = authData?.user_id;
+
+  // Define state for image and model credits left
+  const [imagesLeft, setImagesLeft] = useState<number>(0);
+  const [modelsLeft, setModelsLeft] = useState<number>(0);
+
+  // Fetch the current values of the training credits left
+  const fetchTrainingsLeft = async () => {
+    if (!userId) return; // No need to proceed if userId is not available
+    try {
+      const res = await fetch(`/api/training/fetch/${userId}`);
+      const data = await res.json();
+      setImagesLeft(data.imageCredits || 0);
+      setModelsLeft(data.modelCredits || 0);
+    } catch (error) {
+      console.error("Error fetching training credits:", error);
+    }
+  };
+
+  // Polling every 5 seconds to get updated training credits
+  useEffect(() => {
+    if (userId) {
+      fetchTrainingsLeft(); // Fetch once on mount
+      const interval = setInterval(fetchTrainingsLeft, 5000); // Poll every 5 seconds
+      return () => clearInterval(interval); // Clean up the interval
+    }
+  }, [userId]); // Rerun when userId changes
 
   return (
     <header
@@ -64,6 +95,7 @@ export const Navbar = () => {
             </a>
           </NavigationMenuItem>
 
+          {/* Optional Navigation Links (commented out for now) */}
           {/* <nav className="md:flex gap-2">
             {routeList.map((route: RouteProps, i) => (
               <Link
@@ -88,18 +120,19 @@ export const Navbar = () => {
               >
                 Billing Portal
               </Link>
-            )}
+            ))}
           </nav> */}
 
           <div className="hidden md:flex gap-2">
             <div className="flex items-center justify-center gap-2 pr-4">
               <Box size={20} />
-              <h1>10</h1>
+              <h1>{modelsLeft}</h1>
             </div>
             <div className="flex items-center justify-center gap-2 pr-4">
               <Image size={20} />
-              <h1>43</h1>
+              <h1>{imagesLeft}</h1>
             </div>
+
             {isAuthenticated && (
               <Link
                 rel="noreferrer noopener"
