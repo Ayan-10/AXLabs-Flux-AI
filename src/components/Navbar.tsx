@@ -57,7 +57,7 @@ export const Navbar = () => {
   const fetchTrainingsLeft = async () => {
     if (!userId) return; // No need to proceed if userId is not available
     try {
-      const res = await fetch(`/api/training/fetch/${userId}`);
+      const res = await fetch(`/api/training/fetch/credit/${userId}`);
       const data = await res.json();
       setImagesLeft(data.imageCredits || 0);
       setModelsLeft(data.modelCredits || 0);

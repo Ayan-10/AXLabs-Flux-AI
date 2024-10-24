@@ -75,7 +75,7 @@ export const Home = () => {
             className="relative max-w-sm bg-gray-50 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
           >
             {item.images.length === 0 ? (
-              <Link href="/train">
+              <Link href="/playground">
                 <div>
                   <div className="h-[186px] w-full overflow-hidden flex flex-row gap-0 items-center justify-center">
                     <Plus />
@@ -101,7 +101,7 @@ export const Home = () => {
                     alt=""
                   />
                 </div>
-                <div className="px-4 py-2 flex justify-between items-center">
+                <div className="px-4 pt-2 pb-4 flex justify-between items-center">
                   <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
                     {item.text}
                   </h5>

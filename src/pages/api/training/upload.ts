@@ -136,7 +136,7 @@ export default async function handler(
               model_type: "lora",
               name: userId.substring(3)?.concat(" " + name),
               image_urls: uploadedImages.map((image) => image.url),
-              callback: `${process.env.NEXT_PUBLIC_WEBHOOK_URL}/api/webhook?userId=${userId}`,
+              callback: `${process.env.NEXT_PUBLIC_WEBHOOK_URL}/api/training/webhook?userId=${userId}`,
             },
           }),
         });
@@ -151,7 +151,8 @@ export default async function handler(
             images: uploadedImages.map((image) => image.url),
             name: name,
             triggerWord: userId.substring(3)?.concat(" " + name),
-            requestId: data.tune_id, // Store request_id to track status
+            tuneId: data.tune_id, // Store request_id to track status
+            token: data.token
           },
         });
 

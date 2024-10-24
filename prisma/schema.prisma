@@ -56,8 +56,9 @@ model Training {
   images        String[]
   status        String             @default("IN PROGRESS")
   name          String
-  triggerWord  String             @unique
-  requestId     String             @unique
+  triggerWord   String             @unique
+  tuneId        String             @unique
+  token         String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -71,6 +72,10 @@ model Play {
   images        String[]
   name          String
   prompt        String
+  negativePrompt String
+  requestId     String
+    status        String             @default("IN PROGRESS")
+
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
