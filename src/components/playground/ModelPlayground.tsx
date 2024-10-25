@@ -37,7 +37,7 @@ type Training = {
   images: string[]; // assuming it's an array of image URLs
 };
 
-export const HeadshotPlayground = () => {
+export const ModelPlayground = () => {
   const { data: authData } = useQuery({
     queryKey: ["checkAuthStatus"],
     queryFn: async () => await checkAuthStatus(),
@@ -55,6 +55,9 @@ export const HeadshotPlayground = () => {
   const [numImages, setNumImages] = useState<number>(1);
   const [playData, setPlayData] = useState<Training[]>([]);
   const [gender, setGender] = useState<string>("");
+  const [action, setAction] = useState<string>("");
+  const [place, setPlace] = useState<string>("");
+  const [dress, setDress] = useState<string>("");
 
   const userId = authData?.user_id;
   const isAuthenticated = authData?.success;
@@ -100,7 +103,7 @@ export const HeadshotPlayground = () => {
   };
 
   const handleGenerate = async () => {
-    if (!selectedModel || !gender ) {
+    if (!selectedModel || !gender || !action) {
       toast.warning("Please select all required fields!");
       return;
     }
@@ -224,9 +227,11 @@ export const HeadshotPlayground = () => {
     else if (gender === "woman") quality = "beautiful";
     else quality = "attractive"; // Fallback for other genders
 
-    const newPrompt = `Generate professional headshot, for ${
+    const newPrompt = `Generate images, for ${
       selectedModel?.name
-    }, this person is a ${gender}, generate some ${quality} images.`;
+    }, as a proffesional model, wearning this ${dress || "good dress"}, this person is a ${gender}, in front of ${
+      place || "a scenic location"
+    }, generate some ${quality} images.`;
     return newPrompt;
   };
 
@@ -235,7 +240,7 @@ export const HeadshotPlayground = () => {
       <ToastContainer />
 
       <div className="px-4 md:px-20 pt-10 text-3xl font-semibold tracking-tight flex flex-row gap-4">
-        <p>Generate Professional Headshot</p>
+        <p>Generate Only Fans Images</p>
       </div>
       <div className="flex flex-1 flex-col items-center mr-0 py-6">
         <div className="flex w-full flex-col px-4 md:px-20">
@@ -311,6 +316,30 @@ export const HeadshotPlayground = () => {
                           <option value="other">Other</option>
                           {/* Add more options as needed */}
                         </select>
+                      </div>
+
+                      {/* Place Input */}
+                      <div className="space-y-2 pt-4">
+                        <label className="block text-xl">Known Place</label>
+                        <input
+                          type="text"
+                          placeholder="Mount Fuji"
+                          value={place}
+                          onChange={(e) => setPlace(e.target.value)}
+                          className="block w-full p-2 border rounded"
+                        />
+                      </div>
+
+                      {/* Place Input */}
+                      <div className="space-y-2 pt-4">
+                        <label className="block text-xl">Dress</label>
+                        <input
+                          type="text"
+                          placeholder="Suit"
+                          value={place}
+                          onChange={(e) => setDress(e.target.value)}
+                          className="block w-full p-2 border rounded"
+                        />
                       </div>
 
                       {/*<div className="flex justify-between items-center pt-4">

@@ -37,7 +37,7 @@ type Training = {
   images: string[]; // assuming it's an array of image URLs
 };
 
-export const HeadshotPlayground = () => {
+export const TravelPlayground = () => {
   const { data: authData } = useQuery({
     queryKey: ["checkAuthStatus"],
     queryFn: async () => await checkAuthStatus(),
@@ -55,6 +55,9 @@ export const HeadshotPlayground = () => {
   const [numImages, setNumImages] = useState<number>(1);
   const [playData, setPlayData] = useState<Training[]>([]);
   const [gender, setGender] = useState<string>("");
+  const [action, setAction] = useState<string>("");
+  const [place, setPlace] = useState<string>("");
+  const [activity, setActivity] = useState<string>("");
 
   const userId = authData?.user_id;
   const isAuthenticated = authData?.success;
@@ -100,7 +103,7 @@ export const HeadshotPlayground = () => {
   };
 
   const handleGenerate = async () => {
-    if (!selectedModel || !gender ) {
+    if (!selectedModel || !gender || !action) {
       toast.warning("Please select all required fields!");
       return;
     }
@@ -224,9 +227,11 @@ export const HeadshotPlayground = () => {
     else if (gender === "woman") quality = "beautiful";
     else quality = "attractive"; // Fallback for other genders
 
-    const newPrompt = `Generate professional headshot, for ${
+    const newPrompt = `Generate photo, for ${
       selectedModel?.name
-    }, this person is a ${gender}, generate some ${quality} images.`;
+    }, this person is a ${gender}, this person is ${action} in front of ${
+      place || "a scenic location"
+    }, in front of ${place}, doing ${activity || "travelling"}, generate some ${quality} images which will impress the opposite gender.`;
     return newPrompt;
   };
 
@@ -235,7 +240,7 @@ export const HeadshotPlayground = () => {
       <ToastContainer />
 
       <div className="px-4 md:px-20 pt-10 text-3xl font-semibold tracking-tight flex flex-row gap-4">
-        <p>Generate Professional Headshot</p>
+        <p>Generate Dating Profile Images</p>
       </div>
       <div className="flex flex-1 flex-col items-center mr-0 py-6">
         <div className="flex w-full flex-col px-4 md:px-20">
@@ -313,6 +318,48 @@ export const HeadshotPlayground = () => {
                         </select>
                       </div>
 
+                      {/* Action Dropdown */}
+                      <div className="space-y-2 pt-4">
+                        <label className="block text-xl">Action</label>
+                        <select
+                          value={action}
+                          onChange={(e) => setAction(e.target.value)}
+                          className="block w-full p-2 border rounded"
+                          required
+                        >
+                          <option value="">Select an action</option>
+                          <option value="standing">Standing</option>
+                          <option value="running">Running</option>
+                          <option value="fighting">Fighting</option>
+                          <option value="sitting">Sitting</option>
+                          <option value="dancing">Dancing</option>
+                          {/* Add more options as needed */}
+                        </select>
+                      </div>
+
+                      {/* Place Input */}
+                      <div className="space-y-2 pt-4">
+                        <label className="block text-xl">Known Place</label>
+                        <input
+                          type="text"
+                          placeholder="Mount Fuji"
+                          value={place}
+                          onChange={(e) => setPlace(e.target.value)}
+                          className="block w-full p-2 border rounded"
+                        />
+                      </div>
+
+                      {/* Place Input */}
+                      <div className="space-y-2 pt-4">
+                        <label className="block text-xl">Activity</label>
+                        <input
+                          type="text"
+                          placeholder="Trekking"
+                          value={place}
+                          onChange={(e) => setActivity(e.target.value)}
+                          className="block w-full p-2 border rounded"
+                        />
+                      </div>
                       {/*<div className="flex justify-between items-center pt-4">
                         <h1 className="text-xl">Negative Prompt</h1>
                          <button className="inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-[#5345AB] hover:bg-secondary/90 h-8 rounded-md px-3 text-xs bg-zinc-800 border-none text-white">

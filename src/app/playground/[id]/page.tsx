@@ -2,7 +2,9 @@
 
 import { DatingPlayground } from "@/components/playground/DatingPlayground";
 import { HeadshotPlayground } from "@/components/playground/HeadshotPlayground";
+import { ModelPlayground } from "@/components/playground/ModelPlayground";
 import { OldMoneyPlayground } from "@/components/playground/OldMoneyPlayground";
+import { TravelPlayground } from "@/components/playground/TravelPlayground";
 import { Playground } from "@/components/playground/Playground";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 
@@ -17,6 +19,10 @@ const PlaygroundWithInitialPrompt = () => {
     return <HeadshotPlayground />;
   } else if (id === "3") {
     return <OldMoneyPlayground />;
+  } else if (id === "4") {
+    return <ModelPlayground />;
+  } else if (id === "5") {
+    return <TravelPlayground />;
   }
 
   return <Playground />;

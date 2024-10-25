@@ -503,7 +503,7 @@ export const DatingPlayground = () => {
                         <Loader className="w-10 h-10 animate-spin text-primary" />
                       </div>
                     ) : playData.length === 0 ? (
-                      <p>No images found</p>
+                      <p className="inline-flex justify-center items-center">No images found</p>
                     ) : (
                       playData.map((item, idx) => (
                         <div key={idx} className="border p-4">

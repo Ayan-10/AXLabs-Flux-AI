@@ -61,7 +61,7 @@ const items: SidebarItemProps[] = [
       "https://fal.media/files/koala/Mca-YTc7MN0H13Jp6RjlA.png",
     ],
     text: "Model AI",
-    path: "/playground",
+    path: "/playground/4",
     prompt:
       "Generate images, for <<model>>, as a proffesional model, wearning this <<dress>>.",
   },
@@ -71,7 +71,7 @@ const items: SidebarItemProps[] = [
       "https://fal.media/files/koala/Sk6qFhdL_G_UDqJClHOnE.png",
     ],
     text: "Travel Photography",
-    path: "/playground",
+    path: "/playground/5",
     prompt:
       "Generate images, for <<model>>, this person is a <<gender>>, this person is <<posture>> in front of <<place>>, doing <<activity>>",
   },
