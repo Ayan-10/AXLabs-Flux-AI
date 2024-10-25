@@ -37,14 +37,13 @@ type Training = {
   images: string[]; // assuming it's an array of image URLs
 };
 
-
-export const Playground = () => {
+export const OldMoneyPlayground = () => {
   const { data: authData } = useQuery({
     queryKey: ["checkAuthStatus"],
     queryFn: async () => await checkAuthStatus(),
   });
 
-  const [prompt, setPrompt] = useState("");
+  let prompt = "";
   const [imageUrl, setImageUrl] = useState<string>(
     "https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg"
   );
@@ -55,6 +54,9 @@ export const Playground = () => {
   const [negativePrompt, setNegativePrompt] = useState("");
   const [numImages, setNumImages] = useState<number>(1);
   const [playData, setPlayData] = useState<Training[]>([]);
+  const [gender, setGender] = useState<string>("");
+  const [action, setAction] = useState<string>("");
+  const [place, setPlace] = useState<string>("");
 
   const userId = authData?.user_id;
   const isAuthenticated = authData?.success;
@@ -100,9 +102,14 @@ export const Playground = () => {
   };
 
   const handleGenerate = async () => {
-    setImageUrl(
-      "https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg"
-    );
+    if (!selectedModel || !gender || !action) {
+      toast.warning("Please select all required fields!");
+      return;
+    }
+
+    const newPrompt = generatePrompt(); // Call a function that returns the prompt
+    prompt = newPrompt;
+
     setIsLoading(true);
 
     if (prompt === "") {
@@ -121,14 +128,14 @@ export const Playground = () => {
         );
         return;
       } else {
-        // const modifiedPrompt = prompt.replace(
-        //   new RegExp(selectedModel?.name, "g"),
-        //   `${selectedModel?.token} ${selectedModel?.name}`
-        // );
         const modifiedPrompt = prompt.replace(
           new RegExp(selectedModel?.name, "g"),
-          `${selectedModel?.token} ${selectedModel?.triggerWord}`
+          `${selectedModel?.token} ${selectedModel?.name}`
         );
+        // const modifiedPrompt = prompt.replace(
+        //   new RegExp(selectedModel?.name, "g"),
+        //   `${selectedModel?.token} ${selectedModel?.triggerWord}`
+        // );
 
         const finalPrompt = `${modifiedPrompt}`;
         console.log(finalPrompt);
@@ -213,8 +220,14 @@ export const Playground = () => {
     // }
   };
 
-  const handleImageLoad = () => {
-    setImageLoading(false);
+  const generatePrompt = () => {
+    let quality = "";
+    if (gender === "man") quality = "handsome";
+    else if (gender === "woman") quality = "beautiful";
+    else quality = "attractive"; // Fallback for other genders
+
+    const newPrompt = `Generate photo, for ${selectedModel?.name}, this person is a ${gender}, dressed with old money clothing, wearning this ${place}, generate some ${quality} images.`;
+    return newPrompt;
   };
 
   return (
@@ -222,7 +235,7 @@ export const Playground = () => {
       <ToastContainer />
 
       <div className="px-4 md:px-20 pt-10 text-3xl font-semibold tracking-tight flex flex-row gap-4">
-        <p>Generate Image from Prompt</p>
+        <p>Generate Old Money Dressing Images</p>
       </div>
       <div className="flex flex-1 flex-col items-center mr-0 py-6">
         <div className="flex w-full flex-col px-4 md:px-20">
@@ -271,7 +284,6 @@ export const Playground = () => {
                             const model = models.find(
                               (m) => m.name === e.target.value
                             );
-                            setPrompt(model?.name as string);
                             setSelectedModel(model || null);
                           }}
                         >
@@ -283,33 +295,55 @@ export const Playground = () => {
                           ))}
                         </select>
                       </div>
-                      <div className="flex justify-between items-center pt-4">
-                        <h1 className="text-xl">Detailed Prompt</h1>
-                        {/* <button className="inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-[#5345AB] hover:bg-secondary/90 h-8 rounded-md px-3 text-xs bg-zinc-800 border-none text-white">
-                          Advanced
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            className="ml-2 h-4 w-4"
-                          >
-                            <path d="m6 9 6 6 6-6"></path>
-                          </svg>
-                        </button> */}
+                      {/* Gender Dropdown */}
+                      <div className="space-y-2 pt-4">
+                        <label className="block text-xl">Gender</label>
+                        <select
+                          value={gender}
+                          onChange={(e) => setGender(e.target.value)}
+                          className="block w-full p-2 border rounded"
+                          required
+                        >
+                          <option value="">Select a gender</option>
+                          <option value="man">Man</option>
+                          <option value="woman">Woman</option>
+                          <option value="non-binary">Non-binary</option>
+                          <option value="other">Other</option>
+                          {/* Add more options as needed */}
+                        </select>
                       </div>
-                      <textarea
-                        className="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 resize-none"
-                        placeholder="Enter a prompt"
-                        rows={4}
-                        value={prompt}
-                        onChange={(e) => setPrompt(e.target.value)}
-                      />
+
+                      {/* Action Dropdown */}
+                      <div className="space-y-2 pt-4">
+                        <label className="block text-xl">Action</label>
+                        <select
+                          value={action}
+                          onChange={(e) => setAction(e.target.value)}
+                          className="block w-full p-2 border rounded"
+                          required
+                        >
+                          <option value="">Select an action</option>
+                          <option value="standing">Standing</option>
+                          <option value="running">Running</option>
+                          <option value="fighting">Fighting</option>
+                          <option value="sitting">Sitting</option>
+                          <option value="dancing">Dancing</option>
+                          {/* Add more options as needed */}
+                        </select>
+                      </div>
+
+                      {/* Place Input */}
+                      <div className="space-y-2 pt-4">
+                        <label className="block text-xl">Dress</label>
+                        <input
+                          type="text"
+                          placeholder="Suit"
+                          value={place}
+                          onChange={(e) => setPlace(e.target.value)}
+                          className="block w-full p-2 border rounded"
+                        />
+                      </div>
+
                       {/*<div className="flex justify-between items-center pt-4">
                         <h1 className="text-xl">Negative Prompt</h1>
                          <button className="inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-[#5345AB] hover:bg-secondary/90 h-8 rounded-md px-3 text-xs bg-zinc-800 border-none text-white">

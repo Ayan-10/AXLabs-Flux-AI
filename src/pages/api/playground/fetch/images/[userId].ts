@@ -20,6 +20,9 @@ export default async function handler(
         select: {
           images: true, // fetch only images field
         },
+        orderBy: {
+          createdAt: "desc", // Order by createdAt in descending order
+        },
       });
       // Flatten array of image arrays
       const images = userImages.flatMap((play) => play.images);

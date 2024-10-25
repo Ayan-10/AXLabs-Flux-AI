@@ -10,6 +10,9 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { isUserSubscribed } from "@/app/premium/actions";
 import { checkAuthStatus } from "@/app/auth/callback/actions";
+import { it } from "node:test";
+import { saveAs } from "file-saver";
+import { redirect } from "next/navigation";
 
 interface GalleryItem {
   image: string;
@@ -42,6 +45,11 @@ export const Gallery = () => {
   const isSubscribed = subscriptionData?.subscribed;
   const userId = authData?.user_id;
 
+  const isAuthenticated = authData?.success;
+  if (!isAuthenticated) {
+    return redirect("/api/auth/login");
+  }
+  
   const fetchImages = async () => {
     try {
       const res = await fetch(`/api/playground/fetch/images/${userId}`);
@@ -58,6 +66,11 @@ export const Gallery = () => {
     } catch (error) {
       console.error("Error fetching images:", error);
     }
+  };
+
+  const handleDownload = (e: React.MouseEvent, src: string) => {
+    window.open(src, "_blank");
+
   };
 
   // Polling logic to fetch new images every 5 seconds
@@ -91,17 +104,22 @@ export const Gallery = () => {
           {items.map((item, index) => (
             <div
               key={index}
-              className="relative max-w-sm bg-gray-50 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+              className="relative w-72 max-w-sm bg-gray-50 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" // Fixed width set here
             >
               <div className="h-48 w-full overflow-hidden">
                 <img
-                  className="w-full h-full object-cover rounded-xl  px-2 pt-2"
+                  className="w-full h-full object-cover rounded-xl px-2 pt-2"
                   src={item.image}
                   alt={`Generated image ${index}`}
                 />
               </div>
               <div className="px-2 py-2 flex justify-between items-center">
-                <Button startIcon={<Download />}>Download</Button>
+                <Button
+                  startIcon={<Download />}
+                  onClick={(e) => handleDownload(e, item.image)}
+                >
+                  Download
+                </Button>
                 <Button startIcon={<FavoriteBorder />}>Favorite</Button>
               </div>
             </div>

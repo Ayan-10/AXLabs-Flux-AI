@@ -23,5 +23,11 @@ export async function checkAuthStatus() {
 		});
 	}
 
-	return { success: true, 'user_id': user.id };
+	return {
+    success: true,
+    user_id: user.id,
+    email: user.email,
+    first_name: user.given_name,
+	last_name: user.family_name
+  };
 }

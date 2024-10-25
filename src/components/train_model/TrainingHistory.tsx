@@ -8,6 +8,7 @@ import {
   Collapse,
   dividerClasses,
 } from "@mui/material";
+import { Loader } from "lucide-react";
 // Define a type for each training record
 type Training = {
   id: string;
@@ -28,31 +29,38 @@ const TrainingHistory: React.FC<TrainingHistoryProps> = ({
 }) => {
   const [trainingData, setTrainingData] = useState<Training[]>([]);
   const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({}); // Add type for expanded state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTrainingData = async () => {
-      try {
-        const response = await fetch(`/api/training/history?userId=${userId}`, {
-          method: "GET",
-        });
-
-        const data = await response.json();
-        setTrainingData(data);
-      } catch (error) {
-        console.error("Error fetching training data:", error);
-      }
-    };
-
     fetchTrainingData();
+    const interval = setInterval(fetchTrainingData, 5000); // Poll every 5 seconds
+    return () => clearInterval(interval); // Clean up interval on component unmount
   }, [userId, uploadTrigger]);
 
+  const fetchTrainingData = async () => {
+    try {
+      const response = await fetch(`/api/training/history?userId=${userId}`, {
+        method: "GET",
+      });
+
+      const data = await response.json();
+      setTrainingData(data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching training data:", error);
+    }
+  };
   const handleToggle = (id: string) => {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
     <div>
-      {trainingData && trainingData.length > 0 ? (
+      {loading ? (
+        <div className="flex justify-center items-center">
+          <Loader className="w-10 h-10 animate-spin text-primary" />
+        </div>
+      ) : trainingData && trainingData.length > 0 ? (
         <div className="p-4 max-w-xl mx-auto">
           {trainingData.map((training) => (
             <Card

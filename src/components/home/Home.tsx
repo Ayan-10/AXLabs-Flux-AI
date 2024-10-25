@@ -1,20 +1,25 @@
 "use client";
 
+import { checkAuthStatus } from "@/app/auth/callback/actions";
+import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { redirect, useSearchParams, useRouter } from "next/navigation";
+import { usePromptStore } from "../usePromptStore";
 
 interface SidebarItemProps {
   images: Array<string>;
   text: string;
   path?: string;
+  prompt?: string;
 }
 
 const items: SidebarItemProps[] = [
   {
     images: [],
     text: "Sparrow",
-    path: "/",
+    path: "/playground",
+    prompt: "gjh",
   },
 
   {
@@ -23,7 +28,9 @@ const items: SidebarItemProps[] = [
       "https://fal.media/files/panda/cbPwEgwt2VG8Tz3PiJ_NR_5839e66b84a34eedb56667a9b1c15d21.png",
     ],
     text: "Tinder & Bumble Dating",
-    path: "/",
+    path: "/playground/1",
+    prompt:
+      "Generate photo for dating profile, for <<model>> , this person is a <<gender>>, this person is <<posture>> in front of <<place>>, generate images which will impress other gender.",
   },
 
   {
@@ -32,7 +39,9 @@ const items: SidebarItemProps[] = [
       "https://fal.media/files/tiger/JtrhUxwJd4ck_7z-ZQf9-_8954a1c6817042cfb63d156a4663e228.png",
     ],
     text: "Professional Headshot",
-    path: "/",
+    path: "/playground/2",
+    prompt:
+      "Generate professional headshot, for <<model>>. this person is a <<gender>>,",
   },
 
   {
@@ -41,7 +50,9 @@ const items: SidebarItemProps[] = [
       "https://fal.media/files/panda/cbPwEgwt2VG8Tz3PiJ_NR_5839e66b84a34eedb56667a9b1c15d21.png",
     ],
     text: "Old Money Dressing",
-    path: "/gallery",
+    path: "/playground/3",
+    prompt:
+      "Generate images, for <<model>> dressed with old money clothing, wearning this <<dress>>",
   },
 
   {
@@ -51,6 +62,8 @@ const items: SidebarItemProps[] = [
     ],
     text: "Model AI",
     path: "/playground",
+    prompt:
+      "Generate images, for <<model>>, as a proffesional model, wearning this <<dress>>.",
   },
   {
     images: [
@@ -58,11 +71,30 @@ const items: SidebarItemProps[] = [
       "https://fal.media/files/koala/Sk6qFhdL_G_UDqJClHOnE.png",
     ],
     text: "Travel Photography",
-    path: "/gallery",
+    path: "/playground",
+    prompt:
+      "Generate images, for <<model>>, this person is a <<gender>>, this person is <<posture>> in front of <<place>>, doing <<activity>>",
   },
-
 ];
 export const Home = () => {
+  const { data: authData } = useQuery({
+    queryKey: ["checkAuthStatus"],
+    queryFn: async () => await checkAuthStatus(),
+  });
+
+  const isAuthenticated = authData?.success;
+  if (!isAuthenticated) {
+    return redirect("/api/auth/login");
+  }
+  const router = useRouter();
+
+  const setPrompt = usePromptStore((state) => state.setPrompt);
+
+  const navigateToPlayground = (prompt: string) => {
+    setPrompt(prompt); // Set the prompt in Zustand state
+    router.push("/playground"); // Navigate to Playground
+  };
+
   return (
     <div className="ml-[68px]">
       <div className="px-4 md:px-20 pt-10 text-3xl font-semibold tracking-tight flex flex-row gap-4">
@@ -75,8 +107,19 @@ export const Home = () => {
             className="relative max-w-sm bg-gray-50 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
           >
             {item.images.length === 0 ? (
-              <Link href="/playground">
-                <div>
+              // <Link
+              //   href={{
+              //     pathname: "/playground",
+              //     query: { prompt: item.prompt }, // Pass prompt as a query parameter
+              //   }}
+              //   as={"/playground"}
+              // >
+              <Link
+                href={{
+                  pathname: item.path,
+                }}
+              >
+                <div onClick={() => navigateToPlayground("Your prompt here")}>
                   <div className="h-[186px] w-full overflow-hidden flex flex-row gap-0 items-center justify-center">
                     <Plus />
                   </div>
@@ -88,28 +131,34 @@ export const Home = () => {
                 </div>
               </Link>
             ) : (
-              <div>
-                <div className="h-48 w-full overflow-hidden flex flex-row gap-0">
-                  <img
-                    className="w-1/2 h-full object-cover rounded-l-xl  pl-2 pt-2"
-                    src={item.images[0]}
-                    alt=""
-                  />
-                  <img
-                    className="w-1/2 h-full object-cover rounded-r-xl  px-2 pt-2"
-                    src={item.images[1]}
-                    alt=""
-                  />
+              <Link
+                href={{
+                  pathname: item.path,
+                }}
+              >
+                <div>
+                  <div className="h-48 w-full overflow-hidden flex flex-row gap-0">
+                    <img
+                      className="w-1/2 h-full object-cover rounded-l-xl  pl-2 pt-2"
+                      src={item.images[0]}
+                      alt=""
+                    />
+                    <img
+                      className="w-1/2 h-full object-cover rounded-r-xl  px-2 pt-2"
+                      src={item.images[1]}
+                      alt=""
+                    />
+                  </div>
+                  <div className="px-4 pt-2 pb-4 flex justify-between items-center">
+                    <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                      {item.text}
+                    </h5>
+                    <span className="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-gren-200 dark:text-green-800 ms-3">
+                      New
+                    </span>
+                  </div>
                 </div>
-                <div className="px-4 pt-2 pb-4 flex justify-between items-center">
-                  <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-                    {item.text}
-                  </h5>
-                  <span className="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-gren-200 dark:text-green-800 ms-3">
-                    New
-                  </span>
-                </div>
-              </div>
+              </Link>
             )}
           </div>
         ))}

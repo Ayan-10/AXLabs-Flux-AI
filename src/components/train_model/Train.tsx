@@ -7,9 +7,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LinearProgress from "@mui/material/LinearProgress"; // Import LinearProgress
 import TrainingHistory from "./TrainingHistory";
+import { redirect } from "next/navigation";
 
 export const Train = () => {
-  const { data } = useQuery({
+  const { data: authData } = useQuery({
     queryKey: ["checkAuthStatus"],
     queryFn: async () => await checkAuthStatus(),
   });
@@ -21,6 +22,11 @@ export const Train = () => {
   const [name, setName] = useState(""); // Initialize state
   const [uploadTrigger, setUploadTrigger] = useState(false);
 
+  const isAuthenticated = authData?.success;
+  if (!isAuthenticated) {
+    return redirect("/api/auth/login");
+  }
+  
   const handleButtonClick = () => {
     // e.preventDefault();
     if (!inputRef || !inputRef.current) return;

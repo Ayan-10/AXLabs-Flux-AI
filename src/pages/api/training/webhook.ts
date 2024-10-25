@@ -23,7 +23,7 @@ export default async function handler(
       // Find the training in MongoDB with the tune_id and user_id
       const training = await prisma.training.findFirst({
         where: {
-          requestId: tuneId,
+          tuneId: String(tuneId),
           userId: userId,
         },
       });

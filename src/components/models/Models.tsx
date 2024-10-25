@@ -5,6 +5,7 @@ import { isUserSubscribed } from "@/app/premium/actions";
 import { useQuery } from "@tanstack/react-query";
 import { Loader, Plus } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -89,6 +90,12 @@ export const Models = () => {
 
   const isSubscribed = subscriptionData?.subscribed;
   const userId = authData?.user_id;
+  
+  const isAuthenticated = authData?.success;
+  if (!isAuthenticated) {
+    return redirect("/api/auth/login");
+  }
+  
   // console.log(userId)
   // Fetch training data from MongoDB using Prisma
   const fetchTrainingData = async () => {
@@ -114,11 +121,11 @@ export const Models = () => {
   };
 
   // Poll the data every 5 seconds to keep it updated
-  useEffect(() => {
-    fetchTrainingData(); // Initial fetch
-    const interval = setInterval(fetchTrainingData, 5000); // Polling every 5 seconds
-    return () => clearInterval(interval); // Clear interval on unmount
-  }, []);
+  // useEffect(() => {
+  //   fetchTrainingData(); // Initial fetch
+  //   const interval = setInterval(fetchTrainingData, 5000); // Polling every 5 seconds
+  //   return () => clearInterval(interval); // Clear interval on unmount
+  // }, []);
 
   return (
     <div className="ml-[68px]">

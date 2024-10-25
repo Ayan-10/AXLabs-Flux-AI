@@ -30,6 +30,7 @@
 		"class-variance-authority": "^0.7.0",
 		"cloudinary": "^2.5.0",
 		"clsx": "^2.1.1",
+		"file-saver": "^2.0.5",
 		"formidable": "^3.5.1",
 		"jszip": "^3.10.1",
 		"lucide-react": "^0.396.0",
@@ -42,7 +43,8 @@
 		"stripe": "^16.0.0",
 		"stripe-subscriptions": "file:",
 		"tailwind-merge": "^2.3.0",
-		"tailwindcss-animate": "^1.0.7"
+		"tailwindcss-animate": "^1.0.7",
+		"zustand": "^5.0.0"
 	},
 	"devDependencies": {
 		"@types/formidable": "^3.4.5",

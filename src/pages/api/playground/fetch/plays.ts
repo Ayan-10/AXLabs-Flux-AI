@@ -15,17 +15,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     try {
       if (status) {
-        const trainingData = await prisma.training.findMany({
+        const trainingData = await prisma.play.findMany({
           where: { userId: userId, status: status }, // Adjust based on your schema
           orderBy: {
             createdAt: "desc", // Order by createdAt in descending order
           },
         });
-        console.log(trainingData)
+        console.log(trainingData);
         res.status(200).json(trainingData);
       } else {
-
-        const trainingData = await prisma.training.findMany({
+        const trainingData = await prisma.play.findMany({
           where: { userId: userId }, // Adjust based on your schema
           orderBy: {
             createdAt: "desc", // Order by createdAt in descending order
