@@ -65,29 +65,43 @@ const TrainingHistory: React.FC<TrainingHistoryProps> = ({
           {trainingData.map((training) => (
             <Card
               key={training.id}
-              className="shadow-md border rounded-md mb-1"
+              className="shadow-md border rounded-md mb-1 dark:bg-slate-700"
             >
               <CardContent>
                 <div className="flex justify-between items-center">
-                  <Typography variant="h6">{training.name}</Typography>
-                  <Typography
+                  <Typography variant="h6" className="pb-3 dark:text-white">
+                    {training.name}
+                  </Typography>
+                  {/* <Typography
                     variant="body2"
                     color={training.status === "completed" ? "green" : "orange"}
                   >
                     {training.status}
-                  </Typography>
+                  </Typography> */}
+                  <span
+                    className={`text-xs font-semibold px-2.5 py-0.5 rounded ms-3 ${
+                      training.status.toLowerCase() === "in progress"
+                        ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-200"
+                        : training.status.toLowerCase() === "completed"
+                        ? "bg-green-100 text-green-800 dark:bg-gren-200"
+                        : "bg-red-100 text-red-800 dark:bg-red-200"
+                    }`}
+                  >
+                    {training.status}
+                  </span>
                 </div>
-                {training.status === "IN PROGRESS" && (
-                  <LinearProgress variant="indeterminate" className="my-3" />
-                )}
+
                 <Button
-                  variant="outlined"
+                  variant="contained"
                   onClick={() => handleToggle(training.id)}
+                  style={{
+                    backgroundColor: "#6b21a8",
+                  }}
                 >
                   {expanded[training.id] ? "Collapse" : "Show Images"}
                 </Button>
                 <Collapse in={expanded[training.id]}>
-                  <div className="my-4">
+                  <div className="mt-4">
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                       {/* {console.log(training.images)} */}
                       {training.images.map((imageUrl, index) => (

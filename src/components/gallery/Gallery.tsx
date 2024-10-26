@@ -45,11 +45,28 @@ export const Gallery = () => {
   const isSubscribed = subscriptionData?.subscribed;
   const userId = authData?.user_id;
 
-  const isAuthenticated = authData?.success;
-  if (!isAuthenticated) {
-    return redirect("/api/auth/login");
-  }
-  
+  // // const isAuthenticated = authData?.success;
+  // // console.log(" is "+isAuthenticated)
+  // // if (!isAuthenticated) {
+  // //   return redirect("/api/auth/login");
+  // // }
+  // useEffect(() => {
+  //   const checkAuthStatus = async () => {
+  //     try {
+  //       const response = await fetch("/api/checkAuthStatus");
+  //       const data = await response.json();
+
+  //       if (!data.success) {
+  //         return redirect("/api/auth/login");
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to fetch auth status", error);
+  //     }
+  //   };
+
+  //   checkAuthStatus();
+  // }, []);
+
   const fetchImages = async () => {
     try {
       const res = await fetch(`/api/playground/fetch/images/${userId}`);
@@ -70,7 +87,6 @@ export const Gallery = () => {
 
   const handleDownload = (e: React.MouseEvent, src: string) => {
     window.open(src, "_blank");
-
   };
 
   // Polling logic to fetch new images every 5 seconds

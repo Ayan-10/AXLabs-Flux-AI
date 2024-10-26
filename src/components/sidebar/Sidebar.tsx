@@ -79,8 +79,8 @@ export const Sidebar = () => {
   const email = authData?.email
 
   return (
-    <aside className="fixed inset-y-0 left-0 min-w-max shadow-xl min-h-screen z-50 transition-transform duration-300 ease-in-out">
-      <nav className="h-full w-auto flex flex-col bg-white border-r shadow-sm">
+    <aside className="fixed inset-y-0 left-0 min-w-max shadow-xl min-h-screen z-50 transition-transform duration-300 ease-in-out dark:bg-black">
+      <nav className="h-full w-auto flex flex-col bg-white dark:bg-[#030712] border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
             src="https://img.logoipsum.com/243.svg"
@@ -89,7 +89,7 @@ export const Sidebar = () => {
             }`}
           />
           <button
-            className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
+            className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-[#19232F] dark:hover:bg-[#19232F]/80"
             onClick={() => setExpanded((curr) => !curr)}
           >
             {expanded ? <ChevronFirst /> : <ChevronLast />}
@@ -120,7 +120,9 @@ export const Sidebar = () => {
           `}
             >
               <div className="leading-4">
-                <h4 className="font-semibold">{firstName} {lastName}</h4>
+                <h4 className="font-semibold">
+                  {firstName} {lastName}
+                </h4>
                 <span className="text-xs text-gray-600">{email}</span>
               </div>
             </div>

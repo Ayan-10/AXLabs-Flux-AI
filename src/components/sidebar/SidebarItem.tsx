@@ -14,7 +14,6 @@ interface SidebarContextType {
 
 export const SidebarItem = ({ item }: { item: SidebarItemProps }) => {
   const { icon: Icon, text, path } = item;
-  console.log(text);
   const router = useRouter();
   const pathname = usePathname();
 

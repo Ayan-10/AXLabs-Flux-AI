@@ -61,7 +61,7 @@ export const Train = () => {
 
     toast.info("Training data uploaded started");
     setIsLoading(true);
-    const userId = data?.user_id;
+    const userId = authData?.user_id;
     const formData = new FormData();
     files.forEach((file) => formData.append("images", file));
     formData.append("userId", userId as string);
@@ -300,7 +300,7 @@ export const Train = () => {
                     </h3>
                   </div>
                   <TrainingHistory
-                    userId={data?.user_id}
+                    userId={authData?.user_id}
                     uploadTrigger={uploadTrigger}
                   />
                 </div>
