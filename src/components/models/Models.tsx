@@ -90,12 +90,7 @@ export const Models = () => {
 
   const isSubscribed = subscriptionData?.subscribed;
   const userId = authData?.user_id;
-  
-  const isAuthenticated = authData?.success;
-  if (!isAuthenticated) {
-    return redirect("/api/auth/login");
-  }
-  
+
   // console.log(userId)
   // Fetch training data from MongoDB using Prisma
   const fetchTrainingData = async () => {

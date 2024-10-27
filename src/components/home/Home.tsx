@@ -77,15 +77,6 @@ const items: SidebarItemProps[] = [
   },
 ];
 export const Home = () => {
-  const { data: authData } = useQuery({
-    queryKey: ["checkAuthStatus"],
-    queryFn: async () => await checkAuthStatus(),
-  });
-
-  const isAuthenticated = authData?.success;
-  if (!isAuthenticated) {
-    return redirect("/api/auth/login");
-  }
   const router = useRouter();
 
   const setPrompt = usePromptStore((state) => state.setPrompt);

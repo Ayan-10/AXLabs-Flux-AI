@@ -16,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       if (status) {
         const trainingData = await prisma.training.findMany({
-          where: { userId: userId, status: status }, // Adjust based on your schema
+          where: { userId: userId, status: status as string }, // Adjust based on your schema
           orderBy: {
             createdAt: "desc", // Order by createdAt in descending order
           },

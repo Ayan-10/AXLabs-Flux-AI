@@ -57,10 +57,6 @@ export const Playground = () => {
   const [playData, setPlayData] = useState<Training[]>([]);
 
   const userId = authData?.user_id;
-  const isAuthenticated = authData?.success;
-  if (!isAuthenticated) {
-    return redirect("/api/auth/login");
-  }
 
   useEffect(() => {
     const fetchModels = async () => {

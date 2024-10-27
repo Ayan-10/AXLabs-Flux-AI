@@ -34,6 +34,12 @@ export default async function handler(
     const user = await prisma.user.findUnique({
       where: { id: userId as string },
     });
+    
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
 
     if (user?.imageCredits < numImages) {
       return res.status(402).json({

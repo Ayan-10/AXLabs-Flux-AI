@@ -11,7 +11,6 @@ import { useQuery } from "@tanstack/react-query";
 import { isUserSubscribed } from "@/app/premium/actions";
 import { checkAuthStatus } from "@/app/auth/callback/actions";
 import { it } from "node:test";
-import { saveAs } from "file-saver";
 import { redirect } from "next/navigation";
 
 interface GalleryItem {

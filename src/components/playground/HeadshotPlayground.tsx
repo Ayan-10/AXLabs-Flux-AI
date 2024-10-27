@@ -57,10 +57,6 @@ export const HeadshotPlayground = () => {
   const [gender, setGender] = useState<string>("");
 
   const userId = authData?.user_id;
-  const isAuthenticated = authData?.success;
-  if (!isAuthenticated) {
-    return redirect("/api/auth/login");
-  }
 
   useEffect(() => {
     const fetchModels = async () => {

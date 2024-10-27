@@ -38,6 +38,12 @@ export default async function handler(
         where: { id: userId as string },
       });
 
+      if (!user) {
+        return res.status(404).json({
+          message: "User not found",
+        });
+      }
+
       if (user?.modelCredits < 1) {
         return res.status(402).json({
           message: "Don't have enough credits left",
