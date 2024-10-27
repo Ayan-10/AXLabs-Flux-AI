@@ -100,13 +100,13 @@ export const Gallery = () => {
     <div className="ml-[68px]">
       <div className="px-4 md:px-20 pt-10 text-3xl font-semibold tracking-tight flex flex-row gap-4">
         <p>Images You Generated</p>
-        <Button
+        {/* <Button
           variant="outlined"
           startIcon={<FilterAltOutlinedIcon />}
           endIcon={<KeyboardArrowDownOutlinedIcon />}
         >
           Filter
-        </Button>
+        </Button> */}
       </div>
 
       {loading ? (

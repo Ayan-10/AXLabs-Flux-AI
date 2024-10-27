@@ -31,6 +31,16 @@ export default async function handler(
       tuneId,
     }: RequestBody = req.body;
 
+    const user = await prisma.user.findUnique({
+      where: { id: userId as string },
+    });
+
+    if (user?.imageCredits < numImages) {
+      return res.status(402).json({
+        message: "Don't have enough credits left",
+      });
+    }
+
     const form = new FormData();
     form.append("prompt[text]", finalPrompt);
     // form.append("prompt[negative_prompt]", negativePrompt);
@@ -40,7 +50,7 @@ export default async function handler(
       `${process.env.NEXT_PUBLIC_WEBHOOK_URL}/api/playground/webhook?userId=${userId}`
     );
 
-    console.log(tuneId+" tuneid")
+    console.log(tuneId + " tuneid");
     const response = await fetch(
       `https://api.astria.ai/tunes/${tuneId}/prompts`,
       {

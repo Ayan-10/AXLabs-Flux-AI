@@ -18,7 +18,7 @@ const Page = () => {
 		const stripePaymentLink = localStorage.getItem("stripePaymentLink");
 		if (data?.success && stripePaymentLink && user?.email) {
 			localStorage.removeItem("stripePaymentLink");
-			router.push(stripePaymentLink + `?prefilled_email=${user.email}`);
+			router.push(stripePaymentLink + `?checkout[email]=${user.email}`);
 		} else if (data?.success === false) {
 			router.push("/");
 		}

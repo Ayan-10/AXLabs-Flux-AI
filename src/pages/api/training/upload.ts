@@ -33,6 +33,16 @@ export default async function handler(
       const userId = Array.isArray(fields.userId)
         ? fields.userId[0]
         : fields.userId;
+
+      const user = await prisma.user.findUnique({
+        where: { id: userId as string },
+      });
+
+      if (user?.modelCredits < 1) {
+        return res.status(402).json({
+          message: "Don't have enough credits left",
+        });
+      }
       const name = Array.isArray(fields.name) ? fields.name[0] : fields.name;
       const uploadedFiles = Object.values(files)[0]; // Get uploaded files
       // Ensure uploadedFiles is an array
@@ -50,9 +60,9 @@ export default async function handler(
         return res.status(400).json({ message: "Invalid userId." });
       }
 
-            if (!name || typeof name !== "string") {
-              return res.status(400).json({ message: "Invalid name" });
-            }
+      if (!name || typeof name !== "string") {
+        return res.status(400).json({ message: "Invalid name" });
+      }
       // Ensure at least 10 files are uploaded
       if (uploadedFiles.length < 10) {
         return res
@@ -152,7 +162,7 @@ export default async function handler(
             name: name,
             triggerWord: userId.substring(3)?.concat(" " + name.toLowerCase),
             tuneId: String(data.id), // Store request_id to track status
-            token: String(data.token)
+            token: String(data.token),
           },
         });
 
