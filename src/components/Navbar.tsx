@@ -67,13 +67,13 @@ export const Navbar = () => {
   };
 
   // Polling every 5 seconds to get updated training credits
-  // useEffect(() => {
-  //   if (userId) {
-  //     fetchTrainingsLeft(); // Fetch once on mount
-  //     const interval = setInterval(fetchTrainingsLeft, 5000); // Poll every 5 seconds
-  //     return () => clearInterval(interval); // Clean up the interval
-  //   }
-  // }, [userId]); // Rerun when userId changes
+  useEffect(() => {
+    if (userId) {
+      fetchTrainingsLeft(); // Fetch once on mount
+      const interval = setInterval(fetchTrainingsLeft, 5000); // Poll every 5 seconds
+      return () => clearInterval(interval); // Clean up the interval
+    }
+  }, [userId]); // Rerun when userId changes
 
   return (
     <header

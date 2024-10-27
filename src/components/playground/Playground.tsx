@@ -77,11 +77,11 @@ export const Playground = () => {
     fetchModels();
   }, [userId]);
 
-  // useEffect(() => {
-  //   fetchPlayData();
-  //   const interval = setInterval(fetchPlayData, 5000); // Poll every 5 seconds
-  //   return () => clearInterval(interval); // Clean up interval on component unmount
-  // }, [userId]);
+  useEffect(() => {
+    fetchPlayData();
+    const interval = setInterval(fetchPlayData, 5000); // Poll every 5 seconds
+    return () => clearInterval(interval); // Clean up interval on component unmount
+  }, [userId]);
 
   const fetchPlayData = async () => {
     try {
@@ -213,9 +213,6 @@ export const Playground = () => {
     // }
   };
 
-  const handleImageLoad = () => {
-    setImageLoading(false);
-  };
 
   return (
     <div className="ml-[68px]">

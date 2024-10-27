@@ -121,11 +121,11 @@ export const Models = () => {
   };
 
   // Poll the data every 5 seconds to keep it updated
-  // useEffect(() => {
-  //   fetchTrainingData(); // Initial fetch
-  //   const interval = setInterval(fetchTrainingData, 5000); // Polling every 5 seconds
-  //   return () => clearInterval(interval); // Clear interval on unmount
-  // }, []);
+  useEffect(() => {
+    fetchTrainingData(); // Initial fetch
+    const interval = setInterval(fetchTrainingData, 5000); // Polling every 5 seconds
+    return () => clearInterval(interval); // Clear interval on unmount
+  }, []);
 
   return (
     <div className="ml-[68px]">
