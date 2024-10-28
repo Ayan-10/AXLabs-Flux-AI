@@ -45,15 +45,21 @@ export async function POST(req: Request) {
         console.log("si "+" "+(priceId  as string === process.env.STRIPE_STARTER_PRICE_ID as string));
 
         const starterPriceId = (process.env.STRIPE_STARTER_PRICE_ID || "").toString();
+        const proPriceId = (
+          process.env.STRIPE_PRO_PRICE_ID || ""
+        ).toString();
+        const elitePriceId = (
+          process.env.STRIPE_ELITE_PRICE_ID || ""
+        ).toString();
         const currentPriceId = (priceId || "").toString();
                 console.log("Comparison result:", (starterPriceId===currentPriceId));
 
 
         if (currentPriceId.trim() === starterPriceId.trim()) {
           await addCredits(user.id, 1, 2); // 1 model, 2 images for Starter
-        } else if (priceId === process.env.STRIPE_PRO_PRICE_ID) {
+        } else if (currentPriceId.trim() === proPriceId.trim()) {
           await addCredits(user.id, 2, 4); // 2 models, 4 images for Pro
-        } else if (priceId === process.env.STRIPE_ELITE_PRICE_ID) {
+        } else if (currentPriceId.trim() === elitePriceId.trim()) {
           await addCredits(user.id, 3, 6); // 3 models, 6 images for Elite
         }
       } else {
