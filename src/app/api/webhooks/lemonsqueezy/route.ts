@@ -22,13 +22,13 @@ export async function POST(req: Request) {
     }
 
     console.log(body);
-    console.log(body.data.first_order_item);
+    console.log(body.data.attributes.first_order_item);
     // Logic according to event
     if (eventType === "order_created") {
       //   const userId: string = body.meta.custom_data.user_id;
       const isSuccessful = body.data.attributes.status === "paid";
       const userEmail = body.data.attributes.user_email;
-      const priceId = body.data.first_order_item.product_id;
+      const priceId = body.data.attributes.first_order_item.product_id;
 
       if (isSuccessful) {
         const user = await prisma.user.findUnique({
