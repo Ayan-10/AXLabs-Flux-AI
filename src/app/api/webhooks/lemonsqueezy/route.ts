@@ -28,7 +28,7 @@ export async function POST(req: Request) {
       //   const userId: string = body.meta.custom_data.user_id;
       const isSuccessful = body.data.attributes.status === "paid";
       const userEmail = body.data.attributes.user_email;
-      const priceId = body.data.attributes.first_order_item.product_id;
+      const priceId : string = body.data.attributes.first_order_item.product_id;
 
       if (isSuccessful) {
         const user = await prisma.user.findUnique({
