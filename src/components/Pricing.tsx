@@ -114,7 +114,7 @@ export const Pricing = () => {
 							</CardTitle>
 							<div>
 								<span className='text-3xl font-bold'>${pricing.price}</span>
-								<span className='text-muted-foreground'> {pricing.billing}</span>
+								{/* <span className='text-muted-foreground'> {pricing.billing}</span> */}
 							</div>
 
 							<CardDescription>{pricing.description}</CardDescription>

@@ -497,7 +497,17 @@ export const Playground = () => {
                         <div key={idx} className="border p-4">
                           <div className="flex justify-between">
                             <h2 className="font-bold">{item.name}</h2>
-                            <p>{item.status}</p>
+                            <span
+                              className={`text-xs font-semibold px-2.5 py-0.5 rounded ms-3 ${
+                                item.status.toLowerCase() === "in progress"
+                                  ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-200"
+                                  : item.status.toLowerCase() === "completed"
+                                  ? "bg-green-100 text-green-800 dark:bg-gren-200"
+                                  : "bg-red-100 text-red-800 dark:bg-red-200"
+                              }`}
+                            >
+                              {item.status}
+                            </span>
                           </div>
 
                           {item.status === "IN PROGRESS" ? (
