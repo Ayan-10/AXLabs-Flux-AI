@@ -26,7 +26,7 @@ export const Train = () => {
   if (!isAuthenticated) {
     return redirect("/api/auth/login");
   }
-  
+
   const handleButtonClick = () => {
     // e.preventDefault();
     if (!inputRef || !inputRef.current) return;
@@ -56,6 +56,11 @@ export const Train = () => {
     e.preventDefault();
     if (files.length < 10) {
       toast.error("Please upload atleast 10 images");
+      return;
+    }
+    
+    if (name === "") {
+      toast.error("Name is required");
       return;
     }
 
