@@ -102,6 +102,7 @@ export const Playground = () => {
 
     if (prompt === "") {
       toast.error("The prompt can't be empty.");
+      setIsLoading(false);
     }
 
     console.log(selectedModel?.name);
@@ -114,6 +115,8 @@ export const Playground = () => {
         toast.error(
           "The prompt must contain the selected model name from the dropdown."
         );
+        setIsLoading(false);
+
         return;
       } else {
         // const modifiedPrompt = prompt.replace(
