@@ -35,6 +35,9 @@ export async function POST(req: Request) {
           where: { email: userEmail },
         });
         if (!user) throw new Error("User not found");
+        
+    console.log("YO");
+         console.log(priceId +" Yi "+priceId === process.env.STRIPE_STARTER_PRICE_ID+" "+(priceId === process.env.STRIPE_STARTER_PRICE_ID));
 
         if (priceId === process.env.STRIPE_STARTER_PRICE_ID) {
           await addCredits(user.id, 1, 2); // 1 model, 2 images for Starter
