@@ -20,7 +20,7 @@ const Page = () => {
 			localStorage.removeItem("stripePaymentLink");
 			router.push(stripePaymentLink + `?checkout[email]=${user.email}`);
 		} else if (data?.success === false) {
-			router.push("/");
+			router.push("/home");
 		}
 	}, [router, user, data]);
 
