@@ -43,10 +43,13 @@ export async function POST(req: Request) {
         console.log(" Yi ");
         console.log(process.env.STRIPE_STARTER_PRICE_ID);
         console.log("si "+" "+(priceId  as string === process.env.STRIPE_STARTER_PRICE_ID as string));
-        console.log("Comparison result:", priceId.trim() === (process.env.STRIPE_STARTER_PRICE_ID || "").trim());
+
+        const starterPriceId = (process.env.STRIPE_STARTER_PRICE_ID || "").toString();
+        const currentPriceId = (priceId || "").toString();
+                console.log("Comparison result:", (starterPriceId===currentPriceId));
 
 
-        if (priceId as string === process.env.STRIPE_STARTER_PRICE_ID as string ) {
+        if (currentPriceId.trim() === starterPriceId.trim()) {
           await addCredits(user.id, 1, 2); // 1 model, 2 images for Starter
         } else if (priceId === process.env.STRIPE_PRO_PRICE_ID) {
           await addCredits(user.id, 2, 4); // 2 models, 4 images for Pro
