@@ -43,6 +43,8 @@ export async function POST(req: Request) {
         console.log(" Yi ");
         console.log(process.env.STRIPE_STARTER_PRICE_ID);
         console.log("si "+" "+(priceId  as string === process.env.STRIPE_STARTER_PRICE_ID as string));
+        console.log("Comparison result:", priceId.trim() === (process.env.STRIPE_STARTER_PRICE_ID || "").trim());
+
 
         if (priceId as string === process.env.STRIPE_STARTER_PRICE_ID as string ) {
           await addCredits(user.id, 1, 2); // 1 model, 2 images for Starter
