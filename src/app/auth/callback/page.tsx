@@ -20,11 +20,11 @@ const Page = () => {
 			localStorage.removeItem("stripePaymentLink");
 			router.push(stripePaymentLink + `?checkout[email]=${user.email}`);
 		} else if (data?.success === false) {
-			router.push("/home");
+			router.push("/");
 		}
 	}, [router, user, data]);
 
-	if (data?.success) router.push("/");
+	if (data?.success) router.push("/home");
 
 	return (
 		<div className='mt-20 w-full flex justify-center'>
