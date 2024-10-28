@@ -34,7 +34,7 @@ export default async function handler(
     const user = await prisma.user.findUnique({
       where: { id: userId as string },
     });
-    
+
     if (!user) {
       return res.status(404).json({
         message: "User not found",
@@ -57,8 +57,14 @@ export default async function handler(
     );
 
     console.log(tuneId + " tuneid");
+
+    const url =
+      tuneId === ""
+        ? "https://api.astria.ai/prompts"
+        : `https://api.astria.ai/tunes/${tuneId}/prompts`;
+
     const response = await fetch(
-      `https://api.astria.ai/tunes/${tuneId}/prompts`,
+      url,
       {
         method: "POST",
         headers: {

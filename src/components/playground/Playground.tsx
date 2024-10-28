@@ -37,7 +37,6 @@ type Training = {
   images: string[]; // assuming it's an array of image URLs
 };
 
-
 export const Playground = () => {
   const { data: authData } = useQuery({
     queryKey: ["checkAuthStatus"],
@@ -127,7 +126,6 @@ export const Playground = () => {
         );
 
         const finalPrompt = `${modifiedPrompt}`;
-        console.log(finalPrompt);
 
         const res = await fetch("/api/playground/upload", {
           method: "POST",
@@ -158,6 +156,36 @@ export const Playground = () => {
       }
     } else {
       console.log(prompt);
+      setIsLoading(false);
+
+      toast.error("Model selection is required");
+
+      // const res = await fetch("/api/playground/upload", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     userId: authData?.user_id, // Assuming userId is available from the auth status
+      //     prompt: prompt,
+      //     finalPrompt: prompt,
+      //     negativePrompt: negativePrompt,
+      //     numImages: numImages,
+      //     tuneId:""
+      //   }),
+      // });
+
+      // const resjson = await res.json();
+      // console.log(resjson);
+
+      // if (res.ok) {
+      //   setIsLoading(false);
+
+      //   toast.success(resjson.message);
+      // } else {
+      //   setIsLoading(false);
+      //   toast.error(resjson.message);
+      // }
     }
     // try {
     //   // Call the API
@@ -208,7 +236,6 @@ export const Playground = () => {
     //   setLoading(false);
     // }
   };
-
 
   return (
     <div className="ml-[68px]">
