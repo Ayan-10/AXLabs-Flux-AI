@@ -502,7 +502,7 @@ export const OldMoneyPlayground = () => {
                     ) : (
                       playData.map((item, idx) => (
                         <div key={idx} className="border p-4">
-                          <div className="flex justify-between">
+                          <div className="flex justify-between items-center">
                             <h2 className="font-bold">{item.name}</h2>
                             <span
                               className={`text-xs font-semibold px-2.5 py-0.5 rounded ms-3 ${
