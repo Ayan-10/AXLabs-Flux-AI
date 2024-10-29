@@ -62,7 +62,7 @@ export const Playground = () => {
       setLoading(true);
       console.log(userId);
       const response = await fetch(
-        `/api/training/history?userId=${userId}&status=Completed`
+        `/api/training/history?userId=${userId}&status=COMPLETED`
       );
       const data = await response.json();
       setModels(data);
