@@ -40,13 +40,24 @@ export const Train = () => {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length >= 10) {
-      const fileArray = Array.from(files);
+    if (e.target.files) {
+      updateFiles(Array.from(e.target.files));
+    }
+  };
 
-      const filePreviews = fileArray.map((file) => URL.createObjectURL(file));
+  const handleFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const droppedFiles = e.dataTransfer.files;
+    if (droppedFiles) {
+      updateFiles(Array.from(droppedFiles));
+    }
+  };
+
+  const updateFiles = (selectedFiles: File[]) => {
+    if (selectedFiles.length >= 10) {
+      const filePreviews = selectedFiles.map((file) => URL.createObjectURL(file));
       setPreviewUrls(filePreviews);
-      setFiles(Array.from(fileArray));
+      setFiles(selectedFiles);
     } else {
       toast.error("Please upload at least 10 files.");
     }
@@ -159,6 +170,9 @@ export const Train = () => {
                         <div
                           className="outline-dashed outline-2 outline-gray-100 hover:outline-blue-500 w-full h-full rounded-md p-4 flex justify-center align-middle"
                           onClick={handleButtonClick}
+                          onDragOver={(e) => e.preventDefault()}
+                          onDrop={handleFileDrop}
+                    
                         >
                           <input
                             accept="image/png,.png,image/jpeg,.jpg,.jpeg,image/webp,.webp"

@@ -125,14 +125,14 @@ export const ModelPlayground = () => {
         );
         return;
       } else {
-        const modifiedPrompt = prompt.replace(
-          new RegExp(selectedModel?.name, "g"),
-          `${selectedModel?.token} ${selectedModel?.name}`
-        );
         // const modifiedPrompt = prompt.replace(
         //   new RegExp(selectedModel?.name, "g"),
-        //   `${selectedModel?.token} ${selectedModel?.triggerWord}`
+        //   `${selectedModel?.token} ${selectedModel?.name}`
         // );
+        const modifiedPrompt = prompt.replace(
+          new RegExp(selectedModel?.name, "g"),
+          `${selectedModel?.token} ${selectedModel?.triggerWord}`
+        );
 
         const finalPrompt = `${modifiedPrompt}`;
         console.log(finalPrompt);
