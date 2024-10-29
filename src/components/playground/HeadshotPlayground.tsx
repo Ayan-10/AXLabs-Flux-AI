@@ -37,6 +37,17 @@ type Training = {
   images: string[]; // assuming it's an array of image URLs
 };
 
+const initialItems: Model[] = [
+
+
+  {
+    name: "Elon Musk",
+    triggerWord: "elon musk",
+    tuneId: "1763462",
+    token: "ohwx"
+  },
+]
+
 export const HeadshotPlayground = () => {
   const { data: authData } = useQuery({
     queryKey: ["checkAuthStatus"],
@@ -49,7 +60,7 @@ export const HeadshotPlayground = () => {
   );
   const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [models, setModels] = useState<Model[]>([]);
+  const [models, setModels] = useState<Model[]>(initialItems);
   const [selectedModel, setSelectedModel] = useState<Model | null>(null);
   const [negativePrompt, setNegativePrompt] = useState("");
   const [numImages, setNumImages] = useState<number>(1);
@@ -66,7 +77,7 @@ export const HeadshotPlayground = () => {
         `/api/training/history?userId=${userId}&status=COMPLETED`
       );
       const data = await response.json();
-      setModels(data);
+      setModels([...initialItems, ...data]);
       setLoading(false);
     };
 

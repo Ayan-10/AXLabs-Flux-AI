@@ -24,21 +24,21 @@ const initialItems: SidebarItemProps[] = [
 
   {
     images: [
-      "https://fal.media/files/rabbit/fhXWELruSm2l7YiJmuN6P.png",
-      "https://fal.media/files/panda/cbPwEgwt2VG8Tz3PiJ_NR_5839e66b84a34eedb56667a9b1c15d21.png",
+      "https://static01.nyt.com/images/2022/04/05/business/04musk-twitter-sub2/04musk-twitter-sub2-mediumSquareAt3X.jpg",
+      "https://assets-us-01.kc-usercontent.com/5cb25086-82d2-4c89-94f0-8450813a0fd3/0c3fcefb-bc28-4af6-985e-0c3b499ae832/Elon_Musk_Royal_Society.jpg",
     ],
-    status: "In Progress",
-    name: "Sparrow",
+    status: "COMPLETED",
+    name: "Elon Musk",
   },
 
-  {
-    images: [
-      "https://fal.media/files/zebra/KU360iEhYCb0MkddBkjAG_71f84cce2f5841b280c3ccf296e00a6e.png",
-      "https://fal.media/files/tiger/JtrhUxwJd4ck_7z-ZQf9-_8954a1c6817042cfb63d156a4663e228.png",
-    ],
-    status: "Completed",
-    name: "GTA 5",
-  },
+  // {
+  //   images: [
+  //     "https://fal.media/files/zebra/KU360iEhYCb0MkddBkjAG_71f84cce2f5841b280c3ccf296e00a6e.png",
+  //     "https://fal.media/files/tiger/JtrhUxwJd4ck_7z-ZQf9-_8954a1c6817042cfb63d156a4663e228.png",
+  //   ],
+  //   status: "Completed",
+  //   name: "GTA 5",
+  // },
 
   // {
   //   images: [

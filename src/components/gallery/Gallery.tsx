@@ -119,7 +119,7 @@ export const Gallery = () => {
           {items.map((item, index) => (
             <div
               key={index}
-              className="relative w-72 max-w-sm bg-gray-50 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" // Fixed width set here
+              className="relative w-64 max-w-sm bg-gray-50 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" // Fixed width set here
             >
               <div className="h-48 w-full overflow-hidden">
                 <img
