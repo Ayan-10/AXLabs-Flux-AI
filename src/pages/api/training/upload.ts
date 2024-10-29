@@ -166,7 +166,7 @@ export default async function handler(
             userId: userId,
             images: uploadedImages.map((image) => image.url),
             name: name,
-            triggerWord: userId.substring(3)?.concat(" " + name.toLowerCase),
+            triggerWord: userId.substring(3)?.concat(" " + name.toLowerCase()),
             tuneId: String(data.id), // Store request_id to track status
             token: String(data.token),
           },
