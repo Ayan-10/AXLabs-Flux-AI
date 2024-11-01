@@ -36,12 +36,12 @@ export async function POST(req: Request) {
           });
           if (!user) throw new Error("User not found");
 
-          if (!user.customerId) {
-            await prisma.user.update({
-              where: { id: user.id },
-              data: { customerId },
-            });
-          }
+          // if (!user.customerId) {
+          //   await prisma.user.update({
+          //     where: { id: user.id },
+          //     data: { customerId },
+          //   });
+          // }
 
           const lineItems = session.line_items?.data || [];
 
@@ -108,18 +108,18 @@ export async function POST(req: Request) {
         const subscription = await stripe.subscriptions.retrieve(
           (event.data.object as Stripe.Subscription).id
         );
-        const user = await prisma.user.findUnique({
-          where: { customerId: subscription.customer as string },
-        });
-        if (user) {
-          await prisma.user.update({
-            where: { id: user.id },
-            data: { plan: "free" },
-          });
-        } else {
-          console.error("User not found for the subscription deleted event.");
-          throw new Error("User not found for the subscription deleted event.");
-        }
+        // const user = await prisma.user.findUnique({
+        //   where: { customerId: subscription.customer as string },
+        // });
+        // if (user) {
+        //   await prisma.user.update({
+        //     where: { id: user.id },
+        //     data: { plan: "free" },
+        //   });
+        // } else {
+        //   console.error("User not found for the subscription deleted event.");
+        //   throw new Error("User not found for the subscription deleted event.");
+        // }
 
         break;
       }
