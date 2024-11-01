@@ -347,11 +347,11 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
                               onChange={(e) => {
                                 const model = models.find(
                                   (m) => m.name === e.target.value
-                                )
-                                setSelectedModel(model || null)
+                                );
+                                setSelectedModel(model || null);
                               }}
                             >
-                              <option value="">Select a model</option>
+                              <option value="">-</option>
                               {models.map((model) => (
                                 <option key={model.tuneId} value={model.name}>
                                   {model.name}
@@ -361,14 +361,16 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
                           </div>
                           {/* Gender Dropdown */}
                           <div className="space-y-2 pt-4">
-                            <label className="block text-base">Gender</label>
+                            <label className="block text-base">
+                              Select Gender
+                            </label>
                             <select
                               value={gender}
                               onChange={(e) => setGender(e.target.value)}
                               className="block w-full p-2 border rounded-[8px]"
                               required
                             >
-                              <option value="">Select a gender</option>
+                              <option value="">-</option>
                               <option value="man">Man</option>
                               <option value="woman">Woman</option>
                               <option value="non-binary">Non-binary</option>
@@ -379,14 +381,16 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
 
                           {/* Action Dropdown */}
                           <div className="space-y-2 pt-4">
-                            <label className="block text-base">Action</label>
+                            <label className="block text-base">
+                              Select Action
+                            </label>
                             <select
                               value={action}
                               onChange={(e) => setAction(e.target.value)}
                               className="block w-full p-2 border rounded-[8px]"
                               required
                             >
-                              <option value="">Select an action</option>
+                              <option value="">-</option>
                               <option value="standing">Standing</option>
                               <option value="running">Running</option>
                               <option value="fighting">Fighting</option>
@@ -711,5 +715,5 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
         </div>
       )}
     </div>
-  )
+  );
 }
