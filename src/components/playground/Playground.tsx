@@ -114,6 +114,13 @@ export const Playground = () => {
     if (prompt === "") {
       toast.error("The prompt can't be empty.");
       setIsLoading(false);
+      return
+    }
+    
+    if (numImages < 1 && numImages > 4) {
+      toast.error("Must choose 1-4 number of images.");
+      setIsLoading(false);
+      return;
     }
 
     console.log(selectedModel?.name);
@@ -255,7 +262,7 @@ export const Playground = () => {
     <div className="ml-[68px]">
       <ToastContainer />
 
-      <div className="px-4 md:px-20 pt-10 text-3xl font-semibold tracking-tight flex flex-row gap-4">
+      <div className="px-4 md:px-20 pt-10 text-2xl font-semibold flex flex-row gap-4">
         <p>Generate Image from Prompt</p>
       </div>
       <div className="flex flex-1 flex-col items-center mr-0 py-6">
@@ -294,12 +301,12 @@ export const Playground = () => {
                   <div className="flex flex-col w-full lg:w-2/6 rounded-md sm:pr-6">
                     <div className="flex flex-1 flex-col gap-2">
                       <div className="space-y-2">
-                        <label htmlFor="dropdown" className="block text-xl">
+                        <label htmlFor="dropdown" className="block text-base">
                           Select Model
                         </label>
                         <select
                           id="dropdown"
-                          className="block w-full p-2 border rounded"
+                          className="block w-full p-2 border rounded-[8px]"
                           value={selectedModel ? selectedModel.name : ""}
                           onChange={(e) => {
                             const model = models.find(
@@ -309,7 +316,7 @@ export const Playground = () => {
                             setSelectedModel(model || null);
                           }}
                         >
-                          <option value="">Select a model</option>
+                          <option value="">-</option>
                           {models.map((model) => (
                             <option key={model.tuneId} value={model.name}>
                               {model.name}
@@ -318,7 +325,7 @@ export const Playground = () => {
                         </select>
                       </div>
                       <div className="flex justify-between items-center pt-4">
-                        <h1 className="text-xl">Detailed Prompt</h1>
+                        <h1 className="text-base">Detailed Prompt</h1>
                         {/* <button className="inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-[#5345AB] hover:bg-secondary/90 h-8 rounded-md px-3 text-xs bg-zinc-800 border-none text-white">
                           Advanced
                           <svg
@@ -338,8 +345,8 @@ export const Playground = () => {
                         </button> */}
                       </div>
                       <textarea
-                        className="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 resize-none"
-                        placeholder="Enter a prompt"
+                        className="flex min-h-[60px] w-full rounded-[8px] border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 resize-none"
+                        placeholder="in front of Eiffel Tower, nightlife"
                         rows={4}
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
@@ -372,21 +379,21 @@ export const Playground = () => {
                         onChange={(e) => setNegativePrompt(e.target.value)}
                       />*/}
                       <div className="space-y-2 pt-4 pb-8">
-                        <label htmlFor="numImages" className="block text-xl">
-                          Number of Images (1-8)
+                        <label htmlFor="numImages" className="block text-base">
+                          Number of Images (1-4)
                         </label>
                         <input
                           type="number"
                           id="numImages"
                           min={1}
-                          max={8}
-                          className="block w-full p-2 border rounded"
+                          max={4}
+                          className="block w-full p-2 border rounded-[8px]"
                           value={numImages}
                           onChange={(e) => setNumImages(Number(e.target.value))}
                         />
                       </div>
                       <button
-                        className="inline-flex items-center justify-center rounded-md text-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-secondary shadow hover:bg-primary/90 h-10 px-4 py-2"
+                        className="inline-flex items-center justify-center rounded-md text-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-secondary shadow hover:bg-primary/90 h-10 px-4 py-2 dark:text-white"
                         onClick={handleGenerate}
                       >
                         Generate

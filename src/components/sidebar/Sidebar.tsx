@@ -53,11 +53,11 @@ const items: SidebarItemProps[] = [
     text: "Models",
     path: "/models",
   },
-  {
-    icon: Brain,
-    text: "Train new model",
-    path: "/train",
-  },
+  // {
+  //   icon: Brain,
+  //   text: "Train new model",
+  //   path: "/train",
+  // },
   {
     icon: Settings,
     text: "Billing & Usage",

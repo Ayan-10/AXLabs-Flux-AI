@@ -4,7 +4,7 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-
+import Tooltip from "@mui/material/Tooltip";
 import { Box, Image, LogOut } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
 import { buttonVariants } from "./ui/button";
@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { checkAuthStatus } from "@/app/auth/callback/actions";
 import { isUserSubscribed } from "@/app/premium/actions";
+import { Zoom } from "@mui/material";
 
 interface RouteProps {
   href: string;
@@ -124,14 +125,46 @@ export const Navbar = () => {
           </nav> */}
 
           <div className="hidden md:flex gap-2">
-            <div className="flex items-center justify-center gap-2 pr-4">
-              <Box size={20} />
-              <h1>{modelsLeft}</h1>
-            </div>
-            <div className="flex items-center justify-center gap-2 pr-4">
-              <Image size={20} />
-              <h1>{imagesLeft}</h1>
-            </div>
+            <Tooltip
+              TransitionComponent={Zoom}
+              componentsProps={{
+                tooltip: {
+                  sx: {
+                    bgcolor: "#7355B0",
+                    "& .MuiTooltip-arrow": {
+                      color: "#3730a3",
+                    },
+                  },
+                },
+              }}
+              title="Model Training Credits Left"
+              placement="top"
+            >
+              <div className="flex items-center justify-center gap-2 pr-4">
+                <Box size={20} />
+                <h1>{modelsLeft}</h1>
+              </div>
+            </Tooltip>
+            <Tooltip
+              TransitionComponent={Zoom}
+              componentsProps={{
+                tooltip: {
+                  sx: {
+                    bgcolor: "#7355B0",
+                    "& .MuiTooltip-arrow": {
+                      color: "#3730a3",
+                    },
+                  },
+                },
+              }}
+              title="Image Generation Credits Left"
+              placement="top"
+            >
+              <div className="flex items-center justify-center gap-2 pr-4">
+                <Image size={20} />
+                <h1>{imagesLeft}</h1>
+              </div>
+            </Tooltip>
 
             {isAuthenticated && (
               <Link

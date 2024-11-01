@@ -88,14 +88,14 @@ export const Home = () => {
 
   return (
     <div className="ml-[68px]">
-      <div className="px-4 md:px-20 pt-10 text-3xl font-semibold tracking-tight flex flex-row gap-4">
+      <div className="px-4 md:px-20 pt-10 text-2xl font-semibold tracking-tight flex flex-row gap-4">
         <p>Create New Image</p>
       </div>
       <div className="gap-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-10 px-20">
         {items.map((item, index) => (
           <div
             key={index}
-            className="relative max-w-sm bg-gray-50 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+            className="relative max-w-sm bg-gray-50 border border-gray-200 rounded-[8px] shadow dark:bg-gray-800 dark:border-gray-700"
           >
             {item.images.length === 0 ? (
               // <Link
@@ -115,7 +115,7 @@ export const Home = () => {
                     <Plus />
                   </div>
                   <div className="px-4 pb-8 flex justify-center items-center">
-                    <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                    <h5 className="text-base font-semibold text-gray-900 dark:text-white">
                       Start from scratch
                     </h5>
                   </div>
@@ -141,7 +141,7 @@ export const Home = () => {
                     />
                   </div>
                   <div className="px-4 pt-2 pb-4 flex justify-between items-center">
-                    <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                    <h5 className="text-base font-semibold  text-gray-900 dark:text-white">
                       {item.text}
                     </h5>
                     <span className="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-gren-200 dark:text-green-800 ms-3">

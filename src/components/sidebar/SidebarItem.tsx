@@ -76,13 +76,13 @@ export const SidebarItem = ({ item }: { item: SidebarItemProps }) => {
       >
         {text}
       </span>
-      {alert && (
+      {/* {alert && (
         <div
           className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${
             expanded ? "" : "top-2"
           }`}
         ></div>
-      )}
+      )} */}
       {!expanded && (
         <div
           className={`absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm
