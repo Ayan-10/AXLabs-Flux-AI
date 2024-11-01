@@ -37,26 +37,38 @@ type Training = {
   images: string[]; // assuming it's an array of image URLs
 };
 
-
-
 const initialItems: Model[] = [
-
-
   {
     name: "Elon Musk",
     triggerWord: "elon musk",
     tuneId: "1763462",
-    token: "ohwx"
+    token: "ohwx",
   },
-]
+];
 
-export const DatingPlayground = () => {
+interface TemplatePlaygroundProps {
+  pageId: string | string[];
+}
+
+interface Template {
+  id: string;
+  pageId: string;
+  name: string;
+  images: string[];
+  runCount: number;
+  prePrompt: string;
+}
+
+export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
+  pageId,
+}) => {
+  console.log(pageId);
   const { data: authData } = useQuery({
     queryKey: ["checkAuthStatus"],
     queryFn: async () => await checkAuthStatus(),
   });
 
-  let prompt = ''
+  let prompt = "";
   const [imageUrl, setImageUrl] = useState<string>(
     "https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg"
   );
@@ -70,8 +82,32 @@ export const DatingPlayground = () => {
   const [gender, setGender] = useState<string>("");
   const [action, setAction] = useState<string>("");
   const [place, setPlace] = useState<string>("");
+  const [dress, setDress] = useState<string>("");
+  const [activity, setActivity] = useState<string>("");
+  const [keywords, setKeywords] = useState<string>("");
+  const [template, setTemplate] = useState<Template | null>(null);
+  // const [loadingPage, setLoadingPage] = useState(true);
 
   const userId = authData?.user_id;
+
+  const fetchTemplate = async () => {
+    try {
+      console.log(" pG " + pageId);
+      const response = await fetch(`/api/template/fetch/${pageId}`);
+      const data = await response.json();
+      console.log(data.template);
+      setTemplate(data.template);
+      // setLoadingPage(false);
+    } catch (error) {
+      console.error("Error fetching template:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (pageId) {
+      fetchTemplate();
+    }
+  }, [pageId]);
 
   useEffect(() => {
     const fetchModels = async () => {
@@ -108,16 +144,16 @@ export const DatingPlayground = () => {
     } catch (error) {
       console.error("Error fetching training data:", error);
     }
-  };
+  }
 
   const handleGenerate = async () => {
-    if (!selectedModel || !gender || !action) {
+    if (!selectedModel || !gender) {
       toast.warning("Please select all required fields!");
       return;
     }
 
-    const newPrompt = generatePrompt(); // Call a function that returns the prompt
-    prompt = newPrompt
+    const newPrompt = generatePrompt(template?.prePrompt); // Call a function that returns the prompt
+    prompt = newPrompt;
 
     setIsLoading(true);
 
@@ -161,6 +197,7 @@ export const DatingPlayground = () => {
             negativePrompt: negativePrompt,
             numImages: numImages,
             tuneId: selectedModel.tuneId,
+            pageId: pageId
           }),
         });
 
@@ -227,32 +264,44 @@ export const DatingPlayground = () => {
     // } finally {
     //   setLoading(false);
     // }
-  };
+  }
 
-  const generatePrompt = () => {
+  const generatePrompt = (prePrompt: string | undefined) => {
     let quality = "";
     if (gender === "man") quality = "handsome";
     else if (gender === "woman") quality = "beautiful";
     else quality = "attractive"; // Fallback for other genders
 
-    const newPrompt = `Generate photo for dating profile, for ${selectedModel?.name}, this person is a ${gender}, this person is ${action} in front of ${
-      place || "a scenic location"
-    }, generate some ${quality} images which will impress the opposite gender.`;
-    return newPrompt;
-
-  };
+    const newPrompt = `${prePrompt}, for ${
+      selectedModel?.name
+    }, this person is a ${gender}, this person is ${
+      action || "standing"
+    } in front of ${place || "a scenic location"},  doing ${
+      activity || "exploring"
+    }, wearning this ${
+      dress || "a good dress"
+    }, generate some ${quality} images which will impress other people. ${
+      keywords || ""
+    }`
+    return newPrompt
+  }
 
   return (
     <div className="ml-[68px]">
       <ToastContainer />
-
-      <div className="px-4 md:px-20 pt-10 text-3xl font-semibold tracking-tight flex flex-row gap-4">
-        <p>Generate Dating Profile Images</p>
-      </div>
-      <div className="flex flex-1 flex-col items-center mr-0 py-6">
-        <div className="flex w-full flex-col px-4 md:px-20">
-          <div className="w-full h-full">
-            {/* <div className="flex flex-row gap-4">
+      {!template ? (
+        <div className="flex justify-center items-center px-8 py-8">
+          <Loader className="w-10 h-10 animate-spin text-primary" />
+        </div>
+      ) : (
+        <div>
+          <div className="px-4 md:px-20 pt-10 text-2xl font-semibold flex flex-row gap-4">
+            <p>Generate {template?.name} Images</p>
+          </div>
+          <div className="flex flex-1 flex-col items-center mr-0 py-6">
+            <div className="flex w-full flex-col px-4 md:px-20">
+              <div className="w-full h-full">
+                {/* <div className="flex flex-row gap-4">
               <a className="text-xs w-fit" href="/">
                 <button className="inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-background-secondary border border-[#5345AB] hover:bg-secondary/90 h-8 rounded-md px-3 text-xs">
                   <svg
@@ -279,84 +328,140 @@ export const DatingPlayground = () => {
                 </div>
               </div> 
             </div>*/}
-            <div className="w-full h-full">
-              <div className="flex flex-col w-full mt-4 gap-8">
-                <div className="flex flex-col lg:flex-row gap-8 lg:gap-2">
-                  <div className="flex flex-col w-full lg:w-2/6 rounded-md sm:pr-6">
-                    <div className="flex flex-1 flex-col gap-2">
-                      <div className="space-y-2">
-                        <label htmlFor="dropdown" className="block text-xl">
-                          Select Model
-                        </label>
-                        <select
-                          id="dropdown"
-                          className="block w-full p-2 border rounded"
-                          value={selectedModel ? selectedModel.name : ""}
-                          onChange={(e) => {
-                            const model = models.find(
-                              (m) => m.name === e.target.value
-                            );
-                            setSelectedModel(model || null);
-                          }}
-                        >
-                          <option value="">Select a model</option>
-                          {models.map((model) => (
-                            <option key={model.tuneId} value={model.name}>
-                              {model.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      {/* Gender Dropdown */}
-                      <div className="space-y-2 pt-4">
-                        <label className="block text-xl">Gender</label>
-                        <select
-                          value={gender}
-                          onChange={(e) => setGender(e.target.value)}
-                          className="block w-full p-2 border rounded"
-                          required
-                        >
-                          <option value="">Select a gender</option>
-                          <option value="man">Man</option>
-                          <option value="woman">Woman</option>
-                          <option value="non-binary">Non-binary</option>
-                          <option value="other">Other</option>
-                          {/* Add more options as needed */}
-                        </select>
-                      </div>
+                <div className="w-full h-full">
+                  <div className="flex flex-col w-full mt-4 gap-8">
+                    <div className="flex flex-col lg:flex-row gap-8 lg:gap-2">
+                      <div className="flex flex-col w-full lg:w-2/6 rounded-md sm:pr-6">
+                        <div className="flex flex-1 flex-col gap-2">
+                          <div className="space-y-2">
+                            <label
+                              htmlFor="dropdown"
+                              className="block text-base"
+                            >
+                              Select Model
+                            </label>
+                            <select
+                              id="dropdown"
+                              className="block w-full p-2 border rounded-[8px]"
+                              value={selectedModel ? selectedModel.name : ""}
+                              onChange={(e) => {
+                                const model = models.find(
+                                  (m) => m.name === e.target.value
+                                )
+                                setSelectedModel(model || null)
+                              }}
+                            >
+                              <option value="">Select a model</option>
+                              {models.map((model) => (
+                                <option key={model.tuneId} value={model.name}>
+                                  {model.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          {/* Gender Dropdown */}
+                          <div className="space-y-2 pt-4">
+                            <label className="block text-base">Gender</label>
+                            <select
+                              value={gender}
+                              onChange={(e) => setGender(e.target.value)}
+                              className="block w-full p-2 border rounded-[8px]"
+                              required
+                            >
+                              <option value="">Select a gender</option>
+                              <option value="man">Man</option>
+                              <option value="woman">Woman</option>
+                              <option value="non-binary">Non-binary</option>
+                              <option value="other">Other</option>
+                              {/* Add more options as needed */}
+                            </select>
+                          </div>
 
-                      {/* Action Dropdown */}
-                      <div className="space-y-2 pt-4">
-                        <label className="block text-xl">Action</label>
-                        <select
-                          value={action}
-                          onChange={(e) => setAction(e.target.value)}
-                          className="block w-full p-2 border rounded"
-                          required
-                        >
-                          <option value="">Select an action</option>
-                          <option value="standing">Standing</option>
-                          <option value="running">Running</option>
-                          <option value="fighting">Fighting</option>
-                          <option value="sitting">Sitting</option>
-                          <option value="dancing">Dancing</option>
-                          {/* Add more options as needed */}
-                        </select>
-                      </div>
+                          {/* Action Dropdown */}
+                          <div className="space-y-2 pt-4">
+                            <label className="block text-base">Action</label>
+                            <select
+                              value={action}
+                              onChange={(e) => setAction(e.target.value)}
+                              className="block w-full p-2 border rounded-[8px]"
+                              required
+                            >
+                              <option value="">Select an action</option>
+                              <option value="standing">Standing</option>
+                              <option value="running">Running</option>
+                              <option value="fighting">Fighting</option>
+                              <option value="sitting">Sitting</option>
+                              <option value="dancing">Dancing</option>
+                              {/* Add more options as needed */}
+                            </select>
+                          </div>
 
-                      {/* Place Input */}
-                      <div className="space-y-2 pt-4">
-                        <label className="block text-xl">Known Place</label>
-                        <input
-                          type="text"
-                          placeholder="Mount Fuji"
-                          value={place}
-                          onChange={(e) => setPlace(e.target.value)}
-                          className="block w-full p-2 border rounded"
-                        />
-                      </div>
+                          {/* Place Input */}
+                          <div className="space-y-2 pt-4">
+                            <label className="block text-base">
+                              Known Place
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="Mount Fuji"
+                              value={place}
+                              onChange={(e) => setPlace(e.target.value)}
+                              className="block w-full p-2 border rounded-[8px]"
+                            />
+                          </div>
 
-                      {/*<div className="flex justify-between items-center pt-4">
+                          <div className="space-y-2 pt-4">
+                            <label className="block text-base">Dress</label>
+                            <input
+                              type="text"
+                              placeholder="Suit"
+                              value={dress}
+                              onChange={(e) => setDress(e.target.value)}
+                              className="block w-full p-2 border rounded-[8px]"
+                            />
+                          </div>
+
+                          {/* Place Input */}
+                          <div className="space-y-2 pt-4">
+                            <label className="block text-base">Activity</label>
+                            <input
+                              type="text"
+                              placeholder="Trekking"
+                              value={activity}
+                              onChange={(e) => setActivity(e.target.value)}
+                              className="block w-full p-2 border rounded-[8px]"
+                            />
+                          </div>
+
+                          <div className="flex justify-between items-center pt-4">
+                            <h1 className="text-base">Keywords</h1>
+                            {/* <button className="inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-[#5345AB] hover:bg-secondary/90 h-8 rounded-md px-3 text-xs bg-zinc-800 border-none text-white">
+                          Advanced
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            className="ml-2 h-4 w-4"
+                          >
+                            <path d="m6 9 6 6 6-6"></path>
+                          </svg>
+                        </button> */}
+                          </div>
+
+                          <textarea
+                            className="flex min-h-[60px] w-full rounded-[8px] border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 resize-none"
+                            placeholder="handsome, beautiful, 6 pack abs, mullet haircult"
+                            rows={4}
+                            value={keywords}
+                            onChange={(e) => setKeywords(e.target.value)}
+                          />
+                          {/*<div className="flex justify-between items-center pt-4">
                         <h1 className="text-xl">Negative Prompt</h1>
                          <button className="inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-[#5345AB] hover:bg-secondary/90 h-8 rounded-md px-3 text-xs bg-zinc-800 border-none text-white">
                           Advanced
@@ -383,33 +488,38 @@ export const DatingPlayground = () => {
                         value={negativePrompt}
                         onChange={(e) => setNegativePrompt(e.target.value)}
                       />*/}
-                      <div className="space-y-2 pt-4 pb-8">
-                        <label htmlFor="numImages" className="block text-xl">
-                          Number of Images (1-8)
-                        </label>
-                        <input
-                          type="number"
-                          id="numImages"
-                          min={1}
-                          max={8}
-                          className="block w-full p-2 border rounded"
-                          value={numImages}
-                          onChange={(e) => setNumImages(Number(e.target.value))}
-                        />
-                      </div>
-                      <button
-                        className="inline-flex items-center justify-center rounded-md text-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-secondary shadow hover:bg-primary/90 h-10 px-4 py-2"
-                        onClick={handleGenerate}
-                      >
-                        Generate
-                      </button>
-                      {isLoading && (
-                        <div className="mt-4 px-2">
-                          {" "}
-                          <LinearProgress />
-                        </div>
-                      )}
-                      {/* <div className="transition-all duration-300 max-h-0 opacity-0">
+                          <div className="space-y-2 pt-4 pb-8">
+                            <label
+                              htmlFor="numImages"
+                              className="block text-base"
+                            >
+                              Number of Images (1-4)
+                            </label>
+                            <input
+                              type="number"
+                              id="numImages"
+                              min={1}
+                              max={4}
+                              className="block w-full p-2 border rounded-[8px]"
+                              value={numImages}
+                              onChange={(e) =>
+                                setNumImages(Number(e.target.value))
+                              }
+                            />
+                          </div>
+                          <button
+                            className="inline-flex items-center justify-center rounded-md text-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-secondary shadow hover:bg-primary/90 h-10 px-4 py-2 dark:text-white"
+                            onClick={handleGenerate}
+                          >
+                            Generate
+                          </button>
+                          {isLoading && (
+                            <div className="mt-4 px-2">
+                              {" "}
+                              <LinearProgress />
+                            </div>
+                          )}
+                          {/* <div className="transition-all duration-300 max-h-0 opacity-0">
                         <div className="relative bg-zinc-800 rounded-lg p-4">
                           <button className="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
                             <svg
@@ -499,58 +609,61 @@ export const DatingPlayground = () => {
                           />
                         </div>
                       </div>{" "} */}
-                    </div>
-                  </div>
-                  <div className="flex flex-col rounded-md border border-stroke-light bg-surface group lg:w-4/6">
-                    <div className="mb-2 p-6">
-                      <div className="flex items-center gap-2">
-                        <h1 className="text-xl">Result</h1>
-                      </div>
-                    </div>
-                    {loading ? (
-                      <div className="flex justify-center items-center">
-                        <Loader className="w-10 h-10 animate-spin text-primary" />
-                      </div>
-                    ) : playData.length === 0 ? (
-                      <p className="inline-flex justify-center items-center">No images found</p>
-                    ) : (
-                      playData.map((item, idx) => (
-                        <div key={idx} className="border p-4">
-                          <div className="flex justify-between items-center">
-                            <h2 className="font-bold">{item.name}</h2>
-                            <span
-                              className={`text-xs font-semibold px-2.5 py-0.5 rounded ms-3 ${
-                                item.status.toLowerCase() === "in progress"
-                                  ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-200"
-                                  : item.status.toLowerCase() === "completed"
-                                  ? "bg-green-100 text-green-800 dark:bg-gren-200"
-                                  : "bg-red-100 text-red-800 dark:bg-red-200"
-                              }`}
-                            >
-                              {item.status}
-                            </span>
-                          </div>
-
-                          {item.status === "IN PROGRESS" ? (
-                            <div className="relative w-full  bg-gray-200 mt-2">
-                              <div className="absolute top-0 left-0  w-full ">
-                                <LinearProgress />
-                              </div>
-                            </div>
-                          ) : item.images.length > 0 ? (
-                            <div className="grid grid-cols-3 gap-4 mt-4">
-                              {item.images.map((image, imgIdx) => (
-                                <ImageCard key={imgIdx} src={image} />
-                              ))}
-                            </div>
-                          ) : (
-                            <p>No images found</p>
-                          )}
                         </div>
-                      ))
-                    )}
+                      </div>
+                      <div className="flex flex-col rounded-md border border-stroke-light bg-surface group lg:w-4/6">
+                        <div className="mb-2 p-6">
+                          <div className="flex items-center gap-2">
+                            <h1 className="text-xl">Result</h1>
+                          </div>
+                        </div>
+                        {loading ? (
+                          <div className="flex justify-center items-center">
+                            <Loader className="w-10 h-10 animate-spin text-primary" />
+                          </div>
+                        ) : playData.length === 0 ? (
+                          <p className="inline-flex justify-center items-center">
+                            No images found
+                          </p>
+                        ) : (
+                          playData.map((item, idx) => (
+                            <div key={idx} className="border p-4">
+                              <div className="flex justify-between items-center">
+                                <h2 className="font-bold">{item.name}</h2>
+                                <span
+                                  className={`text-xs font-semibold px-2.5 py-0.5 rounded ms-3 ${
+                                    item.status.toLowerCase() === "in progress"
+                                      ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-200"
+                                      : item.status.toLowerCase() ===
+                                        "completed"
+                                      ? "bg-green-100 text-green-800 dark:bg-gren-200"
+                                      : "bg-red-100 text-red-800 dark:bg-red-200"
+                                  }`}
+                                >
+                                  {item.status}
+                                </span>
+                              </div>
 
-                    {/* <div className="space-y-4 p-6">
+                              {item.status === "IN PROGRESS" ? (
+                                <div className="relative w-full  bg-gray-200 mt-2">
+                                  <div className="absolute top-0 left-0  w-full ">
+                                    <LinearProgress />
+                                  </div>
+                                </div>
+                              ) : item.images.length > 0 ? (
+                                <div className="grid grid-cols-3 gap-4 mt-4">
+                                  {item.images.map((image, imgIdx) => (
+                                    <ImageCard key={imgIdx} src={image} />
+                                  ))}
+                                </div>
+                              ) : (
+                                <p>No images found</p>
+                              )}
+                            </div>
+                          ))
+                        )}
+
+                        {/* <div className="space-y-4 p-6">
                       <div
                         className="flex flex-col space-y-2"
                         data-testid="output-grid"
@@ -588,13 +701,15 @@ export const DatingPlayground = () => {
                         Download
                       </a>
                     </div> */}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
-  );
-};
+  )
+}

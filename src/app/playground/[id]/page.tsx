@@ -1,6 +1,6 @@
 "use client";
 
-import { DatingPlayground } from "@/components/playground/DatingPlayground";
+import { TemplatePlayground } from "@/components/playground/TemplatePlayground";
 import { HeadshotPlayground } from "@/components/playground/HeadshotPlayground";
 import { ModelPlayground } from "@/components/playground/ModelPlayground";
 import { OldMoneyPlayground } from "@/components/playground/OldMoneyPlayground";
@@ -12,19 +12,12 @@ const PlaygroundWithInitialPrompt = () => {
   const params = useParams(); // Gets the dynamic route parameters
   const { id } = params || {}; // Extract the 'id' parameter
 
-  console.log(id)
-  if (id === "1") {
-    return <DatingPlayground />;
-  } else if (id === "2") {
-    return <HeadshotPlayground />;
-  } else if (id === "3") {
-    return <OldMoneyPlayground />;
-  } else if (id === "4") {
-    return <ModelPlayground />;
-  } else if (id === "5") {
-    return <TravelPlayground />;
-  }
 
+
+  console.log(id)
+  if (id) {
+    return <TemplatePlayground pageId={id} />;
+  } 
   return <Playground />;
 };
 

@@ -93,3 +93,15 @@ model FavoriteImages {
 
   User User @relation(fields: [userId], references: [id])
 }
+
+model TemplatePlayground {
+  id         String   @id @default(cuid()) @map("_id")
+  pageId     String   @unique
+  name       String
+  images     String[]
+  runCount   Int      @default(0)
+  prePrompt  String
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

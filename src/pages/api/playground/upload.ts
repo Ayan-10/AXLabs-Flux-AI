@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "@/db/prisma";
-import { Prisma } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import { MongoClient } from "mongodb";
+
+const prisma = new PrismaClient();
 
 type Image = {
   url: string; // Define the structure of each image object
@@ -13,14 +15,26 @@ type RequestBody = {
   negativePrompt: string;
   numImages: number;
   tuneId: string;
+  pageId: string;
 };
+
+const MONGODB_URI = process.env.DATABASE_URL || "your_mongodb_uri_here";
+let client: MongoClient;
+
+// Function to connect to MongoDB
+async function getMongoClient() {
+  if (!client) {
+    client = new MongoClient(MONGODB_URI);
+    await client.connect();
+  }
+  return client;
+}
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-
     const {
       userId,
       prompt,
@@ -28,6 +42,7 @@ export default async function handler(
       negativePrompt,
       numImages,
       tuneId,
+      pageId,
     }: RequestBody = req.body;
 
     const user = await prisma.user.findUnique({
@@ -62,18 +77,15 @@ export default async function handler(
         ? "https://api.astria.ai/prompts"
         : `https://api.astria.ai/tunes/${tuneId}/prompts`;
 
-    const response = await fetch(
-      url,
-      {
-        method: "POST",
-        headers: {
-          // "Access-Control-Allow-Origin": "https://localhost:3000",
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        // "Access-Control-Allow-Origin": "https://localhost:3000",
 
-          Authorization: `Bearer ${process.env.FAL_KEY}`, // Add your API key here
-        },
-        body: form,
-      }
-    );
+        Authorization: `Bearer ${process.env.FAL_KEY}`, // Add your API key here
+      },
+      body: form,
+    });
 
     // Try to parse JSON if the response body is not empty
     const contentType = response.headers.get("content-type");
@@ -106,7 +118,10 @@ export default async function handler(
 
     await removeCredits(userId as string, 0, numImages);
 
-    console.log("req.body" + savedData);
+    const updatedTemplate = await incrementRunCount(pageId);
+    console.log(updatedTemplate);
+
+    // console.log("req.body" + savedData);
     return res.status(200).json({
       message: "Data uploaded successfully",
     });
@@ -185,4 +200,36 @@ export async function removeCredits(
       },
     },
   });
+}
+
+// export async function increaseRunCount(pageId: string) {
+//   await prisma.template.update({
+//     where: { pageId },
+//     data: { runCount: { increment: 1 } },
+//   });
+// }
+
+async function incrementRunCount(pageId: string) {
+  try {
+    const mongoClient = await getMongoClient();
+    const database = mongoClient.db(); // Use default database from URI
+    const templatesCollection = database.collection("TemplatePlayground"); // Collection name
+
+    // Update runCount for the document with the specified pageId
+    const result = await templatesCollection.updateOne(
+      { pageId },
+      { $inc: { runCount: 1 } }
+    );
+
+    if (result.modifiedCount === 0) {
+      console.log("Template not found or runCount not updated.");
+      return null;
+    }
+
+    console.log("Run count successfully incremented.");
+    return result;
+  } catch (error) {
+    console.error("Error incrementing runCount:", error);
+    throw error;
+  }
 }
