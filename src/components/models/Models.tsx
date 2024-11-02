@@ -84,11 +84,11 @@ export const Models = () => {
       <div className="px-4 md:px-20 pt-10 text-2xl font-semibold flex flex-row gap-4">
         <p>Your Models</p>
       </div>
-      {loading ? (
-        <div className="flex justify-center items-center">
-          <Loader className="w-12 h-12 animate-spin text-primary" />
-        </div>
-      ) : items.length === 0 ? (
+      {/* {loading ? (
+        <div className="flex justify-center items-center h-screen">
+          <Loader className="w-10 h-10 animate-spin text-primary" />
+        </div> */}
+      { items.length === 0 ? (
         <p className="text-center py-10">No models found</p>
       ) : (
         <div className="gap-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-10 px-20">
