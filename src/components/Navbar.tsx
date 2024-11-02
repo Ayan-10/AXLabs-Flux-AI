@@ -80,12 +80,12 @@ export const Navbar = () => {
   return (
     <header
       className="sticky top-0 z-40 w-full border-b-[1px] dark:border-b-slate-700 
-    bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60
+    bg-white shadow-md dark:bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-background/60
     ml-16"
     >
       <NavigationMenu className="mx-auto">
-        <NavigationMenuList className="container min-h-[72px] w-screen flex justify-between ">
-          <NavigationMenuItem className="font-bold md:flex">
+        <NavigationMenuList className="container min-h-[72px] w-screen flex justify-between items-center">
+          <NavigationMenuItem className="font-bold md:flex hidden">
             <a
               rel="noreferrer noopener"
               href="/"
@@ -97,35 +97,7 @@ export const Navbar = () => {
             </a>
           </NavigationMenuItem>
 
-          {/* Optional Navigation Links (commented out for now) */}
-          {/* <nav className="md:flex gap-2">
-            {routeList.map((route: RouteProps, i) => (
-              <Link
-                rel="noreferrer noopener"
-                href={route.href}
-                key={i}
-                className={`text-[17px] ${buttonVariants({
-                  variant: "ghost",
-                })}`}
-              >
-                {route.label}
-              </Link>
-            ))}
-            {isAuthenticated && isSubscribed && (
-              <Link
-                rel="noreferrer noopener"
-                href={process.env.NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_URL!}
-                target="_blank"
-                className={`text-[17px] ${buttonVariants({
-                  variant: "ghost",
-                })}`}
-              >
-                Billing Portal
-              </Link>
-            ))}
-          </nav> */}
-
-          <div className="flex sm:flex sm:gap-2 gap-1">
+          <div className="hidden md:flex gap-4 items-center">
             <Tooltip
               TransitionComponent={Zoom}
               componentsProps={{
@@ -133,7 +105,7 @@ export const Navbar = () => {
                   sx: {
                     bgcolor: "#7355B0",
                     "& .MuiTooltip-arrow": {
-                      color: "#3730a3",
+                      color: "#7355B0",
                     },
                   },
                 },
@@ -143,7 +115,9 @@ export const Navbar = () => {
             >
               <div className="flex items-center justify-center gap-2 pr-4">
                 <Box size={20} />
-                <h1>{modelsLeft}</h1>
+                <h1 className="font-semibold text-gray-800 dark:text-white">
+                  {modelsLeft}
+                </h1>
               </div>
             </Tooltip>
             <Tooltip
@@ -153,7 +127,7 @@ export const Navbar = () => {
                   sx: {
                     bgcolor: "#7355B0",
                     "& .MuiTooltip-arrow": {
-                      color: "#3730a3",
+                      color: "#7355B0",
                     },
                   },
                 },
@@ -163,7 +137,9 @@ export const Navbar = () => {
             >
               <div className="flex items-center justify-center gap-2 pr-4">
                 <Image size={20} />
-                <h1>{imagesLeft}</h1>
+                <h1 className="font-semibold text-gray-800  dark:text-white">
+                  {imagesLeft}
+                </h1>
               </div>
             </Tooltip>
 
@@ -174,6 +150,47 @@ export const Navbar = () => {
               >
                 {menuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
+            </div>
+            {isAuthenticated && (
+              <Link
+                rel="noreferrer noopener"
+                href="/api/auth/logout"
+                className={`border ${buttonVariants({
+                  variant: "secondary",
+                })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
+              >
+                Logout
+                <LogOut className="w-4 h-4 ml-2" />
+              </Link>
+            )}
+
+            {!isAuthenticated && (
+              <Link
+                rel="noreferrer noopener"
+                href="/api/auth/register"
+                className={`border ${buttonVariants({
+                  variant: "secondary",
+                })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
+              >
+                Login
+              </Link>
+            )}
+
+            {isAuthenticated && isSubscribed && (
+              <Link
+                rel="noreferrer noopener"
+                href="/premium"
+                className={`border bg-gradient-to-r from-[#667EEA] to-[#764BA2] text-white ${buttonVariants(
+                  {
+                    variant: "secondary",
+                  }
+                )} px-4 py-2 rounded-md hover:opacity-90 transition`}
+              >
+                Premium ✨
+              </Link>
+            )}
+            <div className="mr-10">
+              <ModeToggle />
             </div>
 
             <div className="hidden sm:flex gap-2">
