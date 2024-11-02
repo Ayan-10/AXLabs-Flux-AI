@@ -117,12 +117,12 @@ export const Pricing = () => {
 							<CardDescription className='text-gray-600'>{pricing.description}</CardDescription>
 						</CardHeader>
 
-						<CardContent>
+						<CardContent 								className="w-9/10 mx-auto"
+>
 							<PaymentLink
 								href={pricing.href}
 								text={pricing.buttonText}
 								paymentLink={pricing.paymentLink}
-								className="w-9/10 mx-auto"
 							/>
 						</CardContent>
 
