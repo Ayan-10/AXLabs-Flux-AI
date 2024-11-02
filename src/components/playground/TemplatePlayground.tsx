@@ -340,7 +340,7 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
                         </DialogTitle>
                         <div className="mt-2">
                           <p className="text-sm text-gray-500">
-                            You don't have enough credits left to generate more
+                            You do not have enough credits left to generate more
                             images, Please buy some credits to continue your
                             endeavour.
                           </p>

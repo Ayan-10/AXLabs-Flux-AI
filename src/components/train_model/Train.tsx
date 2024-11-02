@@ -170,7 +170,7 @@ export const Train = () => {
                       </DialogTitle>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          You don't have enough credits left to train more
+                          You do not have enough credits left to train more
                           models, Please buy some credits to continue your
                           endeavour.
                         </p>
