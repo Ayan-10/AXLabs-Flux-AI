@@ -81,7 +81,7 @@ export const Models = () => {
 
   return (
     <div className="ml-[68px]">
-      <div className="px-4 md:px-20 pt-10 text-2xl font-semibold flex flex-row gap-4">
+      <div className="px-4 sm:px-20 pt-10 text-2xl font-semibold flex flex-row gap-4">
         <p>Your Models</p>
       </div>
       {/* {loading ? (
@@ -91,7 +91,7 @@ export const Models = () => {
       {items.length === 0 ? (
         <p className="text-center py-10">No models found</p>
       ) : (
-        <div className="gap-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-10 px-20">
+        <div className="gap-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-10 px-10 sm:px-20">
           {items.map((item, index) => (
             <div
               key={index}

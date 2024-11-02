@@ -97,7 +97,7 @@ export const Gallery = () => {
 
   return (
     <div className="ml-[68px]">
-      <div className="px-4 md:px-20 pt-10 text-2xl font-semibold text-gray-900 dark:text-white flex flex-row gap-4">
+      <div className="px-4 sm:px-20 pt-10 text-2xl font-semibold text-gray-900 dark:text-white flex flex-row gap-4">
         <p>Your Generated Images</p>
         <Button
           startIcon={showFavoritesOnly ? <Favorite /> : <FavoriteTwoTone />}
@@ -121,7 +121,7 @@ export const Gallery = () => {
       ) : displayedItems.length === 0 ? (
         <p className="text-center py-10 text-gray-600">No images found</p>
       ) : (
-        <div className="gap-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-10 px-20">
+        <div className="gap-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-10 px-12 sm:px-20 items-center justify-center">
           {displayedItems.map((item, index) => {
             const isFavorite = favorites.includes(item.image);
             return (

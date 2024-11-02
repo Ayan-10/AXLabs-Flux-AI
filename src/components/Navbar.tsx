@@ -81,11 +81,11 @@ export const Navbar = () => {
     <header
       className="sticky top-0 z-40 w-full border-b-[1px] dark:border-b-slate-700 
     bg-white shadow-md dark:bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-background/60
-    ml-16"
+    ml-11 sm:ml-16"
     >
       <NavigationMenu className="mx-auto">
         <NavigationMenuList className="container min-h-[72px] w-screen flex justify-between items-center">
-          <NavigationMenuItem className="font-bold md:flex hidden">
+          <NavigationMenuItem className="font-bold flex">
             <a
               rel="noreferrer noopener"
               href="/"
@@ -97,7 +97,7 @@ export const Navbar = () => {
             </a>
           </NavigationMenuItem>
 
-          <div className="hidden md:flex gap-4 items-center">
+          <div className="flex sm:gap-2 md:gap-4 gap-1 items-center justify-end">
             <Tooltip
               TransitionComponent={Zoom}
               componentsProps={{
@@ -113,7 +113,7 @@ export const Navbar = () => {
               title="Model Training Credits Left"
               placement="top"
             >
-              <div className="flex items-center justify-center gap-2 pr-4">
+              <div className="flex items-center justify-center gap-2 sm:pr-4 pr-2">
                 <Box size={20} />
                 <h1 className="font-semibold text-gray-800 dark:text-white">
                   {modelsLeft}
@@ -135,7 +135,7 @@ export const Navbar = () => {
               title="Image Generation Credits Left"
               placement="top"
             >
-              <div className="flex items-center justify-center gap-2 pr-4">
+              <div className="flex items-center justify-center gap-2 sm:pr-4 pr-2">
                 <Image size={20} />
                 <h1 className="font-semibold text-gray-800  dark:text-white">
                   {imagesLeft}
@@ -146,54 +146,55 @@ export const Navbar = () => {
             <div className="flex sm:hidden gap-2">
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="p-2 text-gray-700 dark:text-gray-200 mr-10"
+                className="p-2 text-gray-700 dark:text-gray-200 mr-5"
               >
                 {menuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
             </div>
-            {isAuthenticated && (
-              <Link
-                rel="noreferrer noopener"
-                href="/api/auth/logout"
-                className={`border ${buttonVariants({
-                  variant: "secondary",
-                })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
-              >
-                Logout
-                <LogOut className="w-4 h-4 ml-2" />
-              </Link>
-            )}
-
-            {!isAuthenticated && (
-              <Link
-                rel="noreferrer noopener"
-                href="/api/auth/register"
-                className={`border ${buttonVariants({
-                  variant: "secondary",
-                })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
-              >
-                Login
-              </Link>
-            )}
-
-            {isAuthenticated && isSubscribed && (
-              <Link
-                rel="noreferrer noopener"
-                href="/premium"
-                className={`border bg-gradient-to-r from-[#667EEA] to-[#764BA2] text-white ${buttonVariants(
-                  {
+            <div className="hidden sm:flex gap-2">
+              {isAuthenticated && (
+                <Link
+                  rel="noreferrer noopener"
+                  href="/api/auth/logout"
+                  className={`border ${buttonVariants({
                     variant: "secondary",
-                  }
-                )} px-4 py-2 rounded-md hover:opacity-90 transition`}
-              >
-                Premium ✨
-              </Link>
-            )}
-            <div className="mr-10">
-              <ModeToggle />
+                  })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
+                >
+                  Logout
+                  <LogOut className="w-4 h-4 ml-2" />
+                </Link>
+              )}
+
+              {!isAuthenticated && (
+                <Link
+                  rel="noreferrer noopener"
+                  href="/api/auth/login"
+                  className={`border ${buttonVariants({
+                    variant: "secondary",
+                  })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
+                >
+                  Login
+                </Link>
+              )}
+              {isAuthenticated && isSubscribed && (
+                <Link
+                  rel="noreferrer noopener"
+                  href="/premium"
+                  className={`border bg-gradient-to-r from-[#667EEA] to-[#764BA2] text-white ${buttonVariants(
+                    {
+                      variant: "secondary",
+                    }
+                  )} px-4 py-2 rounded-md hover:opacity-90 transition`}
+                >
+                  Premium ✨
+                </Link>
+              )}
+              <div className="mr-10">
+                <ModeToggle />
+              </div>
             </div>
 
-            <div className="hidden sm:flex gap-2">
+            {/* <div className="hidden sm:flex gap-2">
               {isAuthenticated && (
                 <Link
                   rel="noreferrer noopener"
@@ -209,7 +210,7 @@ export const Navbar = () => {
               {!isAuthenticated && (
                 <Link
                   rel="noreferrer noopener"
-                  href="/api/auth/register"
+                  href="/api/auth/login"
                   className={`border ${buttonVariants({
                     variant: "secondary",
                   })}`}
@@ -234,39 +235,49 @@ export const Navbar = () => {
               <div className="mr-10">
                 <ModeToggle />
               </div>
-            </div>
+            </div> */}
             {menuOpen && (
-              <div className="absolute block sm:hidden top-10 right-8 mt-6 w-48 bg-secondary shadow-lg rounded-lg py-2 z-50 mr-10">
-                {isAuthenticated ? (
+              <div className="absolute block sm:hidden top-12 right-8 mt-6 w-36 bg-secondary shadow-lg rounded-lg  z-50 mr-10 px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+                {isAuthenticated && (
                   <Link
                     rel="noreferrer noopener"
                     href="/api/auth/logout"
-                    className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 text-center"
+                    className={`border ${buttonVariants({
+                      variant: "secondary",
+                    })} px-4  rounded-md hover:bg-gray-200 transition`}
                   >
                     Logout
-                    <LogOut className="w-4 h-4 ml-2 inline" />
+                    <LogOut className="w-4 h-4 ml-2" />
                   </Link>
-                ) : (
+                )}
+
+                {!isAuthenticated && (
                   <Link
                     rel="noreferrer noopener"
-                    href="/api/auth/register"
-                    className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 text-center"
+                    href="/api/auth/login"
+                    className={`border ${buttonVariants({
+                      variant: "secondary",
+                    })} px-4  rounded-md hover:bg-gray-200 transition`}
                   >
                     Login
                   </Link>
                 )}
-
                 {isAuthenticated && isSubscribed && (
                   <Link
                     rel="noreferrer noopener"
                     href="/premium"
-                    className="block px-4 py-2 text-white bg-gradient-to-r from-[#667EEA] to-[#764BA2] rounded-md text-center mt-2"
+                    className={`border bg-gradient-to-r from-[#667EEA] to-[#764BA2] text-white ${buttonVariants(
+                      {
+                        variant: "secondary",
+                      }
+                    )} px-4 py-2 rounded-md hover:opacity-90 transition`}
                   >
                     Premium ✨
                   </Link>
                 )}
+                <hr className="mt-2 border-gray-200 dark:border-gray-700" />
 
-                <div className="w-full flex justify-center mt-2">
+                <div className="w-full flex justify-center ">
                   <ModeToggle />
                 </div>
               </div>
