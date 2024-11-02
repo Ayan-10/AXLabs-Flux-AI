@@ -73,7 +73,7 @@ const pricingList: PricingProps[] = [
       "Priority support",
       "lorem ipsum dolor",
     ],
-    href: "/api/auth/register",
+    href: "/api/auth/login",
     paymentLink: process.env.STRIPE_ELITE_PLAN_LINK,
     billing: "/year",
   },
