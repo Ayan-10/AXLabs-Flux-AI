@@ -56,18 +56,18 @@ export const Sidebar = () => {
   return (
     <aside className="fixed inset-y-0 left-0 min-w-max shadow-lg min-h-screen z-50 transition-transform duration-300 ease-in-out bg-white dark:bg-gray-800">
       <nav className="h-full flex flex-col border-r border-gray-200 dark:border-gray-700">
-        <div className="p-4 flex justify-between items-center">
+        <div className="p-4 pb-[44px] flex justify-between items-center">
           <img
             src="https://img.logoipsum.com/243.svg"
             className={`transition-all ease-in-out ${expanded ? "w-32 mr-4" : "w-0"}`}
             alt="Logo"
           />
-          <button
+          {/* <button
             className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
-            onClick={() => setExpanded((curr) => !curr)}
+            // onClick={() => setExpanded((curr) => !curr)}
           >
             {expanded ? <ChevronFirst /> : <ChevronLast />}
-          </button>
+          </button> */}
         </div>
         <hr className="my-3 border-gray-200 dark:border-gray-700" />
         <SidebarContext.Provider value={{ expanded }}>

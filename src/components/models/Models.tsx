@@ -88,7 +88,7 @@ export const Models = () => {
         <div className="flex justify-center items-center h-screen">
           <Loader className="w-10 h-10 animate-spin text-primary" />
         </div> */}
-      { items.length === 0 ? (
+      {items.length === 0 ? (
         <p className="text-center py-10">No models found</p>
       ) : (
         <div className="gap-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-10 px-20">
@@ -100,8 +100,8 @@ export const Models = () => {
               {item.images.length === 0 ? (
                 <Link href="/train">
                   <div>
-                    <div className="h-[220px] w-full overflow-hidden flex flex-row gap-0 items-center justify-center rounded-t-[12px]">
-                      <Plus  className="text-gray-500"/>
+                    <div className="h-[210px] w-full overflow-hidden flex flex-row gap-0 items-center justify-center rounded-t-[12px]">
+                      <Plus className="text-gray-500" />
                     </div>
                     <div className="px-4 pb-8 flex justify-center items-center">
                       <h5 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -112,7 +112,7 @@ export const Models = () => {
                 </Link>
               ) : (
                 <div>
-                  <div className="h-48 w-full overflow-hidden flex flex-row gap-0">
+                  <div className="h-[200px] w-full overflow-hidden flex flex-row gap-0">
                     <img
                       className="w-1/2 h-full object-cover rounded-l-[12px] pl-2 pt-2"
                       src={item.images[0]}
