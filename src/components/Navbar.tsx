@@ -112,7 +112,7 @@ export const Navbar = () => {
             >
               <div className="flex items-center justify-center gap-2 pr-4">
                 <Box size={20} />
-                <h1 className="font-semibold text-gray-800">{modelsLeft}</h1>
+                <h1 className="font-semibold text-gray-800 dark:text-white">{modelsLeft}</h1>
               </div>
             </Tooltip>
             <Tooltip
@@ -132,7 +132,7 @@ export const Navbar = () => {
             >
               <div className="flex items-center justify-center gap-2 pr-4">
                 <Image size={20} />
-                <h1 className="font-semibold text-gray-800">{imagesLeft}</h1>
+                <h1 className="font-semibold text-gray-800  dark:text-white">{imagesLeft}</h1>
               </div>
             </Tooltip>
 
