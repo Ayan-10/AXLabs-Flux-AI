@@ -180,7 +180,7 @@ export const Navbar = () => {
             {!isAuthenticated && (
               <Link
                 rel="noreferrer noopener"
-                href="/api/auth/login"
+                href="/api/auth/register"
                 className={`border ${buttonVariants({ variant: "secondary" })}`}
               >
                 Login
