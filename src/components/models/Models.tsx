@@ -101,7 +101,7 @@ export const Models = () => {
                 <Link href="/train">
                   <div>
                     <div className="h-[220px] w-full overflow-hidden flex flex-row gap-0 items-center justify-center bg-white rounded-t-[12px]">
-                      <Plus className="text-gray-500" />
+                      <Plus/>
                     </div>
                     <div className="px-4 pb-8 flex justify-center items-center">
                       <h5 className="text-lg font-semibold text-gray-900 dark:text-white">
