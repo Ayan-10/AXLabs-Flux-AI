@@ -54,22 +54,45 @@ export const Train = () => {
   };
 
   const updateFiles = (selectedFiles: File[]) => {
-    if (selectedFiles.length >= 10) {
-      const filePreviews = selectedFiles.map((file) => URL.createObjectURL(file));
+    const oversizedFiles = selectedFiles.filter(
+      (file) => file.size > 2 * 1024 * 1024
+    );
+
+    if (oversizedFiles.length > 0) {
+      toast.error("Each file must be smaller than 2 MB.");
+      return;
+    }
+
+    if (selectedFiles.length >= 8 && selectedFiles.length < 16) {
+      const filePreviews = selectedFiles.map((file) =>
+        URL.createObjectURL(file)
+      );
       setPreviewUrls(filePreviews);
       setFiles(selectedFiles);
     } else {
-      toast.error("Please upload at least 10 files.");
+      toast.error("Please upload at least 10 and atmost 15 images.");
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (files.length < 10) {
-      toast.error("Please upload atleast 10 images");
+    if (files.length < 8) {
+      toast.error("Please upload atleast 8 images");
       return;
     }
-    
+    if (files.length > 15) {
+      toast.error("Please upload atmost 15 images");
+      return;
+    }
+    const oversizedFiles = files.filter(
+      (file) => file.size > 2 * 1024 * 1024
+    );
+
+    if (oversizedFiles.length > 0) {
+      toast.error("Each file must be smaller than 2 MB.");
+      return;
+    }
+
     if (name === "") {
       toast.error("Name is required");
       return;
@@ -164,7 +187,7 @@ export const Train = () => {
                           id="undefined-form-item-description"
                           className="text-[0.8rem] text-muted-foreground"
                         >
-                          Upload 4-20 images of the subject you want to train
+                          Upload 8-15 images of the subject you want to train
                           for.
                         </p>
                         <div
@@ -172,7 +195,6 @@ export const Train = () => {
                           onClick={handleButtonClick}
                           onDragOver={(e) => e.preventDefault()}
                           onDrop={handleFileDrop}
-                    
                         >
                           <input
                             accept="image/png,.png,image/jpeg,.jpg,.jpeg,image/webp,.webp"
