@@ -230,7 +230,7 @@ export const Train = () => {
                       </p>
                       <input
                         className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 max-w-screen-sm"
-                        placeholder="John's Ai Avatar"
+                        placeholder="John&apos;s Ai Avatar"
                         autoComplete="off"
                         id=":R1deuuunjla:-form-item"
                         aria-describedby=":R1deuuunjla:-form-item-description"
@@ -376,7 +376,7 @@ export const Train = () => {
                       </ul>
                       <br></br>
                       <p className="mt-1">
-                        P.S. - What you'll input is what you'll get as output. To train good model, take some time to collect good images
+                        P.S. - What you&apos;ll input is what you&apos;ll get as output. To train good model, take some time to collect good images
                       </p>
                     </div>
                   </form>
