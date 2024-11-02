@@ -14,6 +14,8 @@
 		"@emotion/styled": "^11.13.0",
 		"@fal-ai/serverless-client": "^0.14.3",
 		"@fal-ai/serverless-proxy": "^0.9.0",
+		"@headlessui/react": "^2.2.0",
+		"@heroicons/react": "^2.1.5",
 		"@kinde-oss/kinde-auth-nextjs": "^2.3.1",
 		"@mui/icons-material": "^6.1.4",
 		"@mui/material": "^6.1.2",
