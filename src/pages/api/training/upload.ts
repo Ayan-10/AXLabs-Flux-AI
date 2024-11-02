@@ -152,7 +152,7 @@ export default async function handler(
               model_type: "lora",
               name: userId.substring(3)?.concat(" " + name),
               image_urls: uploadedImages.map((image) => image.url),
-              callback: `${process.env.NEXT_PUBLIC_WEBHOOK_URL}/api/training/webhook?userId=${userId}`,
+              callback: `${process.env.NEXT_PUBLIC_WEBHOOK_URL}/api/training/webhook?userId=${userId}&userEmail=${user.email}`,
             },
           }),
         });
