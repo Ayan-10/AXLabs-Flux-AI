@@ -8,6 +8,14 @@ import { redirect, useSearchParams, useRouter } from "next/navigation";
 import { usePromptStore } from "../usePromptStore";
 import { useEffect, useState } from "react";
 import BoltIcon from "@mui/icons-material/Bolt";
+import Button from "@mui/material/Button";
+import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
+import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
+import { useTheme } from "next-themes";
+import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+import Menu from "@mui/material/Menu";
+import { MenuItem } from "@mui/material";
+
 
 interface SidebarItemProps {
   images: Array<string>;
@@ -23,6 +31,7 @@ interface Template {
   images: string[];
   runCount: number;
   prePrompt: string;
+  createdAt: Date;
 }
 
 const items: SidebarItemProps[] = [
@@ -93,6 +102,8 @@ export const Home = () => {
   const setPrompt = usePromptStore((state) => state.setPrompt);
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { theme } = useTheme();
 
   const fetchTemplates = async () => {
     try {
@@ -114,10 +125,78 @@ export const Home = () => {
     router.push("/playground"); // Navigate to Playground
   };
 
+  const sortTemplates = (criteria: "Popular" | "Recent" | "Name") => {
+    const [first, ...rest] = [...templates]
+    const sorted = [...rest]; // Make a shallow copy for sorting
+
+    if (criteria === "Popular") {
+      sorted.sort((a, b) => b.runCount - a.runCount);
+    } else if (criteria === "Recent") {
+      sorted.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    } else if (criteria === "Name") {
+      sorted.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    setTemplates([first, ...sorted]);
+    setAnchorEl(null); // Close the menu after selection
+  };
+
+
   return (
     <div className="ml-[68px]">
       <div className="px-4 md:px-20 pt-10 text-2xl font-semibold flex flex-row gap-4">
         <p>Create New Image</p>
+        <div className="flex flex-row items-center justify-between">
+          <Button
+            variant="outlined"
+            onClick={(e) => setAnchorEl(e.currentTarget)}
+            className="border rounded-[8px]"
+            startIcon={<FilterAltOutlinedIcon />}
+            endIcon={
+              anchorEl ? (
+                <KeyboardArrowUpOutlinedIcon />
+              ) : (
+                <KeyboardArrowDownOutlinedIcon />
+              )
+            }
+            sx={{
+              "&:hover": { backgroundColor: "gray" },
+            }}
+          >
+            Filter
+          </Button>
+          <Menu
+            className="text-white"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={() => setAnchorEl(null)}
+            MenuListProps={{ sx: { padding: 0 } }}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "center",
+            }}
+            PaperProps={{
+              sx: {
+                backgroundColor: theme === "dark" ? "#334155" : "white",
+                color: theme === "dark" ? "white" : "black",
+                width: anchorEl ? anchorEl.offsetWidth : undefined,
+              },
+            }}
+          >
+            <MenuItem onClick={() => sortTemplates("Popular")}>
+              Popular
+            </MenuItem>
+            <MenuItem onClick={() => sortTemplates("Recent")}>Recent</MenuItem>
+            <MenuItem onClick={() => sortTemplates("Name")}>Name</MenuItem>
+          </Menu>
+        </div>
       </div>
       {loading ? (
         <div className="flex justify-center items-center">
@@ -187,7 +266,7 @@ export const Home = () => {
                       </span>
                       <span className="bg-rose-100 text-rose-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-rose-200 dark:text-rose-800">
                         <div className="flex flex-1 justify-end items-center">
-                          <BoltIcon fontSize="small"/>
+                          <BoltIcon fontSize="small" />
                           <p className="text-xs">{item.runCount} </p>
                           <p className="text-xs pl-1">runs</p>
                         </div>
