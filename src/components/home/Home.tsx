@@ -218,7 +218,7 @@ export const Home = () => {
                   }}
                 >
                   <div onClick={() => navigateToPlayground("Your prompt here")}>
-                    <div className="h-[220px] w-full overflow-hidden flex flex-row gap-0 items-center justify-center bg-white rounded-t-[12px]">
+                    <div className="h-[220px] w-full overflow-hidden flex flex-row gap-0 items-center justify-center rounded-t-[12px]">
                       <Plus />
                     </div>
                     <div className="px-4 pb-8 flex justify-center items-center">
