@@ -24,18 +24,15 @@ interface PricingProps {
 
 const pricingList: PricingProps[] = [
   {
-    title: "Starter",
+    title: "Free",
     popular: 0,
-    price: 2,
+    price: 0,
     description:
-      "Lorem ipsum dolor sit, amet ipsum consectetur adipisicing elit.",
-    buttonText: "Buy Now",
+      "for starters",
+    buttonText: "Get Started",
     benefitList: [
-      "2 Prompt to Image",
-      "1 Model Training",
-      "Upto 4 pages",
-      "Community support",
-      "lorem ipsum dolor",
+      "2 AI Image Generations",
+      "0 Model Training Credits",
     ],
     href: "/api/auth/login",
     paymentLink: process.env.STRIPE_STARTER_PLAN_LINK,
@@ -44,16 +41,16 @@ const pricingList: PricingProps[] = [
   {
     title: "Pro",
     popular: 1,
-    price: 5,
+    price: 19,
     description:
-      "Lorem ipsum dolor sit, amet ipsum consectetur adipisicing elit.",
-    buttonText: "Buy Now",
+      "for enthusiasts",
+    buttonText: "Subscribe",
     benefitList: [
-      "4 Prompt to Image",
-      "2 Model Training",
-      "Upto 6 pages",
+      "100 AI Image Generations",
+      "1 Model Training Credits",
       "Priority support",
-      "lorem ipsum dolor",
+      "Medium Quality Photos",
+	  "Commercial use license"
     ],
     href: "/api/auth/login",
     paymentLink: process.env.STRIPE_PRO_PLAN_LINK,
@@ -62,16 +59,17 @@ const pricingList: PricingProps[] = [
   {
     title: "Elite",
     popular: 0,
-    price: 10,
+    price: 39,
     description:
-      "Lorem ipsum dolor sit, amet ipsum consectetur adipisicing elit.",
-    buttonText: "Buy Now",
+      "for creators",
+    buttonText: "Subscribe",
     benefitList: [
-      "6 Prompt to Image",
-      "3 Model Training",
+      "500 AI Image Generations",
+      "3 Model Training Credits",
       "Upto 10 pages",
       "Priority support",
-      "lorem ipsum dolor",
+      "Highest Quality Photos",
+	  "Commercial use license"
     ],
     href: "/api/auth/login",
     paymentLink: process.env.STRIPE_ELITE_PLAN_LINK,
@@ -82,7 +80,7 @@ const pricingList: PricingProps[] = [
 export const Pricing = () => {
 	return (
 		<section id='pricing' className='container py-24 sm:py-32'>
-			<h2 className='text-3xl md:text-4xl font-bold text-center'>
+			{/* <h2 className='text-3xl md:text-4xl font-bold text-center'>
 				Get
 				<span className='bg-gradient-to-b from-[#667EEA] to-[#764BA2] uppercase text-transparent bg-clip-text'>
 					{" "}
@@ -92,19 +90,19 @@ export const Pricing = () => {
 			</h2>
 			<h3 className='text-xl text-center text-muted-foreground pt-4 pb-8'>
 				Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias reiciendis.
-			</h3>
+			</h3> */}
 			<div className='grid md:grid-cols-2 lg:grid-cols-3 gap-8'>
 				{pricingList.map((pricing: PricingProps) => (
 					<Card
 						key={pricing.title}
-						className={
+						className={`transition-transform duration-300 ease-in-out ${
 							pricing.popular === PopularPlanType.YES
-								? "drop-shadow-xl shadow-black/10 dark:shadow-white/10"
-								: ""
-						}
+								? "drop-shadow-xl shadow-black/10 dark:shadow-white/10 transform scale-105"
+								: "hover:shadow-lg"
+						}`}
 					>
 						<CardHeader>
-							<CardTitle className='flex item-center justify-between'>
+							<CardTitle className='flex items-center justify-between'>
 								{pricing.title}
 								{pricing.popular === PopularPlanType.YES ? (
 									<Badge variant='secondary' className='text-sm text-primary'>
@@ -114,10 +112,9 @@ export const Pricing = () => {
 							</CardTitle>
 							<div>
 								<span className='text-3xl font-bold'>${pricing.price}</span>
-								{/* <span className='text-muted-foreground'> {pricing.billing}</span> */}
+								<span className='text-muted-foreground'>{pricing.billing}</span>
 							</div>
-
-							<CardDescription>{pricing.description}</CardDescription>
+							<CardDescription className='text-gray-600'>{pricing.description}</CardDescription>
 						</CardHeader>
 
 						<CardContent>
@@ -125,6 +122,7 @@ export const Pricing = () => {
 								href={pricing.href}
 								text={pricing.buttonText}
 								paymentLink={pricing.paymentLink}
+								className="w-9/10 mx-auto"
 							/>
 						</CardContent>
 
@@ -133,10 +131,11 @@ export const Pricing = () => {
 						<CardFooter className='flex'>
 							<div className='space-y-4'>
 								{pricing.benefitList.map((benefit: string) => (
-									<span key={benefit} className='flex'>
-										<Check className='text-purple-500' /> <h3 className='ml-2'>{benefit}</h3>
+									<span key={benefit} className='flex items-center'>
+										<Check className='text-purple-500' /> 
+										<h3 className='ml-2'>{benefit}</h3>
 									</span>
-								))}
+									))}
 							</div>
 						</CardFooter>
 					</Card>

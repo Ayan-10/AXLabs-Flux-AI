@@ -148,12 +148,12 @@ export const Home = () => {
   return (
     <div className="ml-[68px]">
       <div className="px-4 md:px-20 pt-10 text-2xl font-semibold flex flex-row gap-4">
-        <p>Create New Image</p>
+        <p className="text-gray-900">Create New Image</p>
         <div className="flex flex-row items-center justify-between">
           <Button
             variant="outlined"
             onClick={(e) => setAnchorEl(e.currentTarget)}
-            className="border rounded-[8px]"
+            className="border rounded-[8px] hover:bg-gray-300 transition duration-200"
             startIcon={<FilterAltOutlinedIcon />}
             endIcon={
               anchorEl ? (
@@ -194,42 +194,35 @@ export const Home = () => {
               Popular
             </MenuItem>
             <MenuItem onClick={() => sortTemplates("Recent")}>Recent</MenuItem>
-            <MenuItem onClick={() => sortTemplates("Name")}>Name</MenuItem>
+            <MenuItem onClick={() => sortTemplates("Name")}>A - Z</MenuItem>
           </Menu>
         </div>
       </div>
       {loading ? (
         <div className="flex justify-center items-center">
-          <Loader className="w-10 h-10 animate-spin text-primary" />
+          <Loader className="w-12 h-12 animate-spin text-primary" />
         </div>
       ) : templates.length === 0 ? (
-        <p className="text-center py-10">No templates available</p>
+        <p className="text-center py-10 text-gray-700">No templates available</p>
       ) : (
         <div className="gap-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-10 px-20">
           {templates.map((item, index) => (
             <div
               key={index}
-              className="relative max-w-sm bg-gray-50 border border-gray-200 rounded-[8px] shadow dark:bg-gray-800 dark:border-gray-700"
+              className="relative max-w-sm bg-white border border-gray-300 rounded-[12px] shadow-lg hover:shadow-2xl transition duration-300 dark:bg-gray-800 dark:border-gray-600"
             >
               {item.images.length === 0 ? (
-                // <Link
-                //   href={{
-                //     pathname: "/playground",
-                //     query: { prompt: item.prompt }, // Pass prompt as a query parameter
-                //   }}
-                //   as={"/playground"}
-                // >
                 <Link
                   href={{
                     pathname: `/playground`,
                   }}
                 >
                   <div onClick={() => navigateToPlayground("Your prompt here")}>
-                    <div className="h-[186px] w-full overflow-hidden flex flex-row gap-0 items-center justify-center">
+                    <div className="h-[220px] w-full overflow-hidden flex flex-row gap-0 items-center justify-center bg-white rounded-t-[12px]">
                       <Plus />
                     </div>
                     <div className="px-4 pb-8 flex justify-center items-center">
-                      <h5 className="text-base font-semibold text-gray-900 dark:text-white">
+                      <h5 className="text-lg font-semibold text-gray-900 dark:text-white">
                         Start from scratch
                       </h5>
                     </div>
@@ -242,29 +235,28 @@ export const Home = () => {
                   }}
                 >
                   <div>
-                    <div className="h-48 w-full overflow-hidden flex flex-row gap-0">
+                    <div className="h-52 w-full overflow-hidden flex flex-row gap-0">
                       <img
-                        className="w-1/2 h-full object-cover rounded-l-xl  pl-2 pt-2"
+                        className="w-1/2 h-full object-cover rounded-l-[12px] pl-2 pt-2"
                         src={item.images[0]}
                         alt=""
                       />
                       <img
-                        className="w-1/2 h-full object-cover rounded-r-xl  px-2 pt-2"
+                        className="w-1/2 h-full object-cover rounded-r-[12px] px-2 pt-2"
                         src={item.images[1]}
                         alt=""
                       />
                     </div>
                     <div className="px-4 pt-2 pb-2 flex justify-between items-center">
-                      <h5 className="text-base font-semibold  text-gray-900 dark:text-white">
+                      <h5 className="text-lg font-semibold text-gray-900 dark:text-white">
                         {item.name}
                       </h5>
                     </div>
-
-                    <div className="px-4 pb-4 flex  justify-between items-center">
-                      <span className="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-gren-200 dark:text-green-800">
+                    <div className="px-4 pb-4 flex justify-between items-center">
+                      <span className="bg-green-200 text-green-900 text-xs font-semibold px-3 py-1 rounded dark:bg-green-300 dark:text-green-900">
                         New
                       </span>
-                      <span className="bg-rose-100 text-rose-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-rose-200 dark:text-rose-800">
+                      <span className="bg-rose-200 text-rose-900 text-xs font-semibold px-3 py-1 rounded dark:bg-rose-300 dark:text-rose-900">
                         <div className="flex flex-1 justify-end items-center">
                           <BoltIcon fontSize="small" />
                           <p className="text-xs">{item.runCount} </p>

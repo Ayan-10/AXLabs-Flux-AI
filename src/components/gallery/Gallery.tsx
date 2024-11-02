@@ -3,7 +3,7 @@
 import Button from "@mui/material/Button";
 import Download from "@mui/icons-material/Download";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
-import Favorite from "@mui/icons-material/Favorite";;
+import Favorite from "@mui/icons-material/Favorite";
 import FavoriteTwoTone from "@mui/icons-material/FavoriteTwoTone";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
@@ -12,19 +12,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { isUserSubscribed } from "@/app/premium/actions";
 import { checkAuthStatus } from "@/app/auth/callback/actions";
-import { it } from "node:test";
 import { redirect } from "next/navigation";
-
-// const items: GalleryItem[] = [
-//   {
-//     images: [
-//       "https://fal.media/files/rabbit/fhXWELruSm2l7YiJmuN6P.png",
-//       "https://fal.media/files/panda/cbPwEgwt2VG8Tz3PiJ_NR_5839e66b84a34eedb56667a9b1c15d21.png",
-//     ],
-//     text: "Home",
-//     path: "/",
-//   },
-// ];
 
 interface GalleryItem {
   image: string;
@@ -53,7 +41,6 @@ export const Gallery = () => {
         setItems([]);
       } else {
         const fetchedImages = data.map((image: string) => ({ image }));
-        // Append fetched images to the initial dummy array
         setItems(fetchedImages);
       }
       setLoading(false);
@@ -68,8 +55,6 @@ export const Gallery = () => {
     try {
       const res = await fetch(`/api/playground/fetch/favoriteImages/${userId}`);
       const data = await res.json();
-      console.log("fsaj");
-      console.log(data + " ihi ");
       setFavorites(Array.isArray(data) ? data : []); // Ensure data is an array
     } catch (error) {
       console.error("Error fetching favorite images:", error);
@@ -110,39 +95,31 @@ export const Gallery = () => {
     ? items.filter((item) => favorites.includes(item.image))
     : items;
 
-  console.log(displayedItems + " bwj");
-
   return (
     <div className="ml-[68px]">
-      <div className="px-4 md:px-20 pt-10 text-2xl font-semibold flex flex-row gap-4">
-        <p>Images You Generated</p>
+      <div className="px-4 md:px-20 pt-10 text-2xl font-semibold text-gray-900 flex flex-row gap-4">
+        <p>Your Generated Images</p>
         <Button
           startIcon={showFavoritesOnly ? <Favorite /> : <FavoriteTwoTone />}
-          variant={showFavoritesOnly ? "outlined" : "contained"}
-          onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-          className="border rounded-[8px]"
-          // style={{
-          //   color: "#6b21a8",
-          // }}
-        >
-          {showFavoritesOnly ? "Show All Images" : "Show Favorites"}
-        </Button>
-
-        {/* <Button
           variant="outlined"
-          startIcon={<FilterAltOutlinedIcon />}
-          endIcon={<KeyboardArrowDownOutlinedIcon />}
+          onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+          className={`border rounded-[8px] text-sm transition duration-200 
+            ${showFavoritesOnly ? "bg-blue-500 text-white hover:bg-blue-600" : "border-gray-300 hover:bg-gray-200"}`}
+          sx={{
+            padding: "6px 12px",
+            fontWeight: "bold",
+          }}
         >
-          Filter
-        </Button> */}
+          {showFavoritesOnly ? "All Images" : "Favorites"}
+        </Button>
       </div>
 
       {loading ? (
         <div className="flex justify-center items-center">
-          <Loader className="w-10 h-10 animate-spin text-primary" />
+          <Loader className="w-12 h-12 animate-spin text-primary" />
         </div>
       ) : displayedItems.length === 0 ? (
-        <p className="text-center py-10">No images found</p>
+        <p className="text-center py-10 text-gray-600">No images found</p>
       ) : (
         <div className="gap-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-10 px-20">
           {displayedItems.map((item, index) => {
@@ -150,25 +127,27 @@ export const Gallery = () => {
             return (
               <div
                 key={index}
-                className="relative w-64 max-w-sm bg-gray-50 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" // Fixed width set here
+                className="relative w-64 max-w-sm bg-white border border-gray-300 rounded-lg shadow-lg hover:shadow-xl transition duration-300 dark:bg-gray-800 dark:border-gray-700"
               >
-                <div className="h-48 w-full overflow-hidden">
+                <div className="h-48 w-full overflow-hidden rounded-t-lg">
                   <img
-                    className="w-full h-full object-cover rounded-xl px-2 pt-2"
+                    className="w-full h-full object-cover"
                     src={item.image}
                     alt={`Generated image ${index}`}
                   />
                 </div>
-                <div className="px-2 py-2 flex justify-between items-center">
+                <div className="px-4 py-2 flex justify-between items-center">
                   <Button
                     startIcon={<Download />}
                     onClick={(e) => handleDownload(e, item.image)}
+                    className="bg-blue-500 text-white hover:bg-blue-600 transition duration-200"
                   >
                     Download
                   </Button>
                   <Button
                     startIcon={isFavorite ? <Favorite /> : <FavoriteBorder />}
                     onClick={() => handleToggleFavorite(item.image)}
+                    className="hover:text-red-500 transition duration-200"
                   >
                     Favorite
                   </Button>
