@@ -5,7 +5,7 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import Tooltip from "@mui/material/Tooltip";
-import { Box, Image, LogOut } from "lucide-react";
+import { Box, Image, LogOut, Menu, X } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
 import { buttonVariants } from "./ui/button";
 import Link from "next/link";
@@ -34,6 +34,7 @@ const routeList: RouteProps[] = [
 
 export const Navbar = () => {
   const { isAuthenticated } = useKindeBrowserClient();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Fetch subscription status
   const { data: subscriptionData } = useQuery({
@@ -84,7 +85,7 @@ export const Navbar = () => {
     >
       <NavigationMenu className="mx-auto">
         <NavigationMenuList className="container min-h-[72px] w-screen flex justify-between ">
-          <NavigationMenuItem className="font-bold md:flex hidden">
+          <NavigationMenuItem className="font-bold md:flex">
             <a
               rel="noreferrer noopener"
               href="/"
@@ -124,7 +125,7 @@ export const Navbar = () => {
             ))}
           </nav> */}
 
-          <div className="hidden md:flex gap-2">
+          <div className="flex sm:flex sm:gap-2 gap-1">
             <Tooltip
               TransitionComponent={Zoom}
               componentsProps={{
@@ -166,44 +167,93 @@ export const Navbar = () => {
               </div>
             </Tooltip>
 
-            {isAuthenticated && (
-              <Link
-                rel="noreferrer noopener"
-                href="/api/auth/logout"
-                className={`border ${buttonVariants({ variant: "secondary" })}`}
+            <div className="flex sm:hidden gap-2">
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="p-2 text-gray-700 dark:text-gray-200 mr-10"
               >
-                Logout
-                <LogOut className="w-4 h-4 ml-2" />
-              </Link>
-            )}
-
-            {!isAuthenticated && (
-              <Link
-                rel="noreferrer noopener"
-                href="/api/auth/register"
-                className={`border ${buttonVariants({ variant: "secondary" })}`}
-              >
-                Login
-              </Link>
-            )}
-
-            {isAuthenticated && isSubscribed && (
-              <Link
-                rel="noreferrer noopener"
-                href="/premium"
-                // shining animated button with purple gradient
-                className={`border bg-gradient-to-r from-[#667EEA] to-[#764BA2] text-white ${buttonVariants(
-                  {
-                    variant: "secondary",
-                  }
-                )}`}
-              >
-                Premium ✨
-              </Link>
-            )}
-            <div className="mr-10">
-              <ModeToggle />
+                {menuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
             </div>
+
+            <div className="hidden sm:flex gap-2">
+              {isAuthenticated && (
+                <Link
+                  rel="noreferrer noopener"
+                  href="/api/auth/logout"
+                  className={`border ${buttonVariants({
+                    variant: "secondary",
+                  })}`}
+                >
+                  Logout
+                  <LogOut className="w-4 h-4 ml-2" />
+                </Link>
+              )}
+              {!isAuthenticated && (
+                <Link
+                  rel="noreferrer noopener"
+                  href="/api/auth/register"
+                  className={`border ${buttonVariants({
+                    variant: "secondary",
+                  })}`}
+                >
+                  Login
+                </Link>
+              )}
+              {isAuthenticated && isSubscribed && (
+                <Link
+                  rel="noreferrer noopener"
+                  href="/premium"
+                  // shining animated button with purple gradient
+                  className={`border bg-gradient-to-r from-[#667EEA] to-[#764BA2] text-white ${buttonVariants(
+                    {
+                      variant: "secondary",
+                    }
+                  )}`}
+                >
+                  Premium ✨
+                </Link>
+              )}
+              <div className="mr-10">
+                <ModeToggle />
+              </div>
+            </div>
+            {menuOpen && (
+              <div className="absolute block sm:hidden top-10 right-8 mt-6 w-48 bg-secondary shadow-lg rounded-lg py-2 z-50 mr-10">
+                {isAuthenticated ? (
+                  <Link
+                    rel="noreferrer noopener"
+                    href="/api/auth/logout"
+                    className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 text-center"
+                  >
+                    Logout
+                    <LogOut className="w-4 h-4 ml-2 inline" />
+                  </Link>
+                ) : (
+                  <Link
+                    rel="noreferrer noopener"
+                    href="/api/auth/register"
+                    className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 text-center"
+                  >
+                    Login
+                  </Link>
+                )}
+
+                {isAuthenticated && isSubscribed && (
+                  <Link
+                    rel="noreferrer noopener"
+                    href="/premium"
+                    className="block px-4 py-2 text-white bg-gradient-to-r from-[#667EEA] to-[#764BA2] rounded-md text-center mt-2"
+                  >
+                    Premium ✨
+                  </Link>
+                )}
+
+                <div className="w-full flex justify-center mt-2">
+                  <ModeToggle />
+                </div>
+              </div>
+            )}
           </div>
         </NavigationMenuList>
       </NavigationMenu>
