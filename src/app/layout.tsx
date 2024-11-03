@@ -33,7 +33,9 @@ export default function RootLayout({
                 <Sidebar />
                 <div className="flex-1 flex flex-col overflow-x-hidden overflow-y-auto">
                   <Navbar />
-                  {children}
+                  <main className="pt-[72px]">
+                    {children}
+                  </main>
                 </div>
               </div>
             </TanStackProvider>

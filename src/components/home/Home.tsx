@@ -148,7 +148,7 @@ export const Home = () => {
   return (
     <div className="ml-[68px]">
       <div className="px-4 sm:px-20 pt-10 text-2xl font-semibold flex flex-row gap-4">
-        <p className="text-gray-900 dark:text-white">Create New Image</p>
+        <p className="text-gray-900 dark:text-white">Choose the Style to create your AI Photo</p>
         <div className="flex flex-row items-center justify-between">
           <Button
             variant="outlined"

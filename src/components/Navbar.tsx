@@ -79,9 +79,8 @@ export const Navbar = () => {
 
   return (
     <header
-      className="sticky top-0 z-40 w-full border-b-[1px] dark:border-b-slate-700 
-    bg-white shadow-md dark:bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-background/60
-    ml-11 sm:ml-16"
+      className="fixed top-0 left-0 right-0 z-50 w-full border-b-[1px] dark:border-b-slate-700 
+    bg-white shadow-md dark:bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
     >
       <NavigationMenu className="mx-auto">
         <NavigationMenuList className="container min-h-[72px] w-screen flex justify-between items-center">
@@ -92,7 +91,7 @@ export const Navbar = () => {
               className="ml-2 font-bold text-xl flex"
             >
               <span className="uppercase bg-gradient-to-r from-[#667EEA] to-[#764BA2] text-transparent bg-clip-text">
-                AXLabs Flux AI
+                Cool AI Photo
               </span>
             </a>
           </NavigationMenuItem>
