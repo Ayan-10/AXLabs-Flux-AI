@@ -103,11 +103,14 @@ export const Gallery = () => {
           startIcon={showFavoritesOnly ? <Favorite /> : <FavoriteTwoTone />}
           variant="outlined"
           onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-          className={`border rounded-[8px] text-sm transition duration-200 
-            ${showFavoritesOnly ? "bg-indigo-500 text-white hover:bg-indigo-600 border-violet-600" : "border-gray-300 hover:bg-gray-200 text-indigo-500"}`}
+          className={`border rounded-[8px] text-sm transition duration-200`}
           sx={{
-            padding: "6px 12px",
-            fontWeight: "bold",
+            color: showFavoritesOnly ? "white" : "#6366F1", 
+            backgroundColor: showFavoritesOnly ? "#6366F1" : "transparent", 
+            borderColor: showFavoritesOnly ? "#7C3AED" : "#D1D5DB",
+            "&:hover": {
+              backgroundColor: showFavoritesOnly ? "#4F46E5" : "#E5E7EB", 
+            },
           }}
         >
           {showFavoritesOnly ? "All Images" : "Favorites"}

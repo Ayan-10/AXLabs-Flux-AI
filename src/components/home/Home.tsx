@@ -16,7 +16,6 @@ import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import Menu from "@mui/material/Menu";
 import { MenuItem } from "@mui/material";
 
-
 interface SidebarItemProps {
   images: Array<string>;
   text: string;
@@ -126,7 +125,7 @@ export const Home = () => {
   };
 
   const sortTemplates = (criteria: "Popular" | "Recent" | "Name") => {
-    const [first, ...rest] = [...templates]
+    const [first, ...rest] = [...templates];
     const sorted = [...rest]; // Make a shallow copy for sorting
 
     if (criteria === "Popular") {
@@ -144,7 +143,6 @@ export const Home = () => {
     setAnchorEl(null); // Close the menu after selection
   };
 
-
   return (
     <div className="ml-[68px]">
       <div className="px-4 sm:px-20 pt-10 text-2xl font-semibold flex flex-row gap-4">
@@ -155,7 +153,7 @@ export const Home = () => {
           <Button
             variant="outlined"
             onClick={(e) => setAnchorEl(e.currentTarget)}
-            className="border rounded-[8px] hover:bg-gray-300 transition duration-200 text-violet-700 border-indigo-600"
+            className="border rounded-[8px] hover:bg-gray-300 transition duration-200 "
             startIcon={<FilterAltOutlinedIcon />}
             endIcon={
               anchorEl ? (
@@ -165,7 +163,11 @@ export const Home = () => {
               )
             }
             sx={{
-              "&:hover": { backgroundColor: "gray" },
+              color: "#7C3AED", 
+              borderColor: "#4F46E5", 
+              "&:hover": {
+                backgroundColor: "gray",
+              },
             }}
           >
             Filter
