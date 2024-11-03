@@ -238,15 +238,15 @@ export const Home = () => {
                     pathname: `/playground/${item.pageId}`,
                   }}
                 >
-                  <div>
-                    <div className="h-52 w-full overflow-hidden flex flex-row gap-0">
+                  <div className="rounded-[12px] overflow-hidden">
+                    <div className="h-52 w-full flex flex-row gap-0 px-2 pt-2">
                       <img
-                        className="w-1/2 h-full object-cover rounded-l-[12px] pl-2 pt-2"
+                        className="w-1/2 h-full object-cover rounded-l-[12px]"
                         src={item.images[0]}
                         alt=""
                       />
                       <img
-                        className="w-1/2 h-full object-cover rounded-r-[12px] pr-2 pt-2"
+                        className="w-1/2 h-full object-cover rounded-r-[12px]"
                         src={item.images[1]}
                         alt=""
                       />
@@ -263,7 +263,7 @@ export const Home = () => {
                       <span className="bg-fuchsia-200 text-fuchsia-900 text-xs font-semibold px-3 py-1 rounded dark:bg-fuchsia-300 dark:text-fuchsia-900">
                         <div className="flex flex-1 justify-end items-center">
                           <BoltIcon fontSize="small" />
-                          <p className="text-xs">{item.runCount} </p>
+                          <p className="text-xs">{item.runCount}</p>
                           <p className="text-xs pl-1">runs</p>
                         </div>
                       </span>
