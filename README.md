@@ -1,1 +1,1 @@
-<h1 align="center">AXLabs Flux AI</h1>
+<h1 align="center">Cool AI Photo</h1>
