@@ -15,6 +15,9 @@ import { useEffect, useState } from "react";
 import { checkAuthStatus } from "@/app/auth/callback/actions";
 import { isUserSubscribed } from "@/app/premium/actions";
 import { Zoom } from "@mui/material";
+import Logo from "/logo.svg";
+import ImageNext from "next/image";
+
 
 interface RouteProps {
   href: string;
@@ -84,7 +87,14 @@ export const Navbar = () => {
     >
       <NavigationMenu className="mx-auto">
         <NavigationMenuList className="container min-h-[72px] w-screen flex justify-between items-center">
-          <NavigationMenuItem className="font-bold flex">
+          <NavigationMenuItem className="font-bold flex items-center">
+            <ImageNext
+              src="/logo.svg"
+              width={50}
+              height={50}
+              alt="Picture of the author"
+            />
+
             <a
               rel="noreferrer noopener"
               href="/"
@@ -188,7 +198,7 @@ export const Navbar = () => {
                   Premium ✨
                 </Link>
               )}
-              <div className="mr-10">
+              <div className="">
                 <ModeToggle />
               </div>
             </div>
@@ -236,7 +246,7 @@ export const Navbar = () => {
               </div>
             </div> */}
             {menuOpen && (
-              <div className="absolute block sm:hidden top-12 right-8 mt-6 w-36 bg-secondary shadow-lg rounded-lg  z-50 mr-10 px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+              <div className="absolute block sm:hidden top-12 right-8 mt-6 w-36 bg-secondary shadow-lg rounded-lg  z-50 px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
                 {isAuthenticated && (
                   <Link
                     rel="noreferrer noopener"

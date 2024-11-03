@@ -104,7 +104,7 @@ export const Gallery = () => {
           variant="outlined"
           onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
           className={`border rounded-[8px] text-sm transition duration-200 
-            ${showFavoritesOnly ? "bg-blue-500 text-white hover:bg-blue-600" : "border-gray-300 hover:bg-gray-200"}`}
+            ${showFavoritesOnly ? "bg-indigo-500 text-white hover:bg-indigo-600 border-violet-600" : "border-gray-300 hover:bg-gray-200 text-indigo-500"}`}
           sx={{
             padding: "6px 12px",
             fontWeight: "bold",
@@ -140,14 +140,14 @@ export const Gallery = () => {
                   <Button
                     startIcon={<Download />}
                     onClick={(e) => handleDownload(e, item.image)}
-                    className="bg-blue-500 text-white hover:bg-blue-600 transition duration-200 px-4"
+                    className="bg-indigo-500 text-white hover:bg-indigo-600 transition duration-200 px-4"
                   >
                     Download
                   </Button>
                   <Button
                     startIcon={isFavorite ? <Favorite /> : <FavoriteBorder />}
                     onClick={() => handleToggleFavorite(item.image)}
-                    className="hover:text-red-500 transition duration-200"
+                    className="hover:text-red-500 transition duration-200 text-indigo-500"
                   >
                     Favorite
                   </Button>

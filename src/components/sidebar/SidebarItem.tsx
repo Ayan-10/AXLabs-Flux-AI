@@ -59,7 +59,7 @@ export const SidebarItem = ({ item }: { item: SidebarItemProps }) => {
         ${
           active
             ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
-            : "hover:bg-indigo-50 text-gray-600"
+            : "hover:bg-indigo-50 text-gray-600 dark:text-white hover:dark:bg-indigo-400"
         }
         `}
       style={{ minHeight: "40px" }} // Ensure consistent height

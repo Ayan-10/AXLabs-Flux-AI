@@ -148,12 +148,14 @@ export const Home = () => {
   return (
     <div className="ml-[68px]">
       <div className="px-4 sm:px-20 pt-10 text-2xl font-semibold flex flex-row gap-4">
-        <p className="text-gray-900 dark:text-white">Choose the Style to create your AI Photo</p>
+        <p className="text-gray-900 dark:text-white">
+          Choose the Style to create your AI Photo
+        </p>
         <div className="flex flex-row items-center justify-between">
           <Button
             variant="outlined"
             onClick={(e) => setAnchorEl(e.currentTarget)}
-            className="border rounded-[8px] hover:bg-gray-300 transition duration-200"
+            className="border rounded-[8px] hover:bg-gray-300 transition duration-200 text-violet-700 border-indigo-600"
             startIcon={<FilterAltOutlinedIcon />}
             endIcon={
               anchorEl ? (
@@ -203,7 +205,9 @@ export const Home = () => {
           <Loader className="w-12 h-12 animate-spin text-primary" />
         </div>
       ) : templates.length === 0 ? (
-        <p className="text-center py-10 text-gray-700">No templates available</p>
+        <p className="text-center py-10 text-gray-700">
+          No templates available
+        </p>
       ) : (
         <div className="gap-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-10 px-10 sm:px-20">
           {templates.map((item, index) => (
@@ -256,7 +260,7 @@ export const Home = () => {
                       <span className="bg-green-200 text-green-900 text-xs font-semibold px-3 py-1 rounded dark:bg-green-300 dark:text-green-900">
                         New
                       </span>
-                      <span className="bg-rose-200 text-rose-900 text-xs font-semibold px-3 py-1 rounded dark:bg-rose-300 dark:text-rose-900">
+                      <span className="bg-fuchsia-200 text-fuchsia-900 text-xs font-semibold px-3 py-1 rounded dark:bg-fuchsia-300 dark:text-fuchsia-900">
                         <div className="flex flex-1 justify-end items-center">
                           <BoltIcon fontSize="small" />
                           <p className="text-xs">{item.runCount} </p>

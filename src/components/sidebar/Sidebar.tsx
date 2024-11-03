@@ -42,6 +42,8 @@ const items = [
 
 export const Sidebar = () => {
   const [expanded, setExpanded] = useState(false);
+  const [expandedProfile, setExpandedProfile] = useState(false);
+
   const { data: authData } = useQuery({
     queryKey: ["checkAuthStatus"],
     queryFn: async () => await checkAuthStatus(),
@@ -59,7 +61,9 @@ export const Sidebar = () => {
         <div className="p-4 pb-[44px] flex justify-between items-center">
           <img
             src="https://img.logoipsum.com/243.svg"
-            className={`transition-all ease-in-out ${expanded ? "w-32 mr-4" : "w-0"}`}
+            className={`transition-all ease-in-out ${
+              expanded ? "w-32 mr-4" : "w-0"
+            }`}
             alt="Logo"
           />
           {/* <button
@@ -80,13 +84,18 @@ export const Sidebar = () => {
           </div>
         </SidebarContext.Provider>
         {isAuthenticated && (
-          <div className="border-t flex p-3 flex-shrink-0 bg-gray-50 dark:bg-gray-900">
+          <div className="border-t flex p-3 flex-shrink-0 bg-gray-50 dark:bg-gray-900 gap-4">
             <img
               src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${firstName}+${lastName}`}
               alt=""
               className="w-10 h-10 rounded-md"
+              onClick={() => setExpandedProfile((curr) => !curr)}
             />
-            <div className={`flex justify-between items-center overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>
+            <div
+              className={`absolute flex justify-between items-center overflow-hidden transition-all bg-gray-50 dark:bg-gray-900 left-14 bottom-0  py-[15px] rounded-se-md ${
+                expandedProfile ? "w-44 ml-3" : "w-0"
+              }`}
+            >
               <div className="leading-4">
                 <h4 className="font-semibold text-gray-800 dark:text-white">
                   {firstName} {lastName}
@@ -100,4 +109,3 @@ export const Sidebar = () => {
     </aside>
   );
 };
-
