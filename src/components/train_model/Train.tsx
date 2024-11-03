@@ -386,7 +386,7 @@ export const Train = () => {
                   </form>
                 </div>
 
-                <div className="rounded-xl border shadow w-full max-w-6xl mx-auto bg-secondary text-secondary-foreground">
+                <div className="rounded-b-xl border shadow w-full max-w-6xl mx-auto bg-secondary text-secondary-foreground">
                   
                   <div className="p-6 pt-0">
                     <div dir="ltr" data-orientation="horizontal">
