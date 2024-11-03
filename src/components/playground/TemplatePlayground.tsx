@@ -88,11 +88,13 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
   const [numImages, setNumImages] = useState<number>(1);
   const [playData, setPlayData] = useState<Training[]>([]);
   const [gender, setGender] = useState<string>("");
-  const [action, setAction] = useState<string>("");
-  const [place, setPlace] = useState<string>("");
-  const [dress, setDress] = useState<string>("");
-  const [activity, setActivity] = useState<string>("");
-  const [keywords, setKeywords] = useState<string>("");
+  // const [action, setAction] = useState<string>("");
+  // const [place, setPlace] = useState<string>("");
+  // const [dress, setDress] = useState<string>("");
+  // const [activity, setActivity] = useState<string>("");
+  // const [keywords, setKeywords] = useState<string>("");
+  // const [keywords, setKeywords] = useState<string>("");
+  const [prePrompt, setPrePrompt] = useState<string>("");
   const [template, setTemplate] = useState<Template | null>(null);
   const [open, setOpen] = useState(false);
 
@@ -106,6 +108,8 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
       const data = await response.json();
       console.log(data.template);
       setTemplate(data.template);
+      setPrePrompt(data.template.prePrompt);
+
       // setLoadingPage(false);
     } catch (error) {
       console.error("Error fetching template:", error);
@@ -161,7 +165,7 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
       return;
     }
 
-    const newPrompt = generatePrompt(template?.prePrompt); // Call a function that returns the prompt
+    const newPrompt = generatePrompt(prePrompt); // Call a function that returns the prompt
     prompt = newPrompt;
 
     setIsLoading(true);
@@ -287,15 +291,7 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
 
     const newPrompt = `${prePrompt}, for ${
       selectedModel?.name
-    }, this person is a ${gender}, this person is ${
-      action || "standing"
-    } in front of ${place || "a scenic location"},  doing ${
-      activity || "exploring"
-    }, wearning this ${
-      dress || "a good dress"
-    }, generate some ${quality} images which will impress other people. ${
-      keywords || ""
-    }`;
+    }, this person is a ${gender}`;
     return newPrompt;
   };
 
@@ -458,7 +454,7 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
                           </div>
 
                           {/* Action Dropdown */}
-                          <div className="space-y-2 pt-4">
+                          {/* <div className="space-y-2 pt-4">
                             <label className="block text-base">
                               Select Action
                             </label>
@@ -474,12 +470,11 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
                               <option value="fighting">Fighting</option>
                               <option value="sitting">Sitting</option>
                               <option value="dancing">Dancing</option>
-                              {/* Add more options as needed */}
                             </select>
-                          </div>
+                          </div> */}
 
                           {/* Place Input */}
-                          <div className="space-y-2 pt-4">
+                          {/* <div className="space-y-2 pt-4">
                             <label className="block text-base">
                               Known Place
                             </label>
@@ -490,9 +485,9 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
                               onChange={(e) => setPlace(e.target.value)}
                               className="block w-full p-2 border rounded-[8px]"
                             />
-                          </div>
+                          </div> */}
 
-                          <div className="space-y-2 pt-4">
+                          {/* <div className="space-y-2 pt-4">
                             <label className="block text-base">Dress</label>
                             <input
                               type="text"
@@ -501,10 +496,10 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
                               onChange={(e) => setDress(e.target.value)}
                               className="block w-full p-2 border rounded-[8px]"
                             />
-                          </div>
+                          </div> */}
 
                           {/* Place Input */}
-                          <div className="space-y-2 pt-4">
+                          {/* <div className="space-y-2 pt-4">
                             <label className="block text-base">Activity</label>
                             <input
                               type="text"
@@ -513,10 +508,22 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
                               onChange={(e) => setActivity(e.target.value)}
                               className="block w-full p-2 border rounded-[8px]"
                             />
+                          </div> */}
+
+                          {/* <div className="flex justify-between items-center pt-4">
+                            <h1 className="text-base">Keywords</h1>
+                            
                           </div>
 
+                          <textarea
+                            className="flex min-h-[60px] w-full rounded-[8px] border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 resize-none"
+                            placeholder="handsome, beautiful, 6 pack abs, mullet haircult"
+                            rows={4}
+                            value={keywords}
+                            onChange={(e) => setKeywords(e.target.value)}
+                          /> */}
                           <div className="flex justify-between items-center pt-4">
-                            <h1 className="text-base">Keywords</h1>
+                            <h1 className="text-base">Prompt</h1>
                             {/* <button className="inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-[#5345AB] hover:bg-secondary/90 h-8 rounded-md px-3 text-xs bg-zinc-800 border-none text-white">
                           Advanced
                           <svg
@@ -540,8 +547,8 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
                             className="flex min-h-[60px] w-full rounded-[8px] border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 resize-none"
                             placeholder="handsome, beautiful, 6 pack abs, mullet haircult"
                             rows={4}
-                            value={keywords}
-                            onChange={(e) => setKeywords(e.target.value)}
+                            value={prePrompt}
+                            onChange={(e) => setPrePrompt(e.target.value)}
                           />
                           {/*<div className="flex justify-between items-center pt-4">
                         <h1 className="text-xl">Negative Prompt</h1>
