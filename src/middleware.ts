@@ -14,14 +14,16 @@ export async function middleware(request: NextRequest) {
   // List of assets in the public folder that should be accessible without authentication
   const publicAssets = ["/logo.svg", "/favicon.ico"]; // Add any other public assets here
 
+  const response = NextResponse.next();
+
   // Allow access to public assets like logo, favicon, etc.
   if (publicAssets.includes(request.nextUrl.pathname)) {
-    return NextResponse.next();
+    return response;
   }
 
   // If the route is public, allow access without authentication
   if (publicRoutes.includes(request.nextUrl.pathname)) {
-    return NextResponse.next();
+    return response;
   }
 
   // If the user is not authenticated, redirect to the login page
@@ -30,7 +32,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Proceed if the user is authenticated
-  return NextResponse.next();
+  return response;
 }
 
 // Configure matcher to apply middleware to all routes except Next.js internal files and APIs
