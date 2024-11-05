@@ -6,6 +6,7 @@ import { Navbar } from "@/components/Navbar";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import TanStackProvider from "@/components/providers/TanStackProvider";
 import { Boxes, Brain, Images, LayoutDashboard, Settings } from "lucide-react";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const font = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -20,7 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <html lang="en">
+    <html lang="en">
+      <UserProvider>
         <body className={font.className}>
           <ThemeProvider
             attribute="class"
@@ -33,14 +35,13 @@ export default function RootLayout({
                 <Sidebar />
                 <div className="flex-1 flex flex-col overflow-x-hidden overflow-y-auto">
                   <Navbar />
-                  <main className="pt-[72px]">
-                    {children}
-                  </main>
+                  <main className="pt-[72px]">{children}</main>
                 </div>
               </div>
             </TanStackProvider>
           </ThemeProvider>
         </body>
-      </html>
+      </UserProvider>
+    </html>
   );
 }
