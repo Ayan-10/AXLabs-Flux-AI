@@ -5,19 +5,18 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import Tooltip from "@mui/material/Tooltip";
-import { Box, Image, LogOut, Menu, X } from "lucide-react";
+import { Box, Image, Loader, LogOut, Menu, X } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
 import { buttonVariants } from "./ui/button";
 import Link from "next/link";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { checkAuthStatus } from "@/app/auth/callback/actions";
 import { isUserSubscribed } from "@/app/premium/actions";
 import { Zoom } from "@mui/material";
 import Logo from "/logo.svg";
 import ImageNext from "next/image";
-
+import { checkAuthStatus } from "@/app/auth/callback/actions";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface RouteProps {
   href: string;
@@ -36,7 +35,7 @@ const routeList: RouteProps[] = [
 ];
 
 export const Navbar = () => {
-  const { isAuthenticated } = useKindeBrowserClient();
+  const { user, error, isLoading } = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Fetch subscription status
@@ -79,6 +78,11 @@ export const Navbar = () => {
       return () => clearInterval(interval); // Clean up the interval
     }
   }, [userId]); // Rerun when userId changes
+
+  console.log("hfsd");
+  console.log(user);
+  // if (isLoading) return <div>Loading...</div>;
+  // if (error) return <div>{error.message}</div>;
 
   return (
     <header
@@ -161,31 +165,40 @@ export const Navbar = () => {
               </button>
             </div>
             <div className="hidden sm:flex gap-2">
-              {isAuthenticated && (
-                <Link
-                  rel="noreferrer noopener"
-                  href="/api/auth/logout"
+              {isLoading ? (
+                <Loader
                   className={`border ${buttonVariants({
                     variant: "secondary",
                   })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
-                >
-                  Logout
-                  <LogOut className="w-4 h-4 ml-2" />
-                </Link>
+                />
+              ) : (
+                <>
+                  {user ? (
+                    <Link
+                      rel="noreferrer noopener"
+                      href="/api/auth/logout"
+                      className={`border ${buttonVariants({
+                        variant: "secondary",
+                      })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
+                    >
+                      Logout
+                      <LogOut className="w-4 h-4 ml-2" />
+                    </Link>
+                  ) : (
+                    <Link
+                      rel="noreferrer noopener"
+                      href="/api/auth/login"
+                      className={`border ${buttonVariants({
+                        variant: "secondary",
+                      })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
+                    >
+                      Login
+                    </Link>
+                  )}
+                </>
               )}
 
-              {!isAuthenticated && (
-                <Link
-                  rel="noreferrer noopener"
-                  href="/api/auth/login"
-                  className={`border ${buttonVariants({
-                    variant: "secondary",
-                  })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
-                >
-                  Login
-                </Link>
-              )}
-              {isAuthenticated && isSubscribed && (
+              {user && isSubscribed && (
                 <Link
                   rel="noreferrer noopener"
                   href="/premium"
@@ -247,7 +260,7 @@ export const Navbar = () => {
             </div> */}
             {menuOpen && (
               <div className="absolute block sm:hidden top-12 right-8 mt-6 w-36 bg-secondary shadow-lg rounded-lg  z-50 px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
-                {isAuthenticated && (
+                {user && (
                   <Link
                     rel="noreferrer noopener"
                     href="/api/auth/logout"
@@ -260,7 +273,7 @@ export const Navbar = () => {
                   </Link>
                 )}
 
-                {!isAuthenticated && (
+                {!user && (
                   <Link
                     rel="noreferrer noopener"
                     href="/api/auth/login"
@@ -271,7 +284,7 @@ export const Navbar = () => {
                     Login
                   </Link>
                 )}
-                {isAuthenticated && isSubscribed && (
+                {user && isSubscribed && (
                   <Link
                     rel="noreferrer noopener"
                     href="/premium"
