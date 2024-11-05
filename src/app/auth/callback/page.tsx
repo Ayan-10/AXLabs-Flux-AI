@@ -1,20 +1,21 @@
 "use client";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useQuery } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { checkAuthStatus } from "./actions";
 import { useEffect } from "react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 const Page = () => {
   const router = useRouter();
-  const { user } = useKindeBrowserClient();
+  const { user, error } = useUser();
   const { data, isLoading } = useQuery({
     queryKey: ["checkAuthStatus"],
     queryFn: async () => await checkAuthStatus(),
     staleTime: Infinity, // Optional: prevent frequent refetches
   });
 
+  console.log("qwertyuio....................")
   useEffect(() => {
     if (!isLoading) {
       const stripePaymentLink =
@@ -49,3 +50,5 @@ const Page = () => {
 };
 
 export default Page;
+
+

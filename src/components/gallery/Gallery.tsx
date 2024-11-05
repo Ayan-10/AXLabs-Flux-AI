@@ -11,8 +11,8 @@ import { FilterIcon, Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { isUserSubscribed } from "@/app/premium/actions";
-import { checkAuthStatus } from "@/app/auth/callback/actions";
 import { redirect } from "next/navigation";
+import { checkAuthStatus } from "@/app/auth/callback/actions";
 
 interface GalleryItem {
   image: string;
