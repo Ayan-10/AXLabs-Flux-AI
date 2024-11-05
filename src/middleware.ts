@@ -1,12 +1,13 @@
 // middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { getSession } from "@auth0/nextjs-auth0/edge";
 
 export async function middleware(request: NextRequest) {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
-  const isAuthenticated = Boolean(user);
+  const session = await getSession();
+
+  const user = session?.user;
+  // const isAuthenticated = Boolean(user);
 
   // List of public routes that do not require authentication
   const publicRoutes = ["/", "/public"];
@@ -27,7 +28,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // If the user is not authenticated, redirect to the login page
-  if (!isAuthenticated) {
+  if (!user) {
     return NextResponse.redirect(new URL("/api/auth/login", request.url));
   }
 
