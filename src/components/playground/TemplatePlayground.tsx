@@ -426,11 +426,32 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
                               }}
                             >
                               <option value="">-</option>
-                              {models.map((model) => (
-                                <option key={model.tuneId} value={model.name}>
-                                  {model.name}
-                                </option>
-                              ))}
+
+                              <optgroup label="Public models">
+                                {initialItems.map((model) => (
+                                  <option key={model.tuneId} value={model.name}>
+                                    {model.name}
+                                  </option>
+                                ))}
+                              </optgroup>
+
+                              <optgroup label="Your trained models">
+                                {models
+                                  .filter(
+                                    (model) =>
+                                      !initialItems.some(
+                                        (initial) => initial.name === model.name
+                                      )
+                                  )
+                                  .map((model) => (
+                                    <option
+                                      key={model.tuneId}
+                                      value={model.name}
+                                    >
+                                      {model.name}
+                                    </option>
+                                  ))}
+                              </optgroup>
                             </select>
                           </div>
                           {/* Gender Dropdown */}
