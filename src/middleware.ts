@@ -7,6 +7,7 @@ const isPublicRoute = createRouteMatcher([
   "/refresh",
   "/api/playground/webhook",
   "/api/training/webhook",
+  "/api/webhooks/lemonsqueezy",
 ]);
 
 export default clerkMiddleware(async (auth, request) => {
