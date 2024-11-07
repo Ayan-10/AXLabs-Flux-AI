@@ -276,6 +276,8 @@ export const Playground = () => {
                           setSelectedModel(model || null);
                         }}
                       >
+                        <option value="">-</option>
+
                         <optgroup label="Public models">
                           {initialItems.map((model) => (
                             <option key={model.tuneId} value={model.name}>
