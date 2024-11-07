@@ -8,8 +8,6 @@ export async function checkAuthStatus() {
   const user = session?.user;
   if (!user) return { success: false };
 
-  console.log("uyf")
-  console.log(user)
 
   const existingUser = await prisma.user.findUnique({ where: { id: user.sid } });
 
@@ -27,7 +25,7 @@ export async function checkAuthStatus() {
 
   return {
     success: true,
-    user_id: user.id,
+    user_id: user.sid,
     email: user.email,
     first_name: user.given_name,
     last_name: user.family_name,
