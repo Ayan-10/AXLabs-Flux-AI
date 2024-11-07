@@ -31,11 +31,6 @@ export const Train = () => {
   const [uploadTrigger, setUploadTrigger] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const isAuthenticated = authData?.success;
-  if (!isAuthenticated) {
-    return redirect("/api/auth/login");
-  }
-
   const handleButtonClick = () => {
     if (!inputRef || !inputRef.current) return;
     inputRef.current.click();
@@ -61,23 +56,23 @@ export const Train = () => {
 
   const updateFiles = (selectedFiles: File[]) => {
     const oversizedFiles = selectedFiles.filter(
-      (file) => file.size > 2 * 1024 * 1024
+      (file) => file.size > 5 * 1024 * 1024
     );
 
     if (oversizedFiles.length > 0) {
-      toast.error("Each file must be smaller than 2 MB.");
+      toast.error("Each file must be smaller than 5 MB.");
       return;
     }
 
-    if (selectedFiles.length >= 8 && selectedFiles.length <= 15) {
-      const filePreviews = selectedFiles.map((file) =>
-        URL.createObjectURL(file)
-      );
-      setPreviewUrls(filePreviews);
-      setFiles(selectedFiles);
-    } else {
-      toast.error("Please upload at least 8 and at most 15 images.");
-    }
+    const combinedFiles = [...files, ...selectedFiles];
+    const uniqueFiles = Array.from(
+      new Map(combinedFiles.map((file) => [file.name, file])).values()
+    );
+
+    const filePreviews = uniqueFiles.map((file) => URL.createObjectURL(file));
+
+    setPreviewUrls(filePreviews);
+    setFiles(uniqueFiles);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -90,10 +85,10 @@ export const Train = () => {
       toast.error("Please upload at most 15 images");
       return;
     }
-    const oversizedFiles = files.filter((file) => file.size > 2 * 1024 * 1024);
+    const oversizedFiles = files.filter((file) => file.size > 5 * 1024 * 1024);
 
     if (oversizedFiles.length > 0) {
-      toast.error("Each file must be smaller than 2 MB.");
+      toast.error("Each file must be smaller than 5 MB.");
       return;
     }
 
@@ -133,6 +128,12 @@ export const Train = () => {
       toast.error(resjson.message);
       setUploadTrigger((prev) => !prev);
     }
+  };
+
+  const resetFiles = () => {
+    setFiles([]);
+    setPreviewUrls([]);
+    toast.success("Files and previews have been cleared.");
   };
 
   return (
@@ -245,7 +246,7 @@ export const Train = () => {
                     </div>
                     <div
                       role="presentation"
-                      className=" rounded-md justify-center align-middle cursor-pointer flex flex-col gap-4"
+                      className=" rounded-md justify-center align-middle cursor-pointer flex flex-col gap-4 pb-4"
                     >
                       <label
                         className="text-sm font-semibold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -294,16 +295,25 @@ export const Train = () => {
                     </div>
                     <div>
                       {previewUrls.length > 0 && (
-                        <div className="image-preview-container pb-8">
-                          <div className="image-grid grid grid-cols-2 md:grid-cols-3 gap-1">
-                            {previewUrls.map((url, index) => (
-                              <img
-                                key={index}
-                                src={url}
-                                alt={`preview-${index}`}
-                                className="image-preview"
-                              />
-                            ))}
+                        <div className="relative pt-2 pb-8">
+                          <button
+                            onClick={resetFiles}
+                            className="absolute -top-8 right-0 bg-fuchsia-600 text-white text-sm py-1 px-4 rounded"
+                          >
+                            Reset
+                          </button>
+
+                          <div className="image-preview-container pb-8">
+                            <div className="image-grid grid grid-cols-2 md:grid-cols-3 gap-1">
+                              {previewUrls.map((url, index) => (
+                                <img
+                                  key={index}
+                                  src={url}
+                                  alt={`preview-${index}`}
+                                  className="image-preview"
+                                />
+                              ))}
+                            </div>
                           </div>
                         </div>
                       )}
@@ -387,7 +397,6 @@ export const Train = () => {
                 </div>
 
                 <div className="rounded-b-xl border shadow w-full max-w-6xl mx-auto bg-secondary text-secondary-foreground">
-                  
                   <div className="p-6 pt-0">
                     <div dir="ltr" data-orientation="horizontal">
                       <div
