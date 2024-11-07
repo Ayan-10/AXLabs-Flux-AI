@@ -7,12 +7,11 @@ import { checkAuthStatus } from "@/app/auth/callback/actions";
 import { permanentRedirect, redirect, useRouter } from "next/navigation";
 
 type PaymentLinkProps = {
-  href: string;
   paymentLink?: string;
   text: string;
 };
 
-const PaymentLink = ({ href, paymentLink, text }: PaymentLinkProps) => {
+const PaymentLink = ({ paymentLink, text }: PaymentLinkProps) => {
 	  const router = useRouter();
 
   const { data: authData } = useQuery({
@@ -27,8 +26,10 @@ const PaymentLink = ({ href, paymentLink, text }: PaymentLinkProps) => {
         if (authData?.success) {
           router.push(paymentLink + `?checkout[email]=${authData.email}`);
         } else {
-			console.log("Login first")
-			router.push(`/api/auth/login`);
+			router.push(
+        `https://accounts.coolaiphoto.com/sign-in?redirect_url=https%3A%2F%2Fapp.coolaiphoto.com%2F`
+      );
+      
 		}
       }}
     >
