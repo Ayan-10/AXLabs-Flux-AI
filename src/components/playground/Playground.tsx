@@ -12,7 +12,12 @@ import ImageCard from "./ImageCrad";
 import { Loader } from "lucide-react";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { usePromptStore } from "../usePromptStore";
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
 import Link from "next/link";
 import ExclamationTriangleIcon from "@heroicons/react/24/outline/ExclamationTriangleIcon";
 
@@ -41,15 +46,13 @@ type Training = {
 };
 
 const initialItems: Model[] = [
-
-
   {
     name: "Elon Musk",
     triggerWord: "elon musk",
     tuneId: "1763462",
-    token: "ohwx"
+    token: "ohwx",
   },
-]
+];
 
 export const Playground = () => {
   const { data: authData } = useQuery({
@@ -120,7 +123,7 @@ export const Playground = () => {
       setIsLoading(false);
       return;
     }
-    
+
     if (numImages < 1 || numImages > 4) {
       toast.error("Must choose 1-4 number of images.");
       setIsLoading(false);
@@ -273,12 +276,28 @@ export const Playground = () => {
                           setSelectedModel(model || null);
                         }}
                       >
-                        <option value="">-</option>
-                        {models.map((model) => (
-                          <option key={model.tuneId} value={model.name}>
-                            {model.name}
-                          </option>
-                        ))}
+                        <optgroup label="Public models">
+                          {initialItems.map((model) => (
+                            <option key={model.tuneId} value={model.name}>
+                              {model.name}
+                            </option>
+                          ))}
+                        </optgroup>
+
+                        <optgroup label="Your trained models">
+                          {models
+                            .filter(
+                              (model) =>
+                                !initialItems.some(
+                                  (initial) => initial.name === model.name
+                                )
+                            )
+                            .map((model) => (
+                              <option key={model.tuneId} value={model.name}>
+                                {model.name}
+                              </option>
+                            ))}
+                        </optgroup>
                       </select>
                     </div>
                     <div className="flex justify-between items-center pt-4">
