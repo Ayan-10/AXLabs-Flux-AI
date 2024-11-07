@@ -16,7 +16,14 @@ import { Zoom } from "@mui/material";
 import Logo from "/logo.svg";
 import ImageNext from "next/image";
 import { checkAuthStatus } from "@/app/auth/callback/actions";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+  useUser,
+} from "@clerk/nextjs";
 
 interface RouteProps {
   href: string;
@@ -35,7 +42,7 @@ const routeList: RouteProps[] = [
 ];
 
 export const Navbar = () => {
-  const { user, error, isLoading } = useUser();
+const { isLoaded, isSignedIn, user } = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Fetch subscription status
@@ -163,7 +170,7 @@ export const Navbar = () => {
               </button>
             </div>
             <div className="hidden sm:flex gap-2">
-              {isLoading ? (
+              {!isLoaded ? (
                 <Loader
                   className={`border ${buttonVariants({
                     variant: "secondary",
@@ -179,8 +186,9 @@ export const Navbar = () => {
                         variant: "secondary",
                       })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
                     >
-                      Logout
-                      <LogOut className="w-4 h-4 ml-2" />
+                      <SignedIn>
+                        <UserButton />
+                      </SignedIn>
                     </Link>
                   ) : (
                     <Link
@@ -190,7 +198,9 @@ export const Navbar = () => {
                         variant: "secondary",
                       })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
                     >
-                      Login
+                      <SignedOut>
+                        <SignInButton />
+                      </SignedOut>
                     </Link>
                   )}
                 </>

@@ -1,33 +1,39 @@
 "use server";
 
 import prisma from "@/db/prisma";
-import { getSession } from "@auth0/nextjs-auth0";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 export async function checkAuthStatus() {
-  const session = await getSession();
-  const user = session?.user;
-  if (!user) return { success: false };
+  const { userId, redirectToSignIn } = await auth();
 
+  // console.log(userId)
+  // if (!userId) return redirectToSignIn();
 
-  const existingUser = await prisma.user.findUnique({ where: { id: user.sid } });
+    const user = await currentUser();
+
+  if (!user?.id) return { success: false };
+
+  const existingUser = await prisma.user.findUnique({
+    where: { id: user.id },
+  });
 
   // sign up
   if (!existingUser) {
     await prisma.user.create({
       data: {
-        id: user.sid,
-        email: user.email!,
-        name: user.given_name + " " + user.family_name,
-        image: user.picture,
+        id: user?.id,
+        email: user.emailAddresses[0].emailAddress,
+        name: user.firstName + " " + user.lastName,
+        image: user.imageUrl,
       },
     });
   }
 
   return {
     success: true,
-    user_id: user.sid,
-    email: user.email,
-    first_name: user.given_name,
-    last_name: user.family_name,
+    user_id: user.id,
+    email: user.emailAddresses[0].emailAddress,
+    first_name: user.firstName,
+    last_name: user.lastName,
   };
 }

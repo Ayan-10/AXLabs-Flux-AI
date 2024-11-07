@@ -7,6 +7,7 @@ import { Sidebar } from "@/components/sidebar/Sidebar";
 import TanStackProvider from "@/components/providers/TanStackProvider";
 import { Boxes, Brain, Images, LayoutDashboard, Settings } from "lucide-react";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const font = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -22,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <UserProvider>
+      <ClerkProvider afterSignOutUrl="/refresh">
         <body className={font.className}>
           <ThemeProvider
             attribute="class"
@@ -41,7 +42,7 @@ export default function RootLayout({
             </TanStackProvider>
           </ThemeProvider>
         </body>
-      </UserProvider>
+      </ClerkProvider>
     </html>
   );
 }
