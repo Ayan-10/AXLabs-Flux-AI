@@ -452,6 +452,16 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
                                     </option>
                                   ))}
                               </optgroup>
+                              {models.filter(
+                                (model) =>
+                                  !initialItems.some(
+                                    (initial) => initial.name === model.name
+                                  )
+                              ).length === 0 && (
+                                <option value="" disabled>
+                                  No models found
+                                </option>
+                              )}
                             </select>
                           </div>
                           {/* Gender Dropdown */}
