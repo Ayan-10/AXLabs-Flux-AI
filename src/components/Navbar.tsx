@@ -179,9 +179,8 @@ const { isLoaded, isSignedIn, user } = useUser();
               ) : (
                 <>
                   {user ? (
-                    <Link
+                    <div
                       rel="noreferrer noopener"
-                      href="/api/auth/logout"
                       className={`border ${buttonVariants({
                         variant: "secondary",
                       })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
@@ -189,11 +188,10 @@ const { isLoaded, isSignedIn, user } = useUser();
                       <SignedIn>
                         <UserButton />
                       </SignedIn>
-                    </Link>
+                    </div>
                   ) : (
-                    <Link
+                    <div
                       rel="noreferrer noopener"
-                      href="/api/auth/login"
                       className={`border ${buttonVariants({
                         variant: "secondary",
                       })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
@@ -201,7 +199,7 @@ const { isLoaded, isSignedIn, user } = useUser();
                       <SignedOut>
                         <SignInButton />
                       </SignedOut>
-                    </Link>
+                    </div>
                   )}
                 </>
               )}
@@ -269,28 +267,29 @@ const { isLoaded, isSignedIn, user } = useUser();
             {menuOpen && (
               <div className="absolute block sm:hidden top-12 right-8 mt-6 w-36 bg-secondary shadow-lg rounded-lg  z-50 px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
                 {user && (
-                  <Link
+                  <div
                     rel="noreferrer noopener"
-                    href="/api/auth/logout"
                     className={`border ${buttonVariants({
                       variant: "secondary",
                     })} px-4  rounded-md hover:bg-gray-200 transition`}
                   >
-                    Logout
-                    <LogOut className="w-4 h-4 ml-2" />
-                  </Link>
+                    <SignedIn>
+                      <UserButton />
+                    </SignedIn>
+                  </div>
                 )}
 
                 {!user && (
-                  <Link
+                  <div
                     rel="noreferrer noopener"
-                    href="/api/auth/login"
                     className={`border ${buttonVariants({
                       variant: "secondary",
                     })} px-4  rounded-md hover:bg-gray-200 transition`}
                   >
-                    Login
-                  </Link>
+                    <SignedOut>
+                      <SignInButton />
+                    </SignedOut>
+                  </div>
                 )}
                 {user && isSubscribed && (
                   <Link
