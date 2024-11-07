@@ -300,6 +300,16 @@ export const Playground = () => {
                               </option>
                             ))}
                         </optgroup>
+                        {models.filter(
+                          (model) =>
+                            !initialItems.some(
+                              (initial) => initial.name === model.name
+                            )
+                        ).length === 0 && (
+                          <option value="" disabled>
+                            No models found
+                          </option>
+                        )}
                       </select>
                     </div>
                     <div className="flex justify-between items-center pt-4">
