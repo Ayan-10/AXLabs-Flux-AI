@@ -147,10 +147,10 @@ export default async function handler(
           },
           body: JSON.stringify({
             tune: {
-              title: `${userId.substring(3)?.concat(" " + name)}`,
+              title: `${userId.substring(5)?.concat(" " + name)}`,
               base_tune_id: 1504944, // Example base tune ID
               model_type: "lora",
-              name: userId.substring(3)?.concat(" " + name),
+              name: userId.substring(5)?.concat(" " + name),
               image_urls: uploadedImages.map((image) => image.url),
               callback: `${process.env.NEXT_PUBLIC_WEBHOOK_URL}/api/training/webhook?userId=${userId}&userEmail=${user.email}`,
             },
@@ -166,7 +166,7 @@ export default async function handler(
             userId: userId,
             images: uploadedImages.map((image) => image.url),
             name: name,
-            triggerWord: userId.substring(3)?.concat(" " + name.toLowerCase()),
+            triggerWord: userId.substring(5)?.concat(" " + name.toLowerCase()),
             tuneId: String(data.id), // Store request_id to track status
             token: String(data.token),
           },

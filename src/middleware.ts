@@ -1,42 +1,18 @@
-// middleware.ts
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { getSession } from "@auth0/nextjs-auth0/edge";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-export async function middleware(request: NextRequest) {
-  const session = await getSession();
+const isPublicRoute = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)", "/", "/refresh"]);
 
-  const user = session?.user;
-  // const isAuthenticated = Boolean(user);
-
-  // List of public routes that do not require authentication
-  const publicRoutes = ["/", "/public"];
-
-  // List of assets in the public folder that should be accessible without authentication
-  const publicAssets = ["/logo.svg", "/favicon.ico"]; // Add any other public assets here
-
-  const response = NextResponse.next();
-
-  // Allow access to public assets like logo, favicon, etc.
-  if (publicAssets.includes(request.nextUrl.pathname)) {
-    return response;
+export default clerkMiddleware(async (auth, request) => {
+  if (!isPublicRoute(request)) {
+    await auth.protect();
   }
+});
 
-  // If the route is public, allow access without authentication
-  if (publicRoutes.includes(request.nextUrl.pathname)) {
-    return response;
-  }
-
-  // If the user is not authenticated, redirect to the login page
-  if (!user) {
-    return NextResponse.redirect(new URL("/api/auth/login", request.url));
-  }
-
-  // Proceed if the user is authenticated
-  return response;
-}
-
-// Configure matcher to apply middleware to all routes except Next.js internal files and APIs
 export const config = {
-  matcher: ["/((?!api|_next).*)"],
+  matcher: [
+    // Skip Next.js internals and all static files, unless found in search params
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    // Always run for API routes
+    "/(api|trpc)(.*)",
+  ],
 };
