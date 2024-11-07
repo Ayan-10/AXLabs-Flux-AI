@@ -79,8 +79,6 @@ export const Navbar = () => {
     }
   }, [userId]); // Rerun when userId changes
 
-  console.log("hfsd");
-  console.log(user);
   // if (isLoading) return <div>Loading...</div>;
   // if (error) return <div>{error.message}</div>;
 
