@@ -24,7 +24,6 @@ interface PricingProps {
   description: string;
   buttonText: string;
   benefitList: string[];
-  href: string;
   billing: string;
   paymentLink?: string;
 }
@@ -37,7 +36,6 @@ const pricingList: PricingProps[] = [
     description: "for starters",
     buttonText: "Get Started",
     benefitList: ["2 AI Image Generations", "0 Model Training Credits"],
-    href: "/api/auth/login",
     paymentLink: process.env.STRIPE_STARTER_PLAN_LINK,
     billing: "/month",
   },
@@ -54,7 +52,6 @@ const pricingList: PricingProps[] = [
       "Medium Quality Photos",
       "Commercial use license",
     ],
-    href: "/api/auth/login",
     paymentLink: process.env.STRIPE_PRO_PLAN_LINK,
     billing: "/month",
   },
@@ -72,7 +69,6 @@ const pricingList: PricingProps[] = [
       "Highest Quality Photos",
       "Commercial use license",
     ],
-    href: "/api/auth/login",
     paymentLink: process.env.STRIPE_ELITE_PLAN_LINK,
     billing: "/year",
   },
@@ -122,7 +118,6 @@ export const Pricing = () => {
 
             <CardContent className="inline-flex items-center justify-center w-full">
               <PaymentLink
-                href={pricing.href}
                 text={pricing.buttonText}
                 paymentLink={pricing.paymentLink}
               />
