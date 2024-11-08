@@ -25,18 +25,23 @@ export default async function handler(
   if (req.method === "POST") {
     const form = new IncomingForm();
 
+    console.log("Hiiiiiiiii");
     form.parse(req, async (err, fields, files) => {
       if (err) {
         return res.status(500).json({ message: "Error parsing form" });
       }
+      console.log("Hello");
 
       const userId = Array.isArray(fields.userId)
         ? fields.userId[0]
         : fields.userId;
 
+      console.log("Hello1");
+      console.log(userId);
       const user = await prisma.user.findUnique({
         where: { id: userId as string },
       });
+      console.log(user);
 
       if (!user) {
         return res.status(404).json({
@@ -60,7 +65,9 @@ export default async function handler(
       ) {
         return res
           .status(400)
-          .json({ message: "Please upload at least 7 files and atmost 15 files." });
+          .json({
+            message: "Please upload at least 7 files and atmost 15 files.",
+          });
       }
 
       // Check that userId is defined
@@ -71,7 +78,7 @@ export default async function handler(
       if (!name || typeof name !== "string") {
         return res.status(400).json({ message: "Invalid name" });
       }
-      
+
       try {
         // Upload files to Cloudinary
         const uploadedImages = await Promise.all(
@@ -90,18 +97,18 @@ export default async function handler(
           })
         );
 
-        const zip = new JSZip();
+        // const zip = new JSZip();
         // uploadedImages.forEach((imageUrl, index) => {
         //   zip.file(`image-${index}.jpg`, imageUrl);
         // });
-        await Promise.all(
-          uploadedImages.map(async (image) => {
-            const response = await fetch(image.url);
-            const arrayBuffer = await response.arrayBuffer(); // Get the binary data as ArrayBuffer
-            const imageName = `${image.original_filename}.${image.format}`;
-            zip.file(imageName, Buffer.from(arrayBuffer)); // Add the image content to the zip
-          })
-        );
+        // await Promise.all(
+        //   uploadedImages.map(async (image) => {
+        //     const response = await fetch(image.url);
+        //     const arrayBuffer = await response.arrayBuffer(); // Get the binary data as ArrayBuffer
+        //     const imageName = `${image.original_filename}.${image.format}`;
+        //     zip.file(imageName, Buffer.from(arrayBuffer)); // Add the image content to the zip
+        //   })
+        // );
 
         // Generate the zip as a buffer
         // const zipBuffer = await zip.generateAsync({ type: "nodebuffer" });
