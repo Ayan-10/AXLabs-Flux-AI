@@ -54,11 +54,13 @@ export default async function handler(
       // Ensure uploadedFiles is an array
       if (
         !uploadedFiles ||
-        (Array.isArray(uploadedFiles) && uploadedFiles.length < 10)
+        (Array.isArray(uploadedFiles) &&
+          uploadedFiles.length < 8 &&
+          uploadedFiles.length > 15)
       ) {
         return res
           .status(400)
-          .json({ message: "Please upload at least 10 files." });
+          .json({ message: "Please upload at least 7 files and atmost 15 files." });
       }
 
       // Check that userId is defined
@@ -69,12 +71,7 @@ export default async function handler(
       if (!name || typeof name !== "string") {
         return res.status(400).json({ message: "Invalid name" });
       }
-      // Ensure at least 10 files are uploaded
-      if (uploadedFiles.length < 10) {
-        return res
-          .status(400)
-          .json({ message: "Please upload at least 10 files." });
-      }
+      
       try {
         // Upload files to Cloudinary
         const uploadedImages = await Promise.all(
