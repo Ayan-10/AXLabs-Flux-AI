@@ -24,7 +24,7 @@ model User {
   image         String?
   plan          Plan    @default(free)
   modelCredits  Int     @default(0)
-  imageCredits  Int     @default(0)
+  imageCredits  Int     @default(2)
 
   Subscription  Subscription?
   Training      Training[]
