@@ -56,11 +56,11 @@ export const Train = () => {
 
   const updateFiles = (selectedFiles: File[]) => {
     const oversizedFiles = selectedFiles.filter(
-      (file) => file.size > 5 * 1024 * 1024
+      (file) => file.size > 1 * 1024 * 1024
     );
 
     if (oversizedFiles.length > 0) {
-      toast.error("Each file must be smaller than 5 MB.");
+      toast.error("Each file must be smaller than 1 MB.");
       return;
     }
 
@@ -85,10 +85,10 @@ export const Train = () => {
       toast.error("Please upload at most 15 images");
       return;
     }
-    const oversizedFiles = files.filter((file) => file.size > 5 * 1024 * 1024);
+    const oversizedFiles = files.filter((file) => file.size > 1 * 1024 * 1024);
 
     if (oversizedFiles.length > 0) {
-      toast.error("Each file must be smaller than 5 MB.");
+      toast.error("Each file must be smaller than 1 MB.");
       return;
     }
 
@@ -104,8 +104,6 @@ export const Train = () => {
     files.forEach((file) => formData.append("images", file));
     formData.append("userId", userId as string);
     formData.append("name", name as string);
-    console.log("gu")
-    console.log(userId)
 
     const res = await fetch("/api/training/upload", {
       method: "POST",
