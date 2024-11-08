@@ -104,6 +104,8 @@ export const Train = () => {
     files.forEach((file) => formData.append("images", file));
     formData.append("userId", userId as string);
     formData.append("name", name as string);
+    console.log("gu")
+    console.log(userId)
 
     const res = await fetch("/api/training/upload", {
       method: "POST",

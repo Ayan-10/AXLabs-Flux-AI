@@ -22,6 +22,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+      console.log("feeee");
+
   if (req.method === "POST") {
     const form = new IncomingForm();
 
