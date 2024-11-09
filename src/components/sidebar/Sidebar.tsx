@@ -56,7 +56,7 @@ export const Sidebar = () => {
   const email = authData?.email;
 
   return (
-    <aside className="fixed inset-y-0 left-0 min-w-max shadow-lg min-h-screen z-50 transition-transform duration-300 ease-in-out bg-white dark:bg-gray-800">
+    <aside className="fixed inset-y-0 left-0 min-w-max shadow-lg min-h-screen z-50 transition-transform duration-300 ease-in-out bg-white dark:bg-gray-900">
       <nav className="h-full flex flex-col border-r border-gray-200 dark:border-gray-700">
         <div className="p-4 pb-[44px] flex justify-between items-center">
           <img

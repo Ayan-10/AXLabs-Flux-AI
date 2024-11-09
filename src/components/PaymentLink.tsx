@@ -6,12 +6,13 @@ import { useQuery } from "@tanstack/react-query";
 import { checkAuthStatus } from "@/app/auth/callback/actions";
 import { permanentRedirect, redirect, useRouter } from "next/navigation";
 
-type PaymentLinkProps = {
-  paymentLink?: string;
+interface PaymentLinkProps {
   text: string;
-};
+  paymentLink?: string;
+  className?: string;
+}
 
-const PaymentLink = ({ paymentLink, text }: PaymentLinkProps) => {
+const PaymentLink = ({ paymentLink, text, className }: PaymentLinkProps) => {
 	  const router = useRouter();
 
   const { data: authData } = useQuery({

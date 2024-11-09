@@ -11,8 +11,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 const font = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AXLabs Flux AI",
-  description: "Write prompt to generate images",
+  title: "Cool AI Photo",
+  description: "Your Personal AI Photo Photographer",
 };
 
 export default function RootLayout({
