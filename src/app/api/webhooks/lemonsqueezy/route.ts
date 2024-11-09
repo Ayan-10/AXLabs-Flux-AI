@@ -56,11 +56,11 @@ export async function POST(req: Request) {
 
 
         if (currentPriceId.trim() === starterPriceId.trim()) {
-          await addCredits(user.id, 1, 2); // 1 model, 2 images for Starter
+          await addCredits(user.id, 1, 100); // 1 model, 100 images for Starter
         } else if (currentPriceId.trim() === proPriceId.trim()) {
-          await addCredits(user.id, 2, 4); // 2 models, 4 images for Pro
+          await addCredits(user.id, 3, 500); // 3 models, 500 images for Pro
         } else if (currentPriceId.trim() === elitePriceId.trim()) {
-          await addCredits(user.id, 3, 6); // 3 models, 6 images for Elite
+          await addCredits(user.id, 10, 1000); // 10 models, 1000 images for Elite
         }
       } else {
         return Response.json({ message: "Payment Failed" });

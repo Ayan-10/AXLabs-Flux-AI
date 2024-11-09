@@ -32,7 +32,7 @@ export const SidebarItem = ({ item }: { item: SidebarItemProps }) => {
   //   return path === pathname;
   // }, [path, pathname]);
   const alert = true;
-  console.log(expanded);
+  // console.log(expanded);
 
   // Prefetch the route when the component mounts
   useEffect(() => {

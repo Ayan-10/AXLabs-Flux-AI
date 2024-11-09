@@ -70,7 +70,7 @@ interface Template {
 export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
   pageId,
 }) => {
-  console.log(pageId);
+  // console.log(pageId);
   const { data: authData } = useQuery({
     queryKey: ["checkAuthStatus"],
     queryFn: async () => await checkAuthStatus(),
@@ -106,7 +106,7 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
     try {
       const response = await fetch(`/api/template/fetch/${pageId}`);
       const data = await response.json();
-      console.log(data.template);
+      // console.log(data.template);
       setTemplate(data.template);
       setPrePrompt(data.template.prePrompt);
 
@@ -125,7 +125,7 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
   useEffect(() => {
     const fetchModels = async () => {
       setLoading(true);
-      console.log(userId);
+      // console.log(userId);
       const response = await fetch(
         `/api/training/history?userId=${userId}&status=COMPLETED`
       );
@@ -174,10 +174,10 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
       toast.error("The prompt can't be empty.");
     }
 
-    console.log(selectedModel?.name);
-    console.log(selectedModel?.token);
-    console.log(selectedModel?.triggerWord);
-    console.log(selectedModel?.tuneId);
+    // console.log(selectedModel?.name);
+    // console.log(selectedModel?.token);
+    // console.log(selectedModel?.triggerWord);
+    // console.log(selectedModel?.tuneId);
 
     if (selectedModel) {
       if (!prompt.includes(selectedModel.name)) {
@@ -196,7 +196,7 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
         );
 
         const finalPrompt = `${modifiedPrompt}`;
-        console.log(finalPrompt);
+        // console.log(finalPrompt);
 
         const res = await fetch("/api/playground/upload", {
           method: "POST",
@@ -215,7 +215,7 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
         });
 
         const resjson = await res.json();
-        console.log(resjson);
+        // console.log(resjson);
 
         if (res.ok) {
           setIsLoading(false);
@@ -231,7 +231,7 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
         }
       }
     } else {
-      console.log(prompt);
+      // console.log(prompt);
     }
     // try {
     //   // Call the API
