@@ -30,112 +30,122 @@ interface PricingProps {
 
 const pricingList: PricingProps[] = [
   {
-    title: "Free",
-    popular: 0,
-    price: 0,
-    description: "for starters",
+    title: "Starter",
+    popular: PopularPlanType.NO,
+    price: 19,
+    description: "Perfect for trying out AI photos",
     buttonText: "Get Started",
-    benefitList: ["2 AI Image Generations", "0 Model Training Credits"],
-    paymentLink: process.env.STRIPE_STARTER_PLAN_LINK,
+    benefitList: [
+      "100 AI photo generations",
+      "1 AI model training",
+      "Hyper-realistic photos",
+      "Medium-quality images",
+      "Personal use license",
+    ],
     billing: "/month",
+    paymentLink: process.env.STRIPE_STARTER_PLAN_LINK,
   },
   {
     title: "Pro",
-    popular: 1,
-    price: 19,
-    description: "for enthusiasts",
-    buttonText: "Subscribe",
+    popular: PopularPlanType.YES,
+    price: 39,
+    description: "Best for creators and professionals",
+    buttonText: "Get Pro",
     benefitList: [
-      "100 AI Image Generations",
-      "1 Model Training Credits",
+      "500 AI photo generations",
+      "3 AI model trainings",
+      "Hyper-realistic photos",
+      "High-quality images",
       "Priority support",
-      "Medium Quality Photos",
-      "Commercial use license",
+      "Commercial usage rights",
     ],
-    paymentLink: process.env.STRIPE_PRO_PLAN_LINK,
     billing: "/month",
+    paymentLink: process.env.STRIPE_PRO_PLAN_LINK,
   },
   {
     title: "Elite",
-    popular: 0,
-    price: 39,
-    description: "for creators",
-    buttonText: "Subscribe",
+    popular: PopularPlanType.NO,
+    price: 99,
+    description: "For agencies and power users",
+    buttonText: "Go Elite",
     benefitList: [
-      "500 AI Image Generations",
-      "3 Model Training Credits",
-      "Upto 10 pages",
+      "1,000 AI photo generations",
+      "10 AI model trainings",
+      "Hyper-realistic photos",
+      "High-quality images",
       "Priority support",
-      "Highest Quality Photos",
-      "Commercial use license",
+      "Commercial usage rights",
     ],
+    billing: "/month",
     paymentLink: process.env.STRIPE_ELITE_PLAN_LINK,
-    billing: "/year",
   },
 ];
 
 export const Pricing = () => {
   return (
-    <section id="pricing" className="container py-24 sm:py-32">
-      {/* <h2 className='text-3xl md:text-4xl font-bold text-center'>
-				Get
-				<span className='bg-gradient-to-b from-[#667EEA] to-[#764BA2] uppercase text-transparent bg-clip-text'>
-					{" "}
-					Unlimited{" "}
-				</span>
-				Access
-			</h2>
-			<h3 className='text-xl text-center text-muted-foreground pt-4 pb-8'>
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias reiciendis.
-			</h3> */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <section id="pricing" className="container py-12 sm:py-12">
+      <div className="text-center space-y-4 mb-16">
+        <h2 className="text-4xl font-bold">Pay Once, Lifetime Access</h2>
+        <p className="text-xl text-muted-foreground">
+          Choose the perfect plan for your AI photography needs.
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-8 items-stretch">
         {pricingList.map((pricing: PricingProps) => (
-          <Card
+          <div
             key={pricing.title}
-            className={`transition-transform duration-300 ease-in-out ${
+            className={`relative rounded-2xl bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-800 p-8 flex flex-col justify-between ${
               pricing.popular === PopularPlanType.YES
-                ? "drop-shadow-xl shadow-black/10 dark:shadow-white/10 transform scale-105"
-                : "hover:shadow-lg"
+                ? "ring-2 ring-purple-500 dark:ring-purple-400"
+                : ""
             }`}
           >
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                {pricing.title}
-                {pricing.popular === PopularPlanType.YES ? (
-                  <Badge variant="secondary" className="text-sm text-primary">
-                    Most popular
-                  </Badge>
-                ) : null}
-              </CardTitle>
-              <div>
-                <span className="text-3xl font-bold">${pricing.price}</span>
-                <span className="text-muted-foreground">{pricing.billing}</span>
+            {pricing.popular === PopularPlanType.YES && (
+              <div className="absolute -top-5 left-0 right-0 mx-auto w-32">
+                <div className="text-center py-1 px-3 rounded-full bg-black dark:bg-white text-white dark:text-black text-sm font-medium">
+                  Most Popular
+                </div>
               </div>
-              <CardDescription className="text-gray-600">
-                {pricing.description}
-              </CardDescription>
-            </CardHeader>
+            )}
 
-            <CardContent className="inline-flex items-center justify-center w-full">
+            <div className="space-y-6">
+              {/* Header */}
+              <div>
+                <h3 className="text-2xl font-bold">{pricing.title}</h3>
+                <p className="text-muted-foreground mt-1">{pricing.description}</p>
+              </div>
+
+              {/* Price */}
+              <div className="flex items-baseline">
+                <span className="text-5xl font-bold">${pricing.price}</span>
+                <span className="text-muted-foreground ml-1">{pricing.billing}</span>
+              </div>
+
+              {/* Features */}
+              <div className="space-y-4">
+                {pricing.benefitList.map((benefit: string) => (
+                  <div key={benefit} className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3" />
+                    <span className="text-gray-700 dark:text-gray-300">{benefit}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA Button */}
+            <div className="mt-8">
               <PaymentLink
                 text={pricing.buttonText}
                 paymentLink={pricing.paymentLink}
+                className={`w-full py-3 px-4 rounded-lg text-center font-medium transition-colors ${
+                  pricing.popular === PopularPlanType.YES
+                    ? "bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100"
+                    : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700"
+                }`}
               />
-            </CardContent>
-
-            <hr className="w-4/5 m-auto mb-4" />
-
-            <CardFooter className="flex">
-              <div className="space-y-4">
-                {pricing.benefitList.map((benefit: string) => (
-                  <span key={benefit} className="flex items-center">
-                    <Check className="text-purple-500" />
-                    <h3 className="ml-2">{benefit}</h3>
-                  </span>
-                ))}
-              </div>
-            </CardFooter>
-          </Card>
+            </div>
+          </div>
         ))}
       </div>
     </section>
