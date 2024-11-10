@@ -37,7 +37,13 @@ export const Train = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
+    const regex = /^[a-zA-Z0-9 ]*$/; // Only English letters, numbers, and spaces
+
+    if (regex.test(e.target.value)) {
+      setName(e.target.value);
+    } else {
+      toast.error("Only English letters, numbers, and spaces are allowed.");
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,6 +101,14 @@ export const Train = () => {
     if (name === "") {
       toast.error("Name is required");
       return;
+    }
+
+    const regex = /^[a-zA-Z0-9 ]*$/; // Only English letters, numbers, and spaces
+
+    if (regex.test(name)) {
+    } else {
+      toast.error("Only English letters, numbers, and spaces are allowed.");
+      return
     }
 
     toast.info("Training data upload started");
@@ -233,7 +247,7 @@ export const Train = () => {
                       </p>
                       <input
                         className="flex h-10 w-full rounded-md border border-gray-800 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 max-w-screen-sm dark:border-gray-300 dark:text-white dark:placeholder-gray-400"
-                        placeholder="John's Ai Avatar"
+                        placeholder="John Doe"
                         autoComplete="off"
                         id=":R1deuuunjla:-form-item"
                         aria-describedby=":R1deuuunjla:-form-item-description"
@@ -408,7 +422,7 @@ export const Train = () => {
                       >
                         <div className="space-y-4">
                           <h3 className="text-xl font-semibold">
-                          ？How to get results:
+                            ？How to get results:
                           </h3>
                           <div className="flex flex-wrap justify-center gap-4">
                             <div className="relative w-[130px] h-[130px]">
@@ -511,9 +525,9 @@ export const Train = () => {
                             ✅ Choose good pictures
                           </h3>
                           <p className="text-sm text-description">
-                            5 high-quality face photos, 3 half body shots, 3 full
-                            body shots. Have varied facial expressions, angles
-                            and backgrounds.
+                            5 high-quality face photos, 3 half body shots, 3
+                            full body shots. Have varied facial expressions,
+                            angles and backgrounds.
                           </p>
                           <div className="flex flex-wrap justify-center gap-4">
                             <div className="relative w-[130px] h-[130px]">
@@ -611,8 +625,8 @@ export const Train = () => {
                             ❌ Example of bad pictures
                           </h3>
                           <p className="text-sm text-description">
-                            Multiple subjects, face covered,
-                            blurry, uncropped, improper lightning
+                            Multiple subjects, face covered, blurry, uncropped,
+                            improper lightning
                           </p>
                           <div className="flex flex-wrap justify-center gap-4">
                             <div className="relative w-[90px] h-[130px]">
@@ -688,10 +702,9 @@ export const Train = () => {
                             ✅ Train your model
                           </h3>
                           <p className="text-sm text-description">
-                            
-                                Training your model takes ~30 minutes. 
-                                You can leave the page we will send you an email when it&apos;s done.
-                              
+                            Training your model takes ~30 minutes. You can leave
+                            the page we will send you an email when it&apos;s
+                            done.
                           </p>
                         </div>
                         <div className="space-y-4">
