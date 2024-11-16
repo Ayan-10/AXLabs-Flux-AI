@@ -20,6 +20,7 @@ import {
 } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { templates } from "@/content/templates";
 
 fal.config({
   proxyUrl: "/api/fal/proxy",
@@ -102,15 +103,13 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
 
   const userId = authData?.user_id;
 
-  const fetchTemplate = async () => {
+  const fetchTemplate = () => {
     try {
-      const response = await fetch(`/api/template/fetch/${pageId}`);
-      const data = await response.json();
-      // console.log(data.template);
-      setTemplate(data.template);
-      setPrePrompt(data.template.prePrompt);
-
-      // setLoadingPage(false);
+      const template = templates.find(t => t.pageId === pageId);
+      if (template) {
+        setTemplate(template);
+        setPrePrompt(template.prePrompt);
+      }
     } catch (error) {
       console.error("Error fetching template:", error);
     }
@@ -732,18 +731,18 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
                         </div>
                       </div>
                       <div className="flex flex-col rounded-md border border-stroke-light bg-surface group lg:w-4/6">
-                        <div className="mb-2 p-6">
+                        {/* <div className="mb-2 p-6">
                           <div className="flex items-center gap-2">
                             <h1 className="text-xl">Result</h1>
                           </div>
-                        </div>
+                        </div> */}
                         {loading ? (
                           <div className="flex justify-center items-center">
                             <Loader className="w-10 h-10 animate-spin text-primary" />
                           </div>
                         ) : playData.length === 0 ? (
-                          <p className="inline-flex justify-center items-center">
-                            No images found
+                          <p className="inline-flex justify-center py-20 items-center">
+                            No image generated yet
                           </p>
                         ) : (
                           playData.map((item, idx) => (
