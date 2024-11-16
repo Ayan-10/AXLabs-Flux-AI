@@ -78,7 +78,7 @@ export const Playground = () => {
   useEffect(() => {
     const fetchModels = async () => {
       setLoading(true);
-      console.log(userId);
+      // console.log(userId);
       const response = await fetch(
         `/api/training/history?userId=${userId}&status=COMPLETED`
       );
@@ -130,10 +130,10 @@ export const Playground = () => {
       return;
     }
 
-    console.log(selectedModel?.name);
-    console.log(selectedModel?.token);
-    console.log(selectedModel?.triggerWord);
-    console.log(selectedModel?.tuneId);
+    // console.log(selectedModel?.name);
+    // console.log(selectedModel?.token);
+    // console.log(selectedModel?.triggerWord);
+    // console.log(selectedModel?.tuneId);
 
     if (selectedModel) {
       if (!prompt.includes(selectedModel.name)) {

@@ -37,7 +37,13 @@ export const Train = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
+    const regex = /^[a-zA-Z0-9 ]*$/; // Only English letters, numbers, and spaces
+
+    if (regex.test(e.target.value)) {
+      setName(e.target.value);
+    } else {
+      toast.error("Only English letters, numbers, and spaces are allowed.");
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,6 +101,14 @@ export const Train = () => {
     if (name === "") {
       toast.error("Name is required");
       return;
+    }
+
+    const regex = /^[a-zA-Z0-9 ]*$/; // Only English letters, numbers, and spaces
+
+    if (regex.test(name)) {
+    } else {
+      toast.error("Only English letters, numbers, and spaces are allowed.");
+      return
     }
 
     toast.info("Training data upload started");
