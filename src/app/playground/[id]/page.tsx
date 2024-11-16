@@ -1,10 +1,6 @@
 "use client";
 
 import { TemplatePlayground } from "@/components/playground/TemplatePlayground";
-import { HeadshotPlayground } from "@/components/playground/HeadshotPlayground";
-import { ModelPlayground } from "@/components/playground/ModelPlayground";
-import { OldMoneyPlayground } from "@/components/playground/OldMoneyPlayground";
-import { TravelPlayground } from "@/components/playground/TravelPlayground";
 import { Playground } from "@/components/playground/Playground";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 

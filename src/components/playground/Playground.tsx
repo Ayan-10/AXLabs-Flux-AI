@@ -186,12 +186,172 @@ export const Playground = () => {
   };
 
   return (
-    <div className="ml-[68px]">
+    <div className="ml-0 md:ml-[68px] px-4 md:px-0">
       <ToastContainer />
 
-      <div className="px-4 md:px-20 pt-10 text-2xl font-semibold flex flex-row gap-4">
-        <p>Create Images from Text</p>
+      <div className="px-4 md:px-20 pt-6 md:pt-10">
+        <p className="text-xl md:text-2xl font-semibold">Create a new image</p>
       </div>
+
+      <div className="flex flex-1 flex-col items-center py-4 md:py-6">
+        <div className="w-full max-w-[95%] md:max-w-none md:px-20">
+          <div className="w-full h-full">
+            <div className="flex flex-col w-full mt-4 gap-4 md:gap-8">
+              <div className="flex flex-col lg:flex-row gap-6 lg:gap-2">
+                <div className="flex flex-col w-full lg:w-2/6 rounded-md sm:pr-6">
+                  <div className="flex flex-1 flex-col gap-4">
+                    <div className="space-y-2">
+                      <label htmlFor="dropdown" className="block text-sm md:text-base font-medium">
+                        Select Model
+                      </label>
+                      <select
+                        id="dropdown"
+                        className="block w-full p-2.5 md:p-3 border rounded-[8px] focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                        value={selectedModel ? selectedModel.name : ""}
+                        onChange={(e) => {
+                          const model = models.find((m) => m.name === e.target.value);
+                          setPrompt(model?.name as string);
+                          setSelectedModel(model || null);
+                        }}
+                      >
+                        <option value="">-</option>
+
+                        <optgroup label="Public models">
+                          {initialItems.map((model) => (
+                            <option key={model.tuneId} value={model.name}>
+                              {model.name}
+                            </option>
+                          ))}
+                        </optgroup>
+
+                        <optgroup label="Your trained models">
+                          {models
+                            .filter(
+                              (model) =>
+                                !initialItems.some(
+                                  (initial) => initial.name === model.name
+                                )
+                            )
+                            .map((model) => (
+                              <option key={model.tuneId} value={model.name}>
+                                {model.name}
+                              </option>
+                            ))}
+                        </optgroup>
+                        {models.filter(
+                          (model) =>
+                            !initialItems.some(
+                              (initial) => initial.name === model.name
+                            )
+                        ).length === 0 && (
+                          <option value="" disabled>
+                            No models found
+                          </option>
+                        )}
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <h1 className="text-sm md:text-base font-medium">Detailed Prompt</h1>
+                      </div>
+                      <textarea
+                        className="flex min-h-[80px] md:min-h-[100px] w-full rounded-[8px] border px-3 py-2 text-sm md:text-base shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none"
+                        placeholder="a good prompt is the key to a good image, be detailed and specific"
+                        rows={4}
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label htmlFor="numImages" className="block text-sm md:text-base font-medium">
+                        Number of Images (1-4)
+                      </label>
+                      <input
+                        type="number"
+                        id="numImages"
+                        min={1}
+                        max={4}
+                        className="block w-full p-2.5 md:p-3 border rounded-[8px] focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                        value={numImages}
+                        onChange={(e) => setNumImages(Number(e.target.value))}
+                      />
+                    </div>
+
+                    <button
+                      className="inline-flex items-center justify-center rounded-md text-sm md:text-base font-medium bg-primary text-secondary shadow hover:bg-primary/90 h-10 md:h-12 px-4 py-2 dark:text-white"
+                      onClick={handleGenerate}
+                    >
+                      Generate
+                    </button>
+
+                    {isLoading && (
+                      <div className="mt-2 md:mt-4 px-2">
+                        <LinearProgress />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex flex-col rounded-md border border-stroke-light bg-surface group lg:w-4/6">
+                  <div className="p-4 md:p-6">
+                    <div className="flex items-center gap-2">
+                      <h1 className="text-lg md:text-xl font-medium">Result</h1>
+                    </div>
+                  </div>
+
+                  {loading ? (
+                    <div className="flex justify-center items-center p-8">
+                      <Loader className="w-8 h-8 md:w-10 md:h-10 animate-spin text-primary" />
+                    </div>
+                  ) : playData.length === 0 ? (
+                    <p className="text-center p-8">No images found</p>
+                  ) : (
+                    <div className="space-y-4 p-4">
+                      {playData.map((item, idx) => (
+                        <div key={idx} className="border rounded-lg p-4">
+                          <div className="flex justify-between items-center">
+                            <h2 className="text-sm md:text-base font-semibold">{item.name}</h2>
+                            <span
+                              className={`text-xs md:text-sm font-medium px-2.5 py-1 rounded ${
+                                item.status.toLowerCase() === "in progress"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : item.status.toLowerCase() === "completed"
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-red-100 text-red-800"
+                              }`}
+                            >
+                              {item.status}
+                            </span>
+                          </div>
+
+                          {item.status === "IN PROGRESS" ? (
+                            <div className="relative w-full bg-gray-200 mt-2">
+                              <div className="absolute top-0 left-0 w-full">
+                                <LinearProgress />
+                              </div>
+                            </div>
+                          ) : item.images.length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                              {item.images.map((image, imgIdx) => (
+                                <ImageCard key={imgIdx} src={image} />
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-center py-4">No images found</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <Dialog open={open} onClose={setOpen} className="relative z-10">
         <DialogBackdrop
           transition
@@ -252,159 +412,6 @@ export const Playground = () => {
           </div>
         </div>
       </Dialog>
-
-      <div className="flex flex-1 flex-col items-center mr-0 py-6">
-        <div className="flex w-full flex-col px-4 md:px-20">
-          <div className="w-full h-full">
-            <div className="flex flex-col w-full mt-4 gap-8">
-              <div className="flex flex-col lg:flex-row gap-8 lg:gap-2">
-                <div className="flex flex-col w-full lg:w-2/6 rounded-md sm:pr-6">
-                  <div className="flex flex-1 flex-col gap-2">
-                    <div className="space-y-2">
-                      <label htmlFor="dropdown" className="block text-base">
-                        Select Model
-                      </label>
-                      <select
-                        id="dropdown"
-                        className="block w-full p-2 border rounded-[8px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value={selectedModel ? selectedModel.name : ""}
-                        onChange={(e) => {
-                          const model = models.find(
-                            (m) => m.name === e.target.value
-                          );
-                          setPrompt(model?.name as string);
-                          setSelectedModel(model || null);
-                        }}
-                      >
-                        <option value="">-</option>
-
-                        <optgroup label="Public models">
-                          {initialItems.map((model) => (
-                            <option key={model.tuneId} value={model.name}>
-                              {model.name}
-                            </option>
-                          ))}
-                        </optgroup>
-
-                        <optgroup label="Your trained models">
-                          {models
-                            .filter(
-                              (model) =>
-                                !initialItems.some(
-                                  (initial) => initial.name === model.name
-                                )
-                            )
-                            .map((model) => (
-                              <option key={model.tuneId} value={model.name}>
-                                {model.name}
-                              </option>
-                            ))}
-                        </optgroup>
-                        {models.filter(
-                          (model) =>
-                            !initialItems.some(
-                              (initial) => initial.name === model.name
-                            )
-                        ).length === 0 && (
-                          <option value="" disabled>
-                            No models found
-                          </option>
-                        )}
-                      </select>
-                    </div>
-                    <div className="flex justify-between items-center pt-4">
-                      <h1 className="text-base">Detailed Prompt</h1>
-                    </div>
-                    <textarea
-                      className="flex min-h-[60px] w-full rounded-[8px] border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 resize-none"
-                      placeholder="a good prompt is the key to a good image, be detailed and specific"
-                      rows={4}
-                      value={prompt}
-                      onChange={(e) => setPrompt(e.target.value)}
-                    />
-                    <div className="space-y-2 pt-4 pb-8">
-                      <label htmlFor="numImages" className="block text-base">
-                        Number of Images (1-4)
-                      </label>
-                      <input
-                        type="number"
-                        id="numImages"
-                        min={1}
-                        max={4}
-                        className="block w-full p-2 border rounded-[8px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value={numImages}
-                        onChange={(e) => setNumImages(Number(e.target.value))}
-                      />
-                    </div>
-                    <button
-                      className="inline-flex items-center justify-center rounded-md text-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-secondary shadow hover:bg-primary/90 h-10 px-4 py-2 dark:text-white"
-                      onClick={handleGenerate}
-                    >
-                      Generate
-                    </button>
-                    {isLoading && (
-                      <div className="mt-4 px-2">
-                        <LinearProgress />
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="flex flex-col rounded-md border border-stroke-light bg-surface group lg:w-4/6">
-                  <div className="mb-2 p-6">
-                    <div className="flex items-center gap-2">
-                      <h1 className="text-xl">Result</h1>
-                    </div>
-                  </div>
-                  {loading ? (
-                    <div className="flex justify-center items-center">
-                      <Loader className="w-10 h-10 animate-spin text-primary" />
-                    </div>
-                  ) : playData.length === 0 ? (
-                    <p className="inline-flex justify-center items-center">
-                      No images found
-                    </p>
-                  ) : (
-                    playData.map((item, idx) => (
-                      <div key={idx} className="border p-4">
-                        <div className="flex justify-between items-center">
-                          <h2 className="font-bold">{item.name}</h2>
-                          <span
-                            className={`text-xs font-semibold px-2.5 py-0.5 rounded ms-3 ${
-                              item.status.toLowerCase() === "in progress"
-                                ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-200"
-                                : item.status.toLowerCase() === "completed"
-                                ? "bg-green-100 text-green-800 dark:bg-green-200"
-                                : "bg-red-100 text-red-800 dark:bg-red-200"
-                            }`}
-                          >
-                            {item.status}
-                          </span>
-                        </div>
-
-                        {item.status === "IN PROGRESS" ? (
-                          <div className="relative w-full bg-gray-200 mt-2">
-                            <div className="absolute top-0 left-0 w-full">
-                              <LinearProgress />
-                            </div>
-                          </div>
-                        ) : item.images.length > 0 ? (
-                          <div className="grid grid-cols-3 gap-4 mt-4">
-                            {item.images.map((image, imgIdx) => (
-                              <ImageCard key={imgIdx} src={image} />
-                            ))}
-                          </div>
-                        ) : (
-                          <p>No images found</p>
-                        )}
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

@@ -80,31 +80,29 @@ export const Models = () => {
   }, []);
 
   return (
-    <div className="ml-[68px]">
-      <div className="px-4 sm:px-20 pt-10 text-2xl font-semibold flex flex-row gap-4">
-        <p>Your Models</p>
+    <div className="ml-0 md:ml-[68px] px-4 md:px-0">
+      <div className="px-4 md:px-20 pt-6 md:pt-10">
+        <h1 className="text-xl md:text-2xl font-semibold">
+          Your Models
+        </h1>
       </div>
-      {/* {loading ? (
-        <div className="flex justify-center items-center h-screen">
-          <Loader className="w-10 h-10 animate-spin text-primary" />
-        </div> */}
       {items.length === 0 ? (
-        <p className="text-center py-10">No models found</p>
+        <p className="text-center py-6 md:py-10">No models found</p>
       ) : (
-        <div className="gap-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-10 px-10 sm:px-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 py-6 md:py-10 px-4 md:px-20">
           {items.map((item, index) => (
             <div
               key={index}
-              className="relative max-w-sm bg-white border border-gray-300 rounded-[12px] shadow-lg hover:shadow-2xl transition duration-300 dark:bg-gray-800 dark:border-gray-600"
+              className="relative bg-white border border-gray-300 rounded-[12px] shadow hover:shadow-lg transition duration-300 dark:bg-gray-800 dark:border-gray-600"
             >
               {item.images.length === 0 ? (
                 <Link href="/train">
-                  <div>
-                    <div className="h-[210px] w-full overflow-hidden flex flex-row gap-0 items-center justify-center rounded-t-[12px]">
-                      <Plus className="text-gray-500" />
+                  <div className="flex flex-col items-center">
+                    <div className="h-[180px] md:h-[210px] w-full flex items-center justify-center rounded-t-[12px]">
+                      <Plus className="w-8 h-8 md:w-10 md:h-10 text-gray-500" />
                     </div>
-                    <div className="px-4 pb-8 flex justify-center items-center">
-                      <h5 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    <div className="px-4 py-4 md:pb-8 w-full text-center">
+                      <h5 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white">
                         Train a new model
                       </h5>
                     </div>
@@ -112,24 +110,24 @@ export const Models = () => {
                 </Link>
               ) : (
                 <div>
-                  <div className="h-[200px] w-full overflow-hidden flex flex-row gap-0">
+                  <div className="h-[180px] md:h-[200px] w-full overflow-hidden flex flex-row gap-0 p-2">
                     <img
-                      className="w-1/2 h-full object-cover rounded-l-[12px] pl-2 pt-2"
+                      className="w-1/2 h-full object-cover rounded-l-[12px]"
                       src={item.images[0]}
-                      alt=""
+                      alt={`${item.name} preview 1`}
                     />
                     <img
-                      className="w-1/2 h-full object-cover rounded-r-[12px] px-2 pt-2"
+                      className="w-1/2 h-full object-cover rounded-r-[12px]"
                       src={item.images[1]}
-                      alt=""
+                      alt={`${item.name} preview 2`}
                     />
                   </div>
-                  <div className="px-4 pt-2 pb-4 flex justify-between items-center">
-                    <h5 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <div className="px-3 md:px-4 py-2 flex flex-row items-center justify-between">
+                    <h5 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white truncate max-w-[60%]">
                       {item.name}
                     </h5>
                     <span
-                      className={`text-xs font-semibold px-2.5 py-0.5 rounded ${
+                      className={`text-xs font-semibold px-2.5 py-1 rounded whitespace-nowrap ${
                         item.status.toLowerCase() === "in progress"
                           ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-200"
                           : item.status.toLowerCase() === "completed"

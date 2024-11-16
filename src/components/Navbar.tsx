@@ -24,6 +24,7 @@ import {
   UserButton,
   useUser,
 } from "@clerk/nextjs";
+import { Aperture } from "lucide-react";
 
 interface RouteProps {
   href: string;
@@ -42,7 +43,7 @@ const routeList: RouteProps[] = [
 ];
 
 export const Navbar = () => {
-const { isLoaded, isSignedIn, user } = useUser();
+  const { isLoaded, isSignedIn, user } = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Fetch subscription status
@@ -86,9 +87,6 @@ const { isLoaded, isSignedIn, user } = useUser();
     }
   }, [userId]); // Rerun when userId changes
 
-  // if (isLoading) return <div>Loading...</div>;
-  // if (error) return <div>{error.message}</div>;
-
   return (
     <header
       className="fixed top-0 left-0 right-0 z-50 w-full border-b-[1px] dark:border-b-slate-700 
@@ -97,25 +95,14 @@ const { isLoaded, isSignedIn, user } = useUser();
       <NavigationMenu className="mx-auto">
         <NavigationMenuList className="container min-h-[72px] w-screen flex justify-between items-center">
           <NavigationMenuItem className="font-bold flex items-center">
-            <ImageNext
-              src="/logo.svg"
-              width={50}
-              height={50}
-              alt="Picture of the author"
-            />
-
-            <a
-              rel="noreferrer noopener"
-              href="/"
-              className="ml-2 font-bold text-xl flex"
-            >
-              <span className="uppercase bg-gradient-to-r from-[#667EEA] to-[#764BA2] text-transparent bg-clip-text">
-                Cool AI Photo
-              </span>
-            </a>
+            <Link href="/" className="flex items-center gap-2">
+              <Aperture className="h-6 w-6 text-primary animate-spin-slow" />
+              <span className="text-xl font-bold">CoolAIPhoto</span>
+            </Link>
           </NavigationMenuItem>
 
           <div className="flex sm:gap-2 md:gap-4 gap-1 items-center justify-end">
+            {/* Credits Display */}
             <Tooltip
               TransitionComponent={Zoom}
               componentsProps={{
@@ -155,12 +142,13 @@ const { isLoaded, isSignedIn, user } = useUser();
             >
               <div className="flex items-center justify-center gap-2 sm:pr-4 pr-2">
                 <Image size={20} />
-                <h1 className="font-semibold text-gray-800  dark:text-white">
+                <h1 className="font-semibold text-gray-800 dark:text-white">
                   {imagesLeft}
                 </h1>
               </div>
             </Tooltip>
 
+            {/* Mobile Menu Button */}
             <div className="flex sm:hidden gap-2">
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
@@ -169,6 +157,8 @@ const { isLoaded, isSignedIn, user } = useUser();
                 {menuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
             </div>
+
+            {/* Desktop User Controls */}
             <div className="hidden sm:flex gap-2">
               {!isLoaded ? (
                 <Loader
@@ -222,56 +212,15 @@ const { isLoaded, isSignedIn, user } = useUser();
               </div>
             </div>
 
-            {/* <div className="hidden sm:flex gap-2">
-              {isAuthenticated && (
-                <Link
-                  rel="noreferrer noopener"
-                  href="/api/auth/logout"
-                  className={`border ${buttonVariants({
-                    variant: "secondary",
-                  })}`}
-                >
-                  Logout
-                  <LogOut className="w-4 h-4 ml-2" />
-                </Link>
-              )}
-              {!isAuthenticated && (
-                <Link
-                  rel="noreferrer noopener"
-                  href="/api/auth/login"
-                  className={`border ${buttonVariants({
-                    variant: "secondary",
-                  })}`}
-                >
-                  Login
-                </Link>
-              )}
-              {isAuthenticated && isSubscribed && (
-                <Link
-                  rel="noreferrer noopener"
-                  href="/premium"
-                  // shining animated button with purple gradient
-                  className={`border bg-gradient-to-r from-[#667EEA] to-[#764BA2] text-white ${buttonVariants(
-                    {
-                      variant: "secondary",
-                    }
-                  )}`}
-                >
-                  Premium ✨
-                </Link>
-              )}
-              <div className="mr-10">
-                <ModeToggle />
-              </div>
-            </div> */}
+            {/* Mobile Menu */}
             {menuOpen && (
-              <div className="absolute block sm:hidden top-12 right-8 mt-6 w-36 bg-secondary shadow-lg rounded-lg  z-50 px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+              <div className="absolute block sm:hidden top-12 right-8 mt-6 w-36 bg-secondary shadow-lg rounded-lg z-50 px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
                 {user && (
                   <div
                     rel="noreferrer noopener"
                     className={`border ${buttonVariants({
                       variant: "secondary",
-                    })} px-4  rounded-md hover:bg-gray-200 transition`}
+                    })} px-4 rounded-md hover:bg-gray-200 transition`}
                   >
                     <SignedIn>
                       <UserButton />
@@ -284,7 +233,7 @@ const { isLoaded, isSignedIn, user } = useUser();
                     rel="noreferrer noopener"
                     className={`border ${buttonVariants({
                       variant: "secondary",
-                    })} px-4  rounded-md hover:bg-gray-200 transition`}
+                    })} px-4 rounded-md hover:bg-gray-200 transition`}
                   >
                     <SignedOut>
                       <SignInButton />

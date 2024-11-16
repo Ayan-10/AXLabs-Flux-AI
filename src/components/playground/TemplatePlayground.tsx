@@ -139,7 +139,7 @@ export const TemplatePlayground: React.FC<TemplatePlaygroundProps> = ({
 
   useEffect(() => {
     fetchPlayData();
-    const interval = setInterval(fetchPlayData, 5000); // Poll every 5 seconds
+    const interval = setInterval(fetchPlayData, 30000); // Poll every 30 seconds
     return () => clearInterval(interval); // Clean up interval on component unmount
   }, [userId]);
 
