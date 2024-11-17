@@ -510,7 +510,7 @@ export const templates: Template[] = [
     "/categories/fashion/2.jpg"
     ],
     runCount: 90,
-    prePrompt: "in a sleek, minimalist jumpsuit exploring the exhibits of a West German design museum in 1968, surrounded by the clean lines and functional aesthetic of the era.",
+    prePrompt: "in a sleek minimalist jumpsuit exploring the exhibits of a West German design museum in 1968, surrounded by the clean lines and functional aesthetic of the era.",
     createdAt: new Date("2024-03-03"),
     isNew: false
   },
