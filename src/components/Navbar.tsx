@@ -24,7 +24,7 @@ import {
   UserButton,
   useUser,
 } from "@clerk/nextjs";
-import { Aperture } from "lucide-react";
+import { Aperture, Camera } from "lucide-react";
 
 interface RouteProps {
   href: string;
@@ -89,180 +89,133 @@ export const Navbar = () => {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 w-full border-b-[1px] dark:border-b-slate-700 
-    bg-white shadow-md dark:bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      className="fixed top-0 left-0 right-0 z-50 w-full border-b-[1px] dark:border-b-slate-800 
+    bg-white/90 shadow-lg dark:bg-gray-900/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 transition-all duration-300"
     >
       <NavigationMenu className="mx-auto">
         <NavigationMenuList className="container min-h-[72px] w-screen flex justify-between items-center">
           <NavigationMenuItem className="font-bold flex items-center">
-            <Link href="/" className="flex items-center gap-2">
-              <Aperture className="h-6 w-6 text-primary animate-spin-slow" />
-              <span className="text-xl font-bold">CoolAIPhoto</span>
+            <Link href="/" className="flex items-center gap-2 transition-all duration-200 hover:scale-105">
+              <Camera className="h-6 w-6 text-primary" />
+              <span className="text-xl font-bold bg-gradient-to-r from-primary to-indigo-500 bg-clip-text text-transparent">CoolAIPhoto</span>
             </Link>
           </NavigationMenuItem>
 
-          <div className="flex sm:gap-2 md:gap-4 gap-1 items-center justify-end">
-            {/* Credits Display */}
-            <Tooltip
-              TransitionComponent={Zoom}
-              componentsProps={{
-                tooltip: {
-                  sx: {
-                    bgcolor: "#7355B0",
-                    "& .MuiTooltip-arrow": {
-                      color: "#7355B0",
-                    },
-                  },
-                },
-              }}
-              title="Model Training Credits Left"
-              placement="top"
-            >
-              <div className="flex items-center justify-center gap-2 sm:pr-4 pr-2">
-                <Box size={20} />
-                <h1 className="font-semibold text-gray-800 dark:text-white">
-                  {modelsLeft}
-                </h1>
-              </div>
-            </Tooltip>
-            <Tooltip
-              TransitionComponent={Zoom}
-              componentsProps={{
-                tooltip: {
-                  sx: {
-                    bgcolor: "#7355B0",
-                    "& .MuiTooltip-arrow": {
-                      color: "#7355B0",
-                    },
-                  },
-                },
-              }}
-              title="Image Generation Credits Left"
-              placement="top"
-            >
-              <div className="flex items-center justify-center gap-2 sm:pr-4 pr-2">
-                <Image size={20} />
-                <h1 className="font-semibold text-gray-800 dark:text-white">
-                  {imagesLeft}
-                </h1>
-              </div>
-            </Tooltip>
-
-            {/* Mobile Menu Button */}
-            <div className="flex sm:hidden gap-2">
-              <button
-                onClick={() => setMenuOpen(!menuOpen)}
-                className="p-2 text-gray-700 dark:text-gray-200 mr-5"
-              >
-                {menuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
-
-            {/* Desktop User Controls */}
-            <div className="hidden sm:flex gap-2">
-              {!isLoaded ? (
-                <Loader
-                  className={`border ${buttonVariants({
-                    variant: "secondary",
-                  })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
-                />
-              ) : (
-                <>
-                  {user ? (
-                    <div
-                      rel="noreferrer noopener"
-                      className={`border ${buttonVariants({
-                        variant: "secondary",
-                      })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
-                    >
-                      <SignedIn>
-                        <UserButton />
-                      </SignedIn>
-                    </div>
-                  ) : (
-                    <div
-                      rel="noreferrer noopener"
-                      className={`border ${buttonVariants({
-                        variant: "secondary",
-                      })} px-4 py-2 rounded-md hover:bg-gray-200 transition`}
-                    >
-                      <SignedOut>
-                        <SignInButton />
-                      </SignedOut>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {user && isSubscribed && (
-                <Link
-                  rel="noreferrer noopener"
-                  href="/premium"
-                  className={`border bg-gradient-to-r from-[#667EEA] to-[#764BA2] text-white ${buttonVariants(
-                    {
-                      variant: "secondary",
-                    }
-                  )} px-4 py-2 rounded-md hover:opacity-90 transition`}
-                >
-                  Premium ✨
-                </Link>
-              )}
-              <div className="">
-                <ModeToggle />
-              </div>
-            </div>
-
-            {/* Mobile Menu */}
-            {menuOpen && (
-              <div className="absolute block sm:hidden top-12 right-8 mt-6 w-36 bg-secondary shadow-lg rounded-lg z-50 px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
-                {user && (
-                  <div
-                    rel="noreferrer noopener"
-                    className={`border ${buttonVariants({
-                      variant: "secondary",
-                    })} px-4 rounded-md hover:bg-gray-200 transition`}
-                  >
-                    <SignedIn>
-                      <UserButton />
-                    </SignedIn>
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-4">
+            <SignedIn>
+              <div className="flex items-center space-x-4">
+                <div className="flex gap-2">
+                  <div className="shadow-md bg-white dark:bg-gray-800 px-3 py-1.5 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">
+                    <span className="text-gray-500 dark:text-gray-400">Images: </span>
+                    <span className="font-bold text-primary">{imagesLeft}</span>
                   </div>
-                )}
-
-                {!user && (
-                  <div
-                    rel="noreferrer noopener"
-                    className={`border ${buttonVariants({
-                      variant: "secondary",
-                    })} px-4 rounded-md hover:bg-gray-200 transition`}
-                  >
-                    <SignedOut>
-                      <SignInButton />
-                    </SignedOut>
+                  <div className="shadow-md bg-white dark:bg-gray-800 px-3 py-1.5 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">
+                    <span className="text-gray-500 dark:text-gray-400">Models: </span>
+                    <span className="font-bold text-primary">{modelsLeft}</span>
                   </div>
-                )}
-                {user && isSubscribed && (
+                </div>
+                
+                {!isSubscribed && (
                   <Link
-                    rel="noreferrer noopener"
                     href="/premium"
-                    className={`border bg-gradient-to-r from-[#667EEA] to-[#764BA2] text-white ${buttonVariants(
-                      {
-                        variant: "secondary",
-                      }
-                    )} px-4 py-2 rounded-md hover:opacity-90 transition`}
+                    className={buttonVariants({
+                      variant: "default",
+                      size: "sm",
+                      className: "font-medium rounded-full shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-primary/30",
+                    })}
                   >
-                    Premium ✨
+                    Upgrade
                   </Link>
                 )}
-                <hr className="mt-2 border-gray-200 dark:border-gray-700" />
 
-                <div className="w-full flex justify-center ">
-                  <ModeToggle />
-                </div>
+                <ModeToggle />
+                <UserButton
+                  afterSignOutUrl="/"
+                  appearance={{
+                    elements: {
+                      avatarBox: "h-9 w-9 rounded-full ring-2 ring-primary/30",
+                    },
+                  }}
+                />
               </div>
-            )}
+            </SignedIn>
+
+            <SignedOut>
+              <div className="flex items-center gap-4">
+                <ModeToggle />
+                <SignInButton mode="modal">
+                  <button
+                    className={buttonVariants({
+                      size: "sm",
+                      className: "rounded-full font-medium shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-primary/30",
+                    })}
+                  >
+                    Sign In
+                  </button>
+                </SignInButton>
+              </div>
+            </SignedOut>
+          </div>
+
+          {/* Mobile Navigation */}
+          <div className="md:hidden flex items-center gap-2">
+            <ModeToggle />
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            >
+              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
         </NavigationMenuList>
       </NavigationMenu>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden absolute w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-lg animate-in slide-in-from-top">
+          <div className="container py-4 flex flex-col space-y-4">
+            <SignedIn>
+              <div className="flex justify-between items-center">
+                <div className="flex flex-col gap-2">
+                  <div className="bg-white dark:bg-gray-800 px-3 py-1.5 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700 w-fit">
+                    <span className="text-gray-500 dark:text-gray-400">Images: </span>
+                    <span className="font-bold text-primary">{imagesLeft}</span>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800 px-3 py-1.5 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700 w-fit">
+                    <span className="text-gray-500 dark:text-gray-400">Models: </span>
+                    <span className="font-bold text-primary">{modelsLeft}</span>
+                  </div>
+                </div>
+                <UserButton afterSignOutUrl="/" />
+              </div>
+              {!isSubscribed && (
+                <Link
+                  href="/premium"
+                  className={buttonVariants({
+                    variant: "default",
+                    className: "w-full rounded-full font-medium shadow-lg",
+                  })}
+                >
+                  Upgrade
+                </Link>
+              )}
+            </SignedIn>
+
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button
+                  className={buttonVariants({
+                    className: "w-full rounded-full font-medium shadow-lg",
+                  })}
+                >
+                  Sign In
+                </button>
+              </SignInButton>
+            </SignedOut>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

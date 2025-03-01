@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss"
+import { fontFamily } from "tailwindcss/defaultTheme"
 
 const config = {
   darkMode: ["class"],
@@ -12,12 +13,15 @@ const config = {
   theme: {
     container: {
       center: true,
-      padding: "1rem",
+      padding: "2rem",
       screens: {
         "2xl": "1400px",
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-plus-jakarta)", ...fontFamily.sans],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -67,10 +71,40 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "slide-in": {
+          from: { transform: "translateY(-10px)", opacity: "0" },
+          to: { transform: "translateY(0)", opacity: "1" },
+        },
+        "slide-out": {
+          from: { transform: "translateY(0)", opacity: "1" },
+          to: { transform: "translateY(-10px)", opacity: "0" },
+        },
+        "blob": {
+          "0%": {
+            transform: "translate(0px, 0px) scale(1)",
+          },
+          "33%": {
+            transform: "translate(30px, -50px) scale(1.1)",
+          },
+          "66%": {
+            transform: "translate(-20px, 20px) scale(0.9)",
+          },
+          "100%": {
+            transform: "translate(0px, 0px) scale(1)",
+          },
+        },
+        "slow-spin": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "slide-in": "slide-in 0.2s ease-out",
+        "slide-out": "slide-out 0.2s ease-out",
+        "blob": "blob 7s infinite",
+        "spin-slow": "slow-spin 6s linear infinite",
       },
     },
   },

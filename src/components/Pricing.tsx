@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Check } from "lucide-react";
+import { Check, Sparkles, Zap } from "lucide-react";
 import Link from "next/link";
 import PaymentLink from "./PaymentLink";
 
@@ -26,6 +26,7 @@ interface PricingProps {
   benefitList: string[];
   billing: string;
   paymentLink?: string;
+  highlight?: string[];
 }
 
 const pricingList: PricingProps[] = [
@@ -42,6 +43,7 @@ const pricingList: PricingProps[] = [
       "Medium-quality images",
       "Personal use license",
     ],
+    highlight: ["100 AI photo generations"],
     billing: "/month",
     paymentLink: process.env.STRIPE_STARTER_PLAN_LINK,
   },
@@ -59,6 +61,7 @@ const pricingList: PricingProps[] = [
       "Priority support",
       "Commercial usage rights",
     ],
+    highlight: ["500 AI photo generations", "Commercial usage rights"],
     billing: "/month",
     paymentLink: process.env.STRIPE_PRO_PLAN_LINK,
   },
@@ -76,6 +79,7 @@ const pricingList: PricingProps[] = [
       "Priority support",
       "Commercial usage rights",
     ],
+    highlight: ["1,000 AI photo generations", "10 AI model trainings"],
     billing: "/month",
     paymentLink: process.env.STRIPE_ELITE_PLAN_LINK,
   },
@@ -85,78 +89,112 @@ export const Pricing = () => {
   return (
     <section
       id="pricing"
-      className="flex justify-center w-full py-8 sm:py-12"
+      className="flex justify-center w-full py-16 sm:py-24 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-950"
     >
       <div className="w-[90%] md:container md:max-w-[1200px]">
-        <div className="text-center space-y-3 sm:space-y-4 mb-8 sm:mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold">
-            Pay Once, Lifetime Access
+        <div className="text-center space-y-4 sm:space-y-6 mb-12 sm:mb-20">
+          <Badge variant="outline" className="py-1.5 px-4 border-primary/20 bg-primary/5 text-primary font-medium rounded-full mb-4 inline-flex items-center gap-1.5">
+            <Sparkles className="h-3.5 w-3.5" />
+            Flexible Plans
+          </Badge>
+          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+            Choose Your <span className="bg-gradient-to-r from-primary to-indigo-500 bg-clip-text text-transparent">Perfect Plan</span>
           </h2>
-          <p className="text-lg sm:text-xl text-muted-foreground">
-            Choose the perfect plan for your AI photography needs.
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Select the ideal package for your AI photography needs with no hidden fees or commitments.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 md:gap-8 items-stretch">
-          {pricingList.map((pricing: PricingProps) => (
-            <div
-              key={pricing.title}
-              className={`relative rounded-2xl bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-800 p-6 sm:p-8 flex flex-col justify-between ${
-                pricing.popular === PopularPlanType.YES
-                  ? "ring-2 ring-purple-500 dark:ring-purple-400"
-                  : ""
+        <div className="grid md:grid-cols-3 gap-8 lg:gap-12 items-stretch">
+          {pricingList.map((plan) => (
+            <Card 
+              key={plan.title} 
+              className={`flex flex-col border-2 card-hover transition-all duration-300 ${
+                plan.popular === PopularPlanType.YES 
+                  ? "border-primary/50 shadow-lg shadow-primary/20" 
+                  : "border-gray-200 dark:border-gray-800"
               }`}
             >
-              {pricing.popular === PopularPlanType.YES && (
-                <div className="absolute -top-4 sm:-top-5 left-0 right-0 mx-auto w-28 sm:w-32">
-                  <div className="text-center py-1 px-3 rounded-full bg-black dark:bg-white text-white dark:text-black text-xs sm:text-sm font-medium">
-                    Most Popular
-                  </div>
-                </div>
-              )}
-
-              <div className="space-y-4 sm:space-y-6">
-                <div>
-                  <h3 className="text-xl sm:text-2xl font-bold">{pricing.title}</h3>
-                  <p className="text-sm sm:text-base text-muted-foreground mt-1">
-                    {pricing.description}
-                  </p>
-                </div>
-
-                <div className="flex items-baseline">
-                  <span className="text-4xl sm:text-5xl font-bold">
-                    ${pricing.price}
-                  </span>
-                  <span className="text-sm sm:text-base text-muted-foreground ml-1">
-                    {pricing.billing}
+              <CardHeader className={`pb-8 ${plan.popular === PopularPlanType.YES ? "bg-primary/5 dark:bg-primary/10" : ""}`}>
+                {plan.popular === PopularPlanType.YES && (
+                  <Badge className="w-fit bg-primary hover:bg-primary text-white mb-2">Most Popular</Badge>
+                )}
+                <CardTitle className="text-2xl font-bold">{plan.title}</CardTitle>
+                <CardDescription className="text-md">{plan.description}</CardDescription>
+                <div className="mt-4 flex items-baseline">
+                  <span className="text-4xl font-extrabold tracking-tight">${plan.price}</span>
+                  <span className="ml-1 text-sm font-medium text-muted-foreground">
+                    {plan.billing}
                   </span>
                 </div>
-
-                <div className="space-y-3 sm:space-y-4">
-                  {pricing.benefitList.map((benefit: string) => (
-                    <div key={benefit} className="flex items-center">
-                      <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 mr-2 sm:mr-3 flex-shrink-0" />
-                      <span className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
+              </CardHeader>
+              
+              <CardContent className="flex-grow">
+                <div className="mt-2 space-y-3">
+                  {plan.benefitList.map((benefit) => (
+                    <div key={benefit} className="flex items-start">
+                      <div className={`mr-3 flex h-5 w-5 items-center justify-center rounded-full ${
+                        plan.highlight?.includes(benefit) 
+                          ? "bg-primary text-white" 
+                          : "bg-primary/10 text-primary"
+                      }`}>
+                        <Check className="h-3 w-3" />
+                      </div>
+                      <span className={`text-sm ${
+                        plan.highlight?.includes(benefit) 
+                          ? "font-medium" 
+                          : ""
+                      }`}>
                         {benefit}
                       </span>
                     </div>
                   ))}
                 </div>
-              </div>
-
-              <div className="mt-6 sm:mt-8">
-                <PaymentLink
-                  text={pricing.buttonText}
-                  paymentLink={pricing.paymentLink}
-                  className={`w-full py-2.5 sm:py-3 px-4 rounded-lg text-center text-sm sm:text-base font-medium transition-colors ${
-                    pricing.popular === PopularPlanType.YES
-                      ? "bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100"
-                      : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700"
-                  }`}
-                />
-              </div>
-            </div>
+              </CardContent>
+              
+              <CardFooter className="pt-4">
+                {plan.paymentLink ? (
+                  <PaymentLink
+                    variant={plan.popular === PopularPlanType.YES ? "default" : "outline"}
+                    className={`w-full rounded-full font-medium ${
+                      plan.popular === PopularPlanType.YES 
+                        ? "shadow-lg hover:shadow-primary/30 hover:scale-105 transition-all duration-300" 
+                        : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                    }`}
+                    paymentLink={plan.paymentLink}
+                  >
+                    {plan.buttonText}
+                    {plan.popular === PopularPlanType.YES && <Zap className="ml-2 h-4 w-4" />}
+                  </PaymentLink>
+                ) : (
+                  <Link
+                    href="#"
+                    className={buttonVariants({
+                      variant: plan.popular === PopularPlanType.YES ? "default" : "outline",
+                      className: `w-full rounded-full font-medium ${
+                        plan.popular === PopularPlanType.YES 
+                          ? "shadow-lg hover:shadow-primary/30 hover:scale-105 transition-all duration-300" 
+                          : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                      }`
+                    })}
+                  >
+                    {plan.buttonText}
+                    {plan.popular === PopularPlanType.YES && <Zap className="ml-2 h-4 w-4" />}
+                  </Link>
+                )}
+              </CardFooter>
+            </Card>
           ))}
+        </div>
+        
+        <div className="mt-16 text-center">
+          <p className="text-muted-foreground">
+            All plans include access to our basic features. Need something custom?{" "}
+            <Link href="/contact" className="text-primary font-medium hover:underline">
+              Contact us
+            </Link>
+            {" "}for enterprise solutions.
+          </p>
         </div>
       </div>
     </section>
